@@ -146,6 +146,19 @@ main{max-width:1200px;margin:0 auto;padding:22px 20px 10px}
 .lerr{display:none;color:var(--red);font-size:12px;font-weight:800;margin-top:10px}
 .lerr.on{display:block}
 @media(max-width:760px){main{padding:16px 12px 8px}.hd-date,.hd-clock{display:none}.tl-col{min-width:180px}.drawer{width:100vw}}
+  /* ───── ورود (Supabase Auth) ───── */
+.pv{position:fixed;inset:0;background:radial-gradient(700px 400px at 80% -10%,rgba(188,83,43,.12),transparent 60%),var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:34px 30px;width:340px;max-width:100%;text-align:center;box-shadow:0 20px 60px rgba(90,60,30,.14)}
+.pv-card .mk{width:52px;height:52px;border-radius:15px;background:var(--accent);display:grid;place-items:center;font-weight:900;font-size:25px;color:#FFF6EA;margin:0 auto 14px;padding-bottom:3px}
+.pv-card b{font-size:17px;font-weight:900;display:block}
+.pv-card p{font-size:12px;color:var(--ink-2);margin:7px 0 18px}
+.pv-card input{width:100%;border:1.5px solid var(--line-2);background:#fff;border-radius:12px;padding:12px;font:inherit;font-size:14px;color:var(--ink);outline:none;margin-bottom:10px;text-align:center}
+.pv-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
+.lerr{display:none;color:var(--red);font-size:12px;font-weight:800;margin-top:8px}
+.lerr.on{display:block}
+.ir-staff{border:none;border-bottom:1px dashed var(--line-2);background:transparent;font:inherit;font-size:11.5px;color:var(--ink-2);outline:none;padding:2px 0;max-width:130px}
+header .iconbtn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:var(--cream)}
+header .iconbtn:hover{background:rgba(255,255,255,.14);color:#fff}
 </style>
 </head>
 <body>
@@ -180,6 +193,8 @@ main{max-width:1200px;margin:0 auto;padding:22px 20px 10px}
     <span class="hd-date" id="hdDate"></span>
     <button class="iconbtn" id="btnReload" title="به‌روزرسانی">⟳</button>
     <button class="iconbtn" id="btnLogout" title="خروج">⎋</button>
+    <button class="iconbtn" id="btnReload" title="همگام‌سازی">⟳</button>
+<button class="iconbtn" id="btnLogout" title="خروج">⎋</button>
     <button class="btn-p" id="btnNew">＋ نوبت جدید</button>
   </div>
 </header>
@@ -227,9 +242,50 @@ main{max-width:1200px;margin:0 auto;padding:22px 20px 10px}
       <div id="staffList"></div>
     </div>
   </section>
+  <section id="view-backup" hidden>
+  <div class="panel" style="margin-bottom:14px">
+    <div class="list-toolbar"><span class="ttl" data-icon="cloud" data-size="16">اتصال — Supabase</span><span class="tcount" id="sbStatus" style="margin-inline-start:auto"></span></div>
+    <div class="card-body">
+      <p class="bk-p">داده‌ها مستقیم روی دیتابیس Supabase ذخیره می‌شود: نوبت‌های آنلاینِ جدید با Realtime همان لحظه روی تقویم می‌آیند و هر تغییری بلافاصله ذخیره است.</p>
+      <div class="bk-btns">
+        <button class="btn-ghost" id="bkSync" data-icon="refresh" data-size="14"><span>همگام‌سازی الآن</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="list-toolbar"><span class="ttl">پشتیبان محلی (روی همین دستگاه)</span><span class="tcount" id="bkStats" style="margin-inline-start:auto"></span></div>
+    <div class="card-body">
+      <div class="bk-btns">
+        <button class="btn-ghost" id="bkJson" data-icon="down" data-size="14"><span>دانلود پشتیبان کامل (JSON)</span></button>
+        <button class="btn-ghost" id="bkCsvA" data-icon="down" data-size="14"><span>خروجی CSV نوبت‌ها</span></button>
+        <button class="btn-ghost" id="bkCsvC" data-icon="down" data-size="14"><span>خروجی CSV مشتریان</span></button>
+        <button class="btn-ghost" id="bkCsvI" data-icon="down" data-size="14"><span>خروجی CSV فاکتورها</span></button>
+      </div>
+      <div class="mt16">
+        <input type="file" id="bkFile" accept=".json,application/json" hidden>
+        <button class="btn-ghost" id="bkRestoreBtn" data-icon="up" data-size="14"><span>بازگردانی از فایل پشتیبان</span></button>
+        <div class="warn mt10" id="bkRestoreInfo">
+          <span id="bkRestoreTxt"></span>
+          <button class="btn-primary" id="bkRestoreGo" style="margin-top:10px">تأیید و بازگردانی</button>
+        </div>
+        <p class="bk-note">بازگردانی، ردیف‌های هم‌شناسه را روی دیتابیس بازنویسی می‌کند (upsert) — داده‌ای که در فایل نیست دست‌نخورده می‌ماند. فایل‌های CSV برای اکسل مناسب‌اند.</p>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
 <div class="scrim" id="scrim"></div>
+  <div class="pv" id="loginView">
+  <div class="pv-card">
+    <div class="mk">ن</div>
+    <b>پنل پذیرش نیلا</b><p>ورود منشی</p>
+    <input type="email" id="lgEmail" placeholder="ایمیل" dir="ltr" autocomplete="username">
+    <input type="password" id="lgPass" placeholder="رمز عبور" dir="ltr" autocomplete="current-password">
+    <div class="lerr" id="lgErr"></div>
+    <button class="btn-primary big" id="lgGo" style="margin-top:6px">ورود</button>
+  </div>
+</div>
 
 <aside class="drawer" id="drForm">
   <div class="dr-head">
@@ -306,501 +362,892 @@ main{max-width:1200px;margin:0 auto;padding:22px 20px 10px}
 <div id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ⚙️══════════ تنظیمات — این دو خط را پر کنید ══════════ */
+/* ⚙️══════════ تنظیمات ══════════ */
 const SB_URL='https://vxoumhcgipimkiwigxny.supabase.co';
 const SB_KEY='sb_publishable_MamNHKpsUmCwzd64KYsVTA_Xhee4BJ6';
-/* ═══════════════════════════════════════════════════ */
 const sb=supabase.createClient(SB_URL,SB_KEY);
 const tehranToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran'}).format(new Date());
 
+/* ───────── ابزارها ───────── */
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const fa=s=>String(s).replace(/\d/g,d=>FA[d]);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\u200c/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+const normPhone=s=>String(s||'').replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[\s\-()]/g,'');
+const validPhone=t=>/^09\d{9}$/.test(t);
+const fmtPrice=n=>Number(n||0).toLocaleString('fa-IR');
 const pad2=n=>String(n).padStart(2,'0');
-const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
-const isoShift=(iso,n)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return isoOf(d)};
-const price=n=>Number(n||0).toLocaleString('fa-IR');
+let _u=0; const uid=()=>Date.now().toString(36)+(_u++).toString(36);
 const tLbl=t=>fa(String(t||'').replace(/^0/,''));
 const toMinC=t=>{const p=String(t||'').split(':');return isNaN(+p[0])?NaN:(+p[0])*60+(+(p[1]||0))};
 const minToHHMMC=m=>pad2(Math.floor(m/60))+':'+pad2(m%60);
-const normPh=s=>String(s||'').replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'');
-let _u=0;const uid=()=>Date.now().toString(36)+(_u++).toString(36);
 
-const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
-const F_FULL=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'});
+const ICONS={
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ chevR:'<path d="M9 18l6-6-6-6"/>', chevL:'<path d="M15 18l-6-6 6-6"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ check:'<path d="M5 13l4 4L19 7"/>',
+ x:'<path d="M6 6l12 12M18 6L6 18"/>',
+ trash:'<path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+ scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12"/>',
+ cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/>',
+ calpick:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/>',
+ ptr:'<path d="M3 3l7.1 17 2.5-7.4L20 10.1 3 3z"/>',
+ print:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+ edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+ chart:'<path d="M3 3v18h18"/><path d="M8 16v-5M13 16V8M18 16v-3"/>',
+ save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+ cloud:'<path d="M17.5 19H7a4 4 0 0 1-.9-7.9A6 6 0 0 1 17.8 9.1 4.5 4.5 0 0 1 17.5 19z"/>',
+ down:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+ refresh:'<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>',
+};
+const icon=(n,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||''}</svg>`;
+document.querySelectorAll('[data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||16))));
+
+/* ───────── تاریخ ───────── */
+const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const shiftISO=(iso,days)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+days);return isoOf(d)};
+const TODAY=tehranToday();
+const DF={
+ full:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'}),
+ year:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),
+ short:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long'}),
+};
+const dObj=iso=>new Date(iso+'T12:00:00');
 function dayName(iso){
-  if(!iso)return '—';
-  let s=F_FULL.format(new Date(iso+'T12:00:00'));
-  if(iso===TODAY_ISO)s='امروز، '+s;else if(iso===isoShift(TODAY_ISO,1))s='فردا، '+s;
-  return s;
+ let s=DF.full.format(dObj(iso));
+ if(iso===TODAY)s='امروز، '+s; else if(iso===shiftISO(TODAY,1))s='فردا، '+s; else if(iso===shiftISO(TODAY,-1))s='دیروز، '+s;
+ return s;
 }
+const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes()};
 
-let D={customers:[],appointments:[],services:[],staff:[]};
-let TODAY_ISO='',curDate='',view='schedule',booted=false,LOGGED=false;
-let known=new Set(),flashIds=[],editSvcId=null,editStaffId=null,detailId=null;
-const HPH=64,DAY_START=9*60,DAY_END=21*60;
-
-/* ───────── ورود ───────── */
-async function initAuth(){
-  if(typeof supabase==='undefined'){
-    const e=document.getElementById('lgErr');e.textContent='کتابخانه بارگذاری نشد — اینترنت را چک کنید';e.classList.add('on');return;
+/* ───────── تقویم شمسی (کامل) ───────── */
+const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
+function toJal(d){const p=JFMT.formatToParts(d);const g=t=>+p.find(x=>x.type===t).value;return{jy:g('year'),jm:g('month'),jd:g('day')}}
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+function jalaliFirstDay(jy,jm){
+ let d=new Date();d.setHours(12,0,0,0);
+ for(let i=0;i<14;i++){
+  const j=toJal(d);
+  if(j.jy===jy&&j.jm===jm)return addDays(d,-(j.jd-1));
+  d=addDays(d,Math.round(((jy*12+jm)-(j.jy*12+j.jm))*30.436875));
+ }
+ return d;
+}
+function makePicker(btn,getISO,setISO,hasDots){
+ const wrap=document.createElement('div');wrap.className='dp-wrap';
+ btn.parentNode.insertBefore(wrap,btn);wrap.appendChild(btn);
+ const pop=document.createElement('div');pop.className='dp-pop';pop.hidden=true;wrap.appendChild(pop);
+ pop.innerHTML='<div class="dp-head"><button class="iconbtn" data-p="p">›</button><div class="dp-title"></div><button class="iconbtn" data-p="n">‹</button></div><div class="dp-grid"></div><div class="dp-foot"><button class="btn-ghost">امروز</button></div>';
+ let jy=0,jm=0;
+ function render(){
+  pop.querySelector('.dp-title').textContent=JM[jm-1]+' '+fa(jy);
+  const first=jalaliFirstDay(jy,jm);
+  let ny=jy,nm=jm+1;if(nm>12){nm=1;ny++}
+  const len=Math.round((jalaliFirstDay(ny,nm)-first)/86400000);
+  const lead=(first.getDay()+1)%7;
+  let h='';
+  ['ش','ی','د','س','چ','پ','ج'].forEach(d=>h+='<span class="dp-dow">'+d+'</span>');
+  for(let i=0;i<lead;i++)h+='<span></span>';
+  for(let d=1;d<=len;d++){
+   const iso=isoOf(addDays(first,d-1));
+   h+='<button class="dp-day'+(iso===getISO()?' sel':'')+(iso===TODAY?' today':'')+'" data-iso="'+iso+'">'+fa(d)+
+      (hasDots&&hasDots(iso)?'<span class="dot"></span>':'')+'</button>';
   }
-  const {data}=await sb.auth.getSession();
-  if(data&&data.session)enter();
+  pop.querySelector('.dp-grid').innerHTML=h;
+  pop.querySelectorAll('.dp-day').forEach(b=>b.onclick=()=>{setISO(b.dataset.iso);hide()});
+ }
+ function show(){const j=toJal(dObj(getISO()||TODAY));jy=j.jy;jm=j.jm;render();pop.hidden=false}
+ function hide(){pop.hidden=true}
+ pop.querySelector('[data-p=p]').onclick=()=>{jm--;if(jm<1){jm=12;jy--}render()};
+ pop.querySelector('[data-p=n]').onclick=()=>{jm++;if(jm>12){jm=1;jy++}render()};
+ pop.querySelector('.dp-foot button').onclick=()=>{setISO(TODAY);hide()};
+ btn.onclick=e=>{e.stopPropagation();pop.hidden?show():hide()};
+ document.addEventListener('click',e=>{if(!pop.hidden&&!pop.contains(e.target))hide()});
 }
-function enter(){
-  LOGGED=true;
-  document.getElementById('loginView').style.display='none';
-  document.getElementById('hdr').hidden=false;
-  document.getElementById('main').hidden=false;
-  load(false);
+
+/* ───────── وضعیت ───────── */
+let D={customers:[],appointments:[],services:[],staff:[],invoices:[]};
+let curDate=TODAY,view='schedule',booted=false,LOGGED=false;
+let known=new Set(),flashIds=[];
+let editingApptId=null,formCustId=null,editingCustId=null,editingStaffId=null,editingSvcId=null;
+let invDraft=null,viewInvId=null,rpDate=TODAY;
+const HPH=84,DS=9*60,DE=21*60;
+
+/* ───────── Auth ───────── */
+async function initAuth(){
+ if(typeof supabase==='undefined'){lgFail('کتابخانه بارگذاری نشد — اینترنت را چک کنید');return}
+ const {data}=await sb.auth.getSession();
+ if(data&&data.session)enter();
 }
+function lgFail(m){const e=document.getElementById('lgErr');e.textContent=m;e.classList.add('on')}
 async function doLogin(){
-  const e=document.getElementById('lgErr');e.classList.remove('on');
-  const em=document.getElementById('lgEmail').value.trim();
-  const pw=document.getElementById('lgPass').value;
-  if(!em||!pw){e.textContent='ایمیل و رمز را وارد کنید';e.classList.add('on');return}
-  const b=document.getElementById('lgGo');b.disabled=true;b.textContent='در حال ورود…';
-  const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
-  b.disabled=false;b.textContent='ورود';
-  if(error){e.textContent='ایمیل یا رمز اشتباه است';e.classList.add('on')}
-  else enter();
+ const e=document.getElementById('lgErr');e.classList.remove('on');
+ const em=document.getElementById('lgEmail').value.trim(),pw=document.getElementById('lgPass').value;
+ if(!em||!pw){lgFail('ایمیل و رمز را وارد کنید');return}
+ const b=document.getElementById('lgGo');b.disabled=true;b.textContent='در حال ورود…';
+ const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+ b.disabled=false;b.textContent='ورود';
+ if(error)lgFail('ایمیل یا رمز اشتباه است');else enter();
 }
 document.getElementById('lgGo').onclick=doLogin;
 document.getElementById('lgPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('btnLogout').onclick=()=>sb.auth.signOut().then(()=>location.reload());
+function enter(){
+ LOGGED=true;
+ document.getElementById('loginView').style.display='none';
+ load(false);
+ setInterval(()=>{const n=new Date();document.getElementById('hdClock').textContent=fa(pad2(n.getHours())+':'+pad2(n.getMinutes())+':'+pad2(n.getSeconds()))},1000);
+ setInterval(()=>{if(!document.querySelector('.drawer.on'))load(true)},30000);
+ try{
+  sb.channel('nila-live')
+   .on('postgres_changes',{event:'*',schema:'public',table:'appointments'},()=>debLoad())
+   .on('postgres_changes',{event:'*',schema:'public',table:'invoices'},()=>debLoad())
+   .subscribe();
+ }catch(e){}
+}
+let _dbT=null;function debLoad(){clearTimeout(_dbT);_dbT=setTimeout(()=>load(true),1200)}
 initAuth();
 
+/* ───────── Cloud pill ───────── */
+function setCloud(st,txt){
+ const p=document.getElementById('cloudPill');p.hidden=false;p.dataset.st=st;
+ document.getElementById('cloudTxt').textContent=txt;
+}
+
 /* ───────── بارگیری ───────── */
-function pill(st,txt){
-  document.getElementById('pill').className='pill'+(st==='busy'?' busy':st==='err'?' err':'');
-  document.getElementById('pillTxt').textContent=txt;
-}
 async function load(silent){
-  if(!LOGGED)return;
-  pill('busy','در حال دریافت…');
-  try{
-    const [c,a,sv,s,ss]=await Promise.all([
-      sb.from('customers').select('*'),
-      sb.from('appointments').select('*'),
-      sb.from('services').select('*'),
-      sb.from('staff').select('*'),
-      sb.from('service_staff').select('*')
-    ]);
-    const err=c.error||a.error||sv.error||s.error||ss.error;
-    if(err)throw err;
-    const smap={};(ss.data||[]).forEach(r=>{(smap[r.service_id]=smap[r.service_id]||[]).push(r.staff_id)});
-    D={
-      customers:(c.data||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone,note:x.note||'',createdAt:x.created_at})),
-      services:(sv.data||[]).map(x=>({id:x.id,name:x.name,dur:x.dur||60,price:x.price||0,staff:(smap[x.id]||[]).map(String)})),
-      staff:(s.data||[]).map(x=>({id:x.id,name:x.name||'',role:x.role||'',phone:x.phone||''}))
-    };
-    const svcById={},stfById={};
-    D.services.forEach(x=>svcById[x.id]=x);D.staff.forEach(x=>stfById[x.id]=x);
-    D.appointments=(a.data||[]).map(x=>({
-      id:x.id,date:x.date,timeR:x.time_r,timeS:x.time_s,customerId:x.customer_id,
-      name:x.name||'',phone:x.phone,serviceId:x.service_id,staffId:x.staff_id,
-      svc:(svcById[x.service_id]||{}).name||x.svc||'',
-      staff:(stfById[x.staff_id]||{}).name||x.staff||'',
-      status:x.status||'booked',source:x.source||'panel',note:x.note||'',createdAt:x.created_at
-    }));
-    TODAY_ISO=tehranToday();
-    if(!booted){curDate=TODAY_ISO;booted=true}
-    detectNew();
-    document.getElementById('hdDate').textContent=dayName(TODAY_ISO);
-    renderAll();
-    const n=new Date();
-    pill('ok','متصل · '+fa(pad2(n.getHours())+':'+pad2(n.getMinutes())));
-  }catch(e){
-    pill('err','خطا — دوباره بزنید');
-    toast('خطا در دریافت: '+(e.message||e));
-  }
+ if(!LOGGED)return;
+ setCloud('busy','همگام‌سازی…');
+ try{
+  const [cs,aps,svs,sts,ss,ivs]=await Promise.all([
+   sb.from('customers').select('*'),sb.from('appointments').select('*'),
+   sb.from('services').select('*'),sb.from('staff').select('*'),
+   sb.from('service_staff').select('*'),sb.from('invoices').select('*')]);
+  const err=cs.error||aps.error||svs.error||sts.error||ss.error||ivs.error;
+  if(err)throw err;
+  D.staff=(sts.data||[]).map(x=>({id:x.id,name:x.name||'',role:x.role||'',phone:x.phone||''}));
+  const smap={};(ss.data||[]).forEach(r=>{(smap[r.service_id]=smap[r.service_id]||[]).push(r.staff_id)});
+  D.services=(svs.data||[]).map(x=>({id:x.id,name:x.name,dur:x.dur||60,price:x.price||0,staff:(smap[x.id]||[]).map(String)}));
+  D.customers=(cs.data||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone,note:x.note||'',createdAt:x.created_at}));
+  const svcById={},stfById={};D.services.forEach(x=>svcById[x.id]=x);D.staff.forEach(x=>stfById[x.id]=x);
+  D.appointments=(aps.data||[]).map(x=>({id:x.id,date:x.date,timeR:x.time_r,timeS:x.time_s,
+   customerId:x.customer_id,name:x.name||'',phone:x.phone,serviceId:x.service_id,staffId:x.staff_id,
+   svc:(svcById[x.service_id]||{}).name||'',staff:(stfById[x.staff_id]||{}).name||'',
+   status:x.status||'booked',source:x.source||'panel',note:x.note||'',createdAt:x.created_at}));
+  D.invoices=(ivs.data||[]).map(x=>({id:x.id,no:x.no,date:x.date,customerId:x.customer_id,name:x.name||'',
+   phone:x.phone,items:x.items||[],subtotal:x.subtotal||0,discount:x.discount||0,discountType:x.discount_type||'amount',
+   total:x.total||0,method:x.method||'نقدی',status:x.status||'paid',apptId:x.appt_id||'',note:x.note||'',createdAt:x.created_at}));
+  if(!booted){curDate=TODAY;booted=true;D.appointments.forEach(a=>known.add(a.id))}
+  detectNew();
+  document.getElementById('hdDate').textContent=DF.year.format(dObj(TODAY));
+  renderAll();
+  const n=new Date();setCloud('ok','آنلاین · '+fa(pad2(n.getHours())+':'+pad2(n.getMinutes())));
+ }catch(e){
+  setCloud('err','خطا');
+  if(!silent)toast('خطا در دریافت: '+(e.message||e));
+ }
 }
+document.getElementById('btnReload').onclick=()=>load(false);
+document.getElementById('bkSync').onclick=()=>load(false);
 function detectNew(){
-  D.appointments.forEach(a=>{
-    if(!known.has(a.id)){
-      if(booted&&a.source==='online'&&a.status==='booked'){
-        flashIds.push(a.id);
-        toast('🌐 نوبت آنلاین جدید: '+(a.name||'')+' — '+tLbl(a.timeR||a.timeS||''));
-      }
-      known.add(a.id);
-    }
-  });
-}
-
-/* ───────── رندر ───────── */
-function renderAll(){
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
-  document.querySelectorAll('main>section').forEach(s=>s.hidden=('view-'+view)!==s.id);
-  if(view==='schedule')renderSchedule();
-  if(view==='customers')renderCustomers();
-  if(view==='services')renderServices();
-  if(view==='staff')renderStaff();
-}
-function durOf(a){
-  const k=String(a.serviceId||'');
-  const s=D.services.filter(x=>String(x.id)===k||(a.svc&&String(x.name)===String(a.svc)))[0];
-  return s?Math.max(15,Number(s.dur)||60):60;
-}
-function renderSchedule(){
-  document.getElementById('dayLabel').textContent=dayName(curDate);
-  const day=D.appointments.filter(a=>a.date===curDate&&a.status!=='canceled');
-  const done=day.filter(a=>a.status==='done').length;
-  document.getElementById('dayStats').innerHTML=
-    '<b>'+fa(day.length)+'</b> نوبت<i class="sep"></i><b>'+fa(day.length-done)+'</b> باقی‌مانده<i class="sep"></i><b>'+fa(done)+'</b> انجام‌شده';
-  let h='<div class="tl-hours"><div class="tl-headpad"></div><div class="tl-hours-body">';
-  for(let m=DAY_START;m<DAY_END;m+=60)h+='<div class="tl-hr"><span>'+tLbl(minToHHMMC(m))+'</span></div>';
-  h+='</div></div>';
-  if(!D.staff.length)h+='<div class="empty" style="flex:1">اول از تب «متخصصان» متخصص اضافه کنید</div>';
-  D.staff.forEach((s,si)=>{
-    const list=day.filter(a=>String(a.staffId||'')===String(s.id));
-    h+='<div class="tl-col"><div class="tl-col-head">'+
-      '<span class="avatar av'+(si%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
-      '<div><div class="sname">'+esc(s.name)+'</div><div class="srole">'+esc(s.role||'متخصص')+'</div></div>'+
-      '<span class="scount">'+fa(list.length)+'</span></div><div class="tl-rail" data-staff="'+esc(s.id)+'">';
-    for(let m=DAY_START;m<DAY_END;m+=60)h+='<i class="hline" style="top:'+((m-DAY_START)/60*HPH)+'px"></i>';
-    list.forEach(a=>{
-      const st=toMinC(a.timeS||a.timeR||'');if(isNaN(st))return;
-      const dur=Math.max(30,durOf(a));
-      const top=(st-DAY_START)/60*HPH,hh=Math.max(34,dur/60*HPH-6);
-      const tR=String(a.timeR||''),tS=String(a.timeS||'');
-      h+='<div class="appt'+(a.status==='done'?' st-done':'')+(a.status==='canceled'?' st-canceled':'')+(flashIds.indexOf(a.id)>-1?' flash':'')+'" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+hh+'px">'+
-        '<div class="a-time">'+tLbl(tR||tS)+(tS&&tR&&tS!==tR?' → '+tLbl(tS):'')+
-        (a.source==='online'?' <span class="onetag">🌐 آنلاین</span>':'')+'</div>'+
-        '<div class="a-name">'+esc(a.name||'')+'</div>'+
-        '<div class="a-svc">'+esc(a.svc||'')+'</div></div>';
-    });
-    h+='</div></div>';
-  });
-  if(curDate===TODAY_ISO){
-    const n=new Date(),nm=n.getHours()*60+n.getMinutes();
-    if(nm>=DAY_START&&nm<=DAY_END)
-      h+='<div class="nowline" style="top:'+(58+(nm-DAY_START)/60*HPH)+'px"><span class="nlab">'+tLbl(minToHHMMC(nm))+'</span></div>';
+ D.appointments.forEach(a=>{
+  if(!known.has(a.id)){
+   if(booted&&a.source==='online'&&a.status==='booked'){
+    flashIds.push(a.id);
+    toast('🌐 نوبت آنلاین جدید: '+(a.name||'')+' — '+tLbl(a.timeR||a.timeS||''));
+   }
+   known.add(a.id);
   }
-  const track=document.getElementById('tlTrack');
-  track.innerHTML=h;
-  track.querySelectorAll('.tl-rail').forEach(rail=>{
-    rail.addEventListener('click',function(e){
-      if(e.target.closest('.appt'))return;
-      const rect=rail.getBoundingClientRect();
-      let m=DAY_START+Math.round(((e.clientY-rect.top)/HPH*60)/5)*5;
-      m=Math.max(DAY_START,Math.min(DAY_END-15,m));
-      openForm({staffId:rail.dataset.staff,date:curDate,time:minToHHMMC(m)});
-    });
-  });
-  track.querySelectorAll('.appt').forEach(el=>{
-    el.addEventListener('click',function(e){e.stopPropagation();openDetail(el.dataset.id)});
-  });
-  flashIds=[];
+ });
 }
-document.getElementById('dPrev').onclick=()=>{curDate=isoShift(curDate,-1);renderSchedule()};
-document.getElementById('dNext').onclick=()=>{curDate=isoShift(curDate,1);renderSchedule()};
-document.getElementById('dToday').onclick=()=>{curDate=TODAY_ISO;renderSchedule()};
 
+/* ───────── helpers داده ───────── */
+const svcOf=k=>D.services.filter(s=>String(s.id)===String(k)||(s.name&&s.name===k))[0]||null;
+const durOf=a=>{const s=svcOf(a.serviceId||a.svc);return s?Math.max(15,Number(s.dur)||60):60};
+const intervalOf=a=>{const tR=toMinC(a.timeR),tS=toMinC(a.timeS);const c=[tR,tS].filter(x=>!isNaN(x));if(!c.length)return null;
+ const s=Math.min.apply(null,c);return{s:s,e:s+durOf(a)}};
+const staffById=id=>D.staff.filter(s=>String(s.id)===String(id))[0]||null;
+function overlaps(staffId,date,intv,exceptId){
+ return D.appointments.some(a=>{
+  if(a.id===exceptId||String(a.staffId||'')!==String(staffId)||a.date!==date)return false;
+  const st=String(a.status||'booked').toLowerCase();if(st==='canceled'||st==='done')return false;
+  const iv=intervalOf(a);if(!iv)return false;
+  return intv.s<iv.e&&iv.s<intv.e;
+ });
+}
+
+/* ───────── رندر اصلی ───────── */
+function renderAll(){
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+ document.querySelectorAll('main>section').forEach(s=>s.hidden=('view-'+view)!==s.id);
+ if(view==='schedule')renderSchedule();
+ if(view==='customers')renderCustomers();
+ if(view==='staff')renderStaff();
+ if(view==='services')renderServices();
+ if(view==='invoices')renderInvoices();
+ if(view==='report')renderReport();
+ if(view==='backup')renderBackup();
+}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{view=b.dataset.view;renderAll()});
+
+/* ───────── تقویم پذیرش ───────── */
+function renderSchedule(){
+ document.getElementById('dayLabel').textContent=dayName(curDate);
+ document.getElementById('dToday').classList.toggle('on',curDate===TODAY);
+ const day=D.appointments.filter(a=>a.date===curDate);
+ const act=day.filter(a=>a.status!=='canceled');
+ const done=act.filter(a=>a.status==='done').length;
+ document.getElementById('dayStats').innerHTML=
+  '<b>'+fa(act.length)+'</b> نوبت<i class="sep"></i><b>'+fa(act.length-done)+'</b> باقی‌مانده<i class="sep"></i><b>'+fa(done)+'</b> انجام‌شده'+
+  (day.length-act.length?'<i class="sep"></i><b>'+fa(day.length-act.length)+'</b> لغو':'');
+ let h='<div class="tl-hours"><div class="tl-headpad"></div><div class="tl-hours-body">';
+ for(let m=DS;m<=DE;m+=60)h+='<div class="tl-hr"><span>'+tLbl(minToHHMMC(m))+'</span></div>';
+ h+='<span class="end-h">'+tLbl(minToHHMMC(DE))+'</span></div></div>';
+ if(!D.staff.length)h+='<div class="empty" style="flex:1">اول از تب «متخصصان» متخصص اضافه کنید</div>';
+ D.staff.forEach((s,si)=>{
+  const list=day.filter(a=>String(a.staffId||'')===String(s.id));
+  h+='<div class="tl-col"><div class="tl-col-head">'+
+   '<span class="avatar av'+(si%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
+   '<div><div class="sname">'+esc(s.name)+'</div><div class="srole">'+esc(s.role||'متخصص')+'</div></div>'+
+   '<span class="scount">'+fa(list.filter(a=>a.status!=='canceled').length)+'</span></div><div class="tl-rail" data-staff="'+esc(s.id)+'">';
+  for(let m=DS;m<DE;m+=60)h+='<i class="hline" style="top:'+((m-DS)/60*HPH)+'px"></i>';
+  list.forEach(a=>{
+   const iv=intervalOf(a);if(!iv)return;
+   const top=(iv.s-DS)/60*HPH,hh=Math.max(34,Math.min((iv.e-iv.s)/60*HPH-6,DE-DS)/60*HPH);
+   const H=Math.max(34,(iv.e-iv.s)/60*HPH-8);
+   const tR=String(a.timeR||''),tS=String(a.timeS||'');
+   const st=a.status||'booked';
+   h+='<div class="appt'+(st==='done'?' st-done':st==='canceled'?' st-canceled':st==='inprogress'?' st-inprogress':'')+
+    (H<60?' compact':'')+(flashIds.indexOf(a.id)>-1?' flash':'')+'" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+H+'px">'+
+    '<div class="a-time">'+(st==='inprogress'?'<span class="pulse"></span>':'')+tLbl(tR||tS)+
+    (tS&&tR&&tS!==tR?' <span class="a-late">شروع '+tLbl(tS)+'</span>':'')+
+    (a.source==='online'?' <span class="pill st-booked">🌐</span>':'')+'</div>'+
+    '<div class="a-name">'+esc(a.name||'')+'</div>'+
+    '<div class="a-svc">'+esc(a.svc||'')+'</div></div>';
+  });
+  h+='</div></div>';
+ });
+ if(curDate===TODAY){
+  const nm=nowMin();
+  if(nm>=DS&&nm<=DE)
+   h+='<div class="nowline" style="top:'+(58+(nm-DS)/60*HPH)+'px"><span class="nlab">'+tLbl(minToHHMMC(nm))+'</span></div>';
+ }
+ const track=document.getElementById('tlTrack');
+ track.innerHTML=h;
+ track.querySelectorAll('.tl-rail').forEach(rail=>{
+  rail.addEventListener('click',function(e){
+   if(e.target.closest('.appt'))return;
+   const rect=rail.getBoundingClientRect();
+   let m=DS+Math.round(((e.clientY-rect.top)/HPH*60)/5)*5;
+   m=Math.max(DS,Math.min(DE-15,m));
+   openForm({staffId:rail.dataset.staff,date:curDate,timeR:minToHHMMC(m)});
+  });
+ });
+ track.querySelectorAll('.appt').forEach(el=>{
+  el.addEventListener('click',function(e){e.stopPropagation();openDetail(el.dataset.id)});
+ });
+ flashIds=[];
+}
+document.getElementById('dPrev').onclick=()=>{curDate=shiftISO(curDate,-1);renderSchedule()};
+document.getElementById('dNext').onclick=()=>{curDate=shiftISO(curDate,1);renderSchedule()};
+document.getElementById('dToday').onclick=()=>{curDate=TODAY;renderSchedule()};
+makePicker(document.getElementById('dpBtn'),()=>curDate,iso=>{curDate=iso;renderSchedule()},iso=>D.appointments.some(a=>a.date===iso&&a.status!=='canceled'));
+
+/* ───────── مشتریان ───────── */
 function renderCustomers(){
-  const q=document.getElementById('cSearch').value.trim();
-  const list=D.customers.filter(c=>!q||(c.name||'').indexOf(q)>-1||normPh(c.phone).indexOf(normPh(q))>-1);
-  document.getElementById('custCount').textContent=fa(list.length)+' مشتری';
-  const w=document.getElementById('custList');
-  if(!list.length){w.innerHTML='<div class="empty">مشتری‌ای یافت نشد</div>';return}
-  w.innerHTML=list.map(c=>{
-    const n=D.appointments.filter(a=>normPh(a.phone)===normPh(c.phone)&&a.status==='booked').length;
-    return '<div class="crow" data-id="'+esc(c.id)+'"><div class="cmain"><div class="cname">'+esc(c.name||'—')+'</div>'+
-      '<div class="cphone">'+fa(normPh(c.phone))+'</div></div>'+
-      (n?'<span class="sdur">'+fa(n)+' نوبت پیش‌رو</span>':'')+'<span class="chev">‹</span></div>';
-  }).join('');
-  w.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openCust(r.dataset.id));
+ const q=document.getElementById('cSearch').value.trim();
+ const list=D.customers.filter(c=>!q||(c.name||'').includes(q)||normPhone(c.phone).includes(normPhone(q)))
+  .sort((a,b)=>(a.name||'').localeCompare(b.name||'','fa'));
+ document.getElementById('custCount').textContent=fa(list.length)+' مشتری';
+ const w=document.getElementById('custList');
+ if(!list.length){w.innerHTML='<div class="empty"><span>'+(q?'موردی یافت نشد':'هنوز مشتری ثبت نشده')+'</span></div>';return}
+ w.innerHTML=list.map(c=>{
+  const n=D.appointments.filter(a=>normPhone(a.phone)===normPhone(c.phone)&&a.status==='booked').length;
+  return '<div class="crow" data-id="'+esc(c.id)+'"><div class="cmain"><div class="cname">'+esc(c.name||'—')+'</div>'+
+   '<div class="cphone">'+fa(normPhone(c.phone))+'</div></div>'+
+   (n?'<span class="cstat"><b>'+fa(n)+'</b> نوبت پیش‌رو</span>':'')+'<span class="chev">‹</span></div>';
+ }).join('');
+ w.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openCust(r.dataset.id));
 }
 document.getElementById('cSearch').addEventListener('input',renderCustomers);
 function openCust(id){
-  const c=D.customers.filter(x=>x.id===id)[0];if(!c)return;
-  const hist=D.appointments.filter(a=>normPh(a.phone)===normPh(c.phone)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  document.getElementById('cBody').innerHTML=
-    '<div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:900">'+esc(c.name||'—')+'</div>'+
-    '<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px" dir="ltr">'+fa(normPh(c.phone))+'</div></div>'+
-    '<div class="drow"><span class="dl">تعداد نوبت‌ها</span><span class="dv">'+fa(hist.length)+'</span></div>'+
-    '<div class="drow"><span class="dl">عضویت از</span><span class="dv">'+(c.createdAt?fa(new Date(c.createdAt).toLocaleDateString('fa-IR')):'—')+'</span></div>'+
-    '<div style="font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 6px">تاریخچه نوبت‌ها</div>'+
-    (hist.length?hist.map(a=>'<div class="drow" style="cursor:pointer" onclick="openDetail(\''+a.id+'\')"><span class="dl">'+dayName(a.date)+' · '+tLbl(a.timeR||'')+'</span><span class="dv">'+esc(a.svc||'')+' <small>'+esc(a.staff||'')+'</small></span></div>').join(''):'<div class="empty" style="padding:18px">هنوز نوبتی ثبت نشده</div>');
-  openDr('drCust');
+ const c=D.customers.filter(x=>x.id===id)[0];if(!c)return;
+ editingCustId=id;
+ const hist=D.appointments.filter(a=>normPhone(a.phone)===normPhone(c.phone)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ const spent=D.invoices.filter(v=>normPhone(v.phone)===normPhone(c.phone)).reduce((s,v)=>s+(v.total||0),0);
+ document.getElementById('cBody').innerHTML=
+  '<div class="ch-head"><span class="avatar lg av0">'+esc((c.name||'؟').charAt(0))+'</span>'+
+  '<div><div class="cname">'+esc(c.name||'—')+'</div><div class="cphone" dir="ltr">'+fa(normPhone(c.phone))+'</div></div></div>'+
+  '<div class="fld"><label>نام</label><input type="text" id="ceName" value="'+esc(c.name||'')+'"></div>'+
+  '<div class="fld"><label>موبایل</label><input type="text" id="cePhone" dir="ltr" value="'+esc(normPhone(c.phone))+'"></div>'+
+  '<div class="fld"><label>یادداشت</label><input type="text" id="ceNote" value="'+esc(c.note||'')+'"></div>'+
+  '<div style="display:flex;gap:9px"><button class="btn-ghost" id="ceSave" data-icon="check" data-size="14"><span>ذخیره پرونده</span></button>'+
+  '<button class="btn-ghost" id="ceNew" data-icon="plus" data-size="14"><span>نوبت جدید</span></button></div>'+
+  '<div class="dacts"><div class="drow"><span class="dl">مجموع خرید</span><span class="dv">'+fmtPrice(spent)+' تومان</span></div>'+
+  '<div class="drow"><span class="dl">تعداد نوبت</span><span class="dv">'+fa(hist.length)+'</span></div></div>'+
+  '<div style="font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 6px">تاریخچه</div>'+
+  (hist.length?hist.map(a=>'<div class="hrow click" onclick="openDetail(\''+a.id+'\')"><div class="hmain"><b>'+esc(a.svc||'')+' · '+tLbl(a.timeR||'')+'</b><span>'+dayName(a.date)+' · '+esc(a.staff||'—')+'</span></div>'+
+   '<span class="pill st-'+(a.status||'booked')+'">'+({booked:'رزرو',done:'انجام',canceled:'لغو',inprogress:'جاری'}[a.status]||a.status)+'</span></div>').join('')
+   :'<div class="empty" style="padding:18px">هنوز نوبتی ثبت نشده</div>');
+ document.getElementById('ceSave').onclick=async()=>{
+  const name=document.getElementById('ceName').value.trim();
+  const phone=normPhone(document.getElementById('cePhone').value);
+  if(name.length<2){toast('نام را کامل وارد کنید');return}
+  if(!validPhone(phone)){toast('شماره موبایل معتبر نیست');return}
+  const {error}=await sb.from('customers').update({name:name,phone:phone,note:document.getElementById('ceNote').value.trim()}).eq('id',id);
+  toast(error?('خطا: '+error.message):'پرونده ذخیره شد ✓');if(!error){closeDr();load(true)}
+ };
+ document.getElementById('ceNew').onclick=()=>openForm({date:curDate,preName:c.name,prePhone:normPhone(c.phone),preCustId:c.id});
+ document.querySelectorAll('#cBody [data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||14))));
+ openDr('drCust');
 }
 
+/* ───────── متخصصان ───────── */
+function renderStaff(){
+ document.getElementById('staffCount').textContent=fa(D.staff.length)+' متخصص';
+ const w=document.getElementById('staffList');
+ if(!D.staff.length){w.innerHTML='<div class="empty"><span>متخصصی ثبت نشده</span></div>';return}
+ w.innerHTML=D.staff.map((s,i)=>{
+  const svcN=D.services.filter(v=>(v.staff||[]).indexOf(String(s.id))>-1).length;
+  return '<div class="srow" data-id="'+esc(s.id)+'"><span class="avatar av'+(i%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
+   '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+icon('scissors',11)+' '+esc(s.role||'متخصص')+' · '+fa(svcN)+' خدمت</div></span>'+
+   '<span class="chev">‹</span></div>';
+ }).join('');
+ w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openStaffFile(r.dataset.id));
+}
+document.getElementById('btnAddStaff').onclick=()=>{const f=document.getElementById('staffForm');f.hidden=!f.hidden;if(!f.hidden)document.getElementById('stName').focus()};
+document.getElementById('stCancel').onclick=()=>{document.getElementById('staffForm').hidden=true};
+document.getElementById('stSave').onclick=async()=>{
+ const name=document.getElementById('stName').value.trim(),role=document.getElementById('stRole').value.trim();
+ const phone=normPhone(document.getElementById('stPhone').value);
+ if(name.length<2){toast('نام متخصص را وارد کنید');return}
+ const {error}=await sb.from('staff').insert({id:'st'+uid(),name:name,role:role,phone:phone});
+ if(error){toast('خطا: '+error.message);return}
+ document.getElementById('stName').value='';document.getElementById('stRole').value='';document.getElementById('stPhone').value='';
+ document.getElementById('staffForm').hidden=true;toast('متخصص اضافه شد ✓');load(true);
+};
+function openStaffFile(id){
+ const s=staffById(id);if(!s)return;
+ editingStaffId=id;
+ const mine=D.appointments.filter(a=>String(a.staffId)===String(id));
+ const done=mine.filter(a=>a.status==='done').length;
+ document.getElementById('sSub').textContent=s.role||'متخصص';
+ document.getElementById('stBody').innerHTML=
+  '<div class="ch-head"><span class="avatar lg av1">'+esc((s.name||'؟').charAt(0))+'</span><div><div class="cname">'+esc(s.name)+'</div><div class="cphone">'+fa(s.phone||'—')+'</div></div></div>'+
+  '<div class="fld"><label>نام</label><input type="text" id="se2Name" value="'+esc(s.name||'')+'"></div>'+
+  '<div class="fld"><label>تخصص</label><input type="text" id="se2Role" value="'+esc(s.role||'')+'"></div>'+
+  '<div class="fld"><label>موبایل</label><input type="text" id="se2Phone" dir="ltr" value="'+esc(s.phone||'')+'"></div>'+
+  '<button class="btn-ghost" id="se2Save" data-icon="check" data-size="14"><span>ذخیره</span></button>'+
+  '<div class="dacts">'+
+  '<div class="drow"><span class="dl">نوبت‌ها</span><span class="dv">'+fa(mine.length)+' · انجام‌شده '+fa(done)+'</span></div></div>'+
+  '<div class="dacts"><button class="btn btn-del" id="se2Del">حذف متخصص</button></div>';
+ document.getElementById('se2Save').onclick=async()=>{
+  const name=document.getElementById('se2Name').value.trim();
+  if(name.length<2){toast('نام را وارد کنید');return}
+  const {error}=await sb.from('staff').update({name:name,role:document.getElementById('se2Role').value.trim(),
+   phone:normPhone(document.getElementById('se2Phone').value)}).eq('id',id);
+  toast(error?('خطا: '+error.message):'ذخیره شد ✓');if(!error){closeDr();load(true)}
+ };
+ document.getElementById('se2Del').onclick=function(){
+  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+  sb.from('staff').delete().eq('id',id).then(({error})=>{
+   toast(error?('خطا: '+error.message):'حذف شد');if(!error){closeDr();load(true)}});
+ };
+ document.querySelectorAll('#stBody [data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||14))));
+ openDr('drStaff');
+}
+
+/* ───────── خدمات ───────── */
 function staffNamesOf(svc){
-  const ids=Array.isArray(svc.staff)?svc.staff:[];
-  return D.staff.filter(s=>ids.indexOf(String(s.id))>-1).map(s=>s.name).join('، ')||'—';
+ const ids=Array.isArray(svc.staff)?svc.staff:[];
+ return D.staff.filter(s=>ids.indexOf(String(s.id))>-1).map(s=>s.name).join('، ')||'—';
 }
 function renderServices(){
-  document.getElementById('svcCount').textContent=fa(D.services.length)+' خدمت';
-  const w=document.getElementById('svcList');
-  if(!D.services.length){w.innerHTML='<div class="empty">خدمتی ثبت نشده — دکمه «افزودن خدمت» را بزنید</div>';return}
-  w.innerHTML=D.services.map(s=>'<div class="srow" data-id="'+esc(s.id)+'">'+
-    '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+esc(staffNamesOf(s))+'</div></span>'+
-    '<span class="sdur">'+fa(s.dur||60)+' دقیقه</span>'+
-    '<span class="sprice"><b>'+price(s.price)+'</b> تومان</span>'+
-    '<span class="chev">‹</span></div>').join('');
-  w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openSvcEdit(r.dataset.id));
+ document.getElementById('svcCount').textContent=fa(D.services.length)+' خدمت';
+ const w=document.getElementById('svcList');
+ if(!D.services.length){w.innerHTML='<div class="empty"><span>خدمتی ثبت نشده</span></div>';return}
+ w.innerHTML=D.services.map(s=>'<div class="srow" data-id="'+esc(s.id)+'">'+
+  '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+icon('user',11)+' '+esc(staffNamesOf(s))+'</div></span>'+
+  '<span class="sdur">'+fa(s.dur||60)+' دقیقه</span>'+
+  '<span class="sprice"><b>'+fmtPrice(s.price)+'</b> تومان</span><span class="chev">‹</span></div>').join('');
+ w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openSvcEdit(r.dataset.id));
 }
 document.getElementById('btnAddSvc').onclick=()=>openSvcEdit('');
 function openSvcEdit(id){
-  editSvcId=id||null;
-  const s=id?D.services.filter(x=>x.id===id)[0]:null;
-  document.getElementById('seTitle').textContent=s?'ویرایش خدمت':'افزودن خدمت';
-  document.getElementById('seName').value=s?s.name||'':'';
-  document.getElementById('seDur').value=s?s.dur||60:60;
-  document.getElementById('sePrice').value=s?s.price||0:0;
-  document.getElementById('seDelWrap').hidden=!s;
-  document.getElementById('seDel').classList.remove('armed');
-  document.getElementById('seDel').textContent='حذف خدمت';
-  const w=document.getElementById('seStaff');w.innerHTML='';
-  const sel=Array.isArray(s&&s.staff)?s.staff.map(String):[];
-  D.staff.forEach(st=>{
-    const b=document.createElement('button');b.className='chip'+(sel.indexOf(String(st.id))>-1?' sel':'');
-    b.textContent=st.name;b.onclick=()=>b.classList.toggle('sel');w.appendChild(b);
-  });
-  document.getElementById('seErr').classList.remove('on');
-  openDr('drSvc');
+ editingSvcId=id||null;
+ const s=id?svcOf(id):null;
+ document.getElementById('svDrTitle').textContent=s?'ویرایش خدمت':'افزودن خدمت';
+ document.getElementById('seName').value=s?s.name||'':'';
+ document.getElementById('seDur').value=s?(s.dur||60):60;
+ document.getElementById('sePrice').value=s?(s.price||0):0;
+ document.getElementById('seDelWrap').hidden=!s;
+ document.getElementById('seDel').classList.remove('armed');
+ document.getElementById('seDel').textContent='حذف خدمت';
+ const w=document.getElementById('seStaff');w.innerHTML='';
+ const sel=Array.isArray(s&&s.staff)?s.staff.map(String):[];
+ D.staff.forEach(st=>{
+  const b=document.createElement('button');b.className='chip'+(sel.indexOf(String(st.id))>-1?' sel':'');
+  b.textContent=st.name;b.onclick=()=>b.classList.toggle('sel');w.appendChild(b);
+ });
+ document.getElementById('seErr').classList.remove('on');
+ openDr('drSvc');
 }
 document.getElementById('seSave').onclick=async function(){
-  const e=document.getElementById('seErr');e.classList.remove('on');
-  const name=document.getElementById('seName').value.trim();
-  const dur=+document.getElementById('seDur').value||60;
-  const pr=+document.getElementById('sePrice').value||0;
-  const chips=Array.from(document.querySelectorAll('#seStaff .chip'));
-  const staff=chips.map((c,i)=>c.classList.contains('sel')&&D.staff[i]?String(D.staff[i].id):null).filter(Boolean);
-  if(name.length<2){e.textContent='نام خدمت را وارد کنید';e.classList.add('on');return}
-  this.disabled=true;this.textContent='در حال ذخیره…';
-  try{
-    const id=editSvcId||('sv'+uid());
-    await sb.from('services').upsert({id:id,name:name,dur:dur,price:pr});
-    await sb.from('service_staff').delete().eq('service_id',id);
-    if(staff.length)await sb.from('service_staff').insert(staff.map(x=>({service_id:id,staff_id:x})));
-    closeDr();toast('خدمت ذخیره شد');load(true);
-  }catch(err){e.textContent=err.message||'خطا';e.classList.add('on')}
-  this.disabled=false;this.textContent='ذخیره خدمت';
+ const e=document.getElementById('seErr');e.classList.remove('on');
+ const name=document.getElementById('seName').value.trim();
+ const dur=+document.getElementById('seDur').value||60;
+ const pr=+document.getElementById('sePrice').value||0;
+ const staff=[];document.querySelectorAll('#seStaff .chip').forEach((c,i)=>{if(c.classList.contains('sel')&&D.staff[i])staff.push(String(D.staff[i].id))});
+ if(name.length<2){e.textContent='نام خدمت را وارد کنید';e.classList.add('on');return}
+ if(!staff.length){e.textContent='حداقل یک متخصص انتخاب کنید';e.classList.add('on');return}
+ this.disabled=true;
+ try{
+  const sid=editingSvcId||('sv'+uid());
+  await sb.from('services').upsert({id:sid,name:name,dur:dur,price:pr});
+  await sb.from('service_staff').delete().eq('service_id',sid);
+  await sb.from('service_staff').insert(staff.map(x=>({service_id:sid,staff_id:x})));
+  closeDr();toast('خدمت ذخیره شد ✓');load(true);
+ }catch(err){e.textContent=err.message||'خطا';e.classList.add('on')}
+ this.disabled=false;
 };
-document.getElementById('seDel').onclick=async function(){
-  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
-  if(!editSvcId)return;
-  this.disabled=true;
-  await sb.from('services').delete().eq('id',editSvcId);
-  closeDr();toast('خدمت حذف شد');load(true);
-};
-
-function renderStaff(){
-  document.getElementById('staffCount').textContent=fa(D.staff.length)+' متخصص';
-  const w=document.getElementById('staffList');
-  if(!D.staff.length){w.innerHTML='<div class="empty">متخصصی ثبت نشده — دکمه «افزودن متخصص» را بزنید</div>';return}
-  w.innerHTML=D.staff.map((s,i)=>'<div class="srow" data-id="'+esc(s.id)+'">'+
-    '<span class="avatar av'+(i%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
-    '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+esc(s.role||'متخصص')+(s.phone?' · '+fa(s.phone):'')+'</div></span>'+
-    '<span class="chev">‹</span></div>').join('');
-  w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openStaffEdit(r.dataset.id));
-}
-document.getElementById('btnAddStaff').onclick=()=>openStaffEdit('');
-function openStaffEdit(id){
-  editStaffId=id||null;
-  const s=id?D.staff.filter(x=>x.id===id)[0]:null;
-  document.getElementById('stfTitle').textContent=s?'ویرایش متخصص':'افزودن متخصص';
-  document.getElementById('stfName').value=s?s.name||'':'';
-  document.getElementById('stfRole').value=s?s.role||'':'';
-  document.getElementById('stfPhone').value=s?s.phone||'':'';
-  document.getElementById('stfDelWrap').hidden=!s;
-  document.getElementById('stfDel').classList.remove('armed');
-  document.getElementById('stfDel').textContent='حذف متخصص';
-  document.getElementById('stfErr').classList.remove('on');
-  openDr('drStaff');
-}
-document.getElementById('stfSave').onclick=async function(){
-  const e=document.getElementById('stfErr');e.classList.remove('on');
-  const name=document.getElementById('stfName').value.trim();
-  const role=document.getElementById('stfRole').value.trim();
-  const phone=normPh(document.getElementById('stfPhone').value);
-  if(name.length<2){e.textContent='نام را وارد کنید';e.classList.add('on');return}
-  this.disabled=true;this.textContent='در حال ذخیره…';
-  try{
-    const id=editStaffId||('st'+uid());
-    await sb.from('staff').upsert({id:id,name:name,role:role,phone:phone});
-    closeDr();toast('متخصص ذخیره شد');load(true);
-  }catch(err){e.textContent=err.message||'خطا';e.classList.add('on')}
-  this.disabled=false;this.textContent='ذخیره';
-};
-document.getElementById('stfDel').onclick=async function(){
-  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
-  if(!editStaffId)return;
-  this.disabled=true;
-  await sb.from('staff').delete().eq('id',editStaffId);
-  closeDr();toast('متخصص حذف شد');load(true);
+document.getElementById('seDel').onclick=function(){
+ if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+ if(!editingSvcId)return;
+ this.disabled=true;
+ sb.from('services').delete().eq('id',editingSvcId).then(({error})=>{
+  toast(error?('خطا: '+error.message):'حذف شد');if(!error){closeDr();load(true)}});
 };
 
-/* ───────── نوبت جدید (پنل) ───────── */
-let formDate='',formStaffId='';
-function openForm(pre){
-  pre=pre||{};
-  formDate=pre.date||curDate||TODAY_ISO;
-  formStaffId=pre.staffId||'';
-  document.getElementById('fSub').textContent=dayName(formDate)+(pre.time?' · ساعت '+tLbl(pre.time):'');
-  document.getElementById('fName').value='';document.getElementById('fPhone').value='';
-  document.getElementById('fNote').value='';
-  const sel=document.getElementById('fService');
-  sel.innerHTML=D.services.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+' ('+fa(s.dur||60)+' دقیقه)</option>').join('');
-  if(pre.serviceId)sel.value=pre.serviceId;
-  sel.onchange=renderSvcInfo;renderSvcInfo();
-  const w=document.getElementById('fStaff');w.innerHTML='';
-  D.staff.forEach(s=>{
-    const b=document.createElement('button');b.className='chip'+(String(s.id)===String(formStaffId)?' sel':'');
-    b.textContent=s.name;
-    b.onclick=()=>{formStaffId=s.id;w.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');checkConflict()};
-    w.appendChild(b);
+/* ───────── فرم نوبت (ثبت/ویرایش) ───────── */
+function attachSug(input,sugEl,onPick){
+ input.addEventListener('input',()=>{
+  const q=input.value.trim();sugEl.innerHTML='';if(q.length<1){sugEl.classList.remove('on');return}
+  const nq=norm(q);
+  const hits=D.customers.filter(c=>norm(c.name||'').includes(nq)||normPhone(c.phone).includes(normPhone(q))).slice(0,6);
+  let h=hits.map(c=>'<div class="sug-item" data-id="'+esc(c.id)+'"><span>'+esc(c.name)+'</span><span class="ph" dir="ltr">'+fa(normPhone(c.phone))+'</span></div>').join('');
+  h+='<div class="sug-item sug-new" data-new="1">'+icon('plus',13)+'<span>مشتری جدید: «'+esc(q)+'»</span></div>';
+  sugEl.innerHTML=h;sugEl.classList.add('on');
+  sugEl.querySelectorAll('.sug-item').forEach(it=>it.onclick=()=>{
+   sugEl.classList.remove('on');
+   if(it.dataset.new){onPick(null,q)}else{const c=D.customers.filter(x=>x.id===it.dataset.id)[0];onPick(c,c.name)}
   });
-  const ts=document.getElementById('fTime');
-  ts.innerHTML='';
-  for(let m=DAY_START;m<DAY_END;m+=30){
-    const v=minToHHMMC(m);
-    ts.innerHTML+='<option value="'+v+'"'+(pre.time===v?' selected':'')+'>'+tLbl(v)+'</option>';
-  }
-  if(pre.time)ts.value=pre.time;
-  ts.onchange=checkConflict;
-  document.getElementById('fWarn').classList.remove('on');
-  document.getElementById('fErr').classList.remove('on');
-  updateFormDate();
-  openDr('drForm');
+ });
+ document.addEventListener('click',e=>{if(!sugEl.contains(e.target)&&e.target!==input)sugEl.classList.remove('on')});
 }
-function renderSvcInfo(){
-  const s=D.services.filter(x=>x.id===document.getElementById('fService').value)[0];
-  document.getElementById('fSvcInfo').textContent=s?('قیمت: '+price(s.price)+' تومان · متخصص‌ها: '+staffNamesOf(s)):'';
+let formDate=TODAY,formStaffId='',formTimeSTouched=false;
+function openForm(pre){
+ pre=pre||{};
+ editingApptId=pre.id||null;
+ formDate=pre.date||curDate||TODAY;
+ formStaffId=pre.staffId||'';
+ formCustId=pre.preCustId||null;formTimeSTouched=false;
+ document.getElementById('fSub').textContent=(editingApptId?'ویرایش نوبت · ':'ثبت نوبت جدید · ')+dayName(formDate);
+ document.getElementById('fName').value=pre.preName||'';
+ document.getElementById('fPhone').value=pre.prePhone||'';
+ const sel=document.getElementById('fService');
+ sel.innerHTML=D.services.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+' ('+fa(s.dur||60)+' دقیقه)</option>').join('');
+ if(pre.serviceId)sel.value=pre.serviceId;
+ sel.onchange=()=>{formStaffId='';renderFChips();renderFSum()};
+ renderFChips();
+ const tR=document.getElementById('fTimeR'),tS=document.getElementById('fTimeS');
+ let opts='';for(let m=DS;m<DE;m+=15)opts+='<option value="'+minToHHMMC(m)+'">'+tLbl(minToHHMMC(m))+'</option>';
+ tR.innerHTML=opts;tS.innerHTML=opts;
+ if(pre.timeR)tR.value=pre.timeR;else tR.value=minToHHMMC(Math.max(DS,Math.ceil(nowMin()/15)*15));
+ tS.value=tR.value;
+ tR.onchange=()=>{if(!formTimeSTouched)tS.value=tR.value;checkConflict()};
+ tS.onchange=()=>{formTimeSTouched=true;checkConflict()};
+ document.getElementById('fWarn').classList.remove('on');
+ document.getElementById('fErr').classList.remove('on');
+ updateFormDate();
+ openDr('drForm');
+}
+function renderFChips(){
+ const svc=svcOf(document.getElementById('fService').value);
+ const allowed=(svc&&svc.staff&&svc.staff.length)?svc.staff:D.staff.map(s=>s.id);
+ const w=document.getElementById('fChips');w.innerHTML='';
+ let has=false;
+ D.staff.forEach(s=>{
+  if(allowed.indexOf(String(s.id))===-1)return;has=true;
+  const b=document.createElement('button');b.className='chip'+(String(s.id)===String(formStaffId)?' sel':'');
+  b.textContent=s.name;
+  b.onclick=()=>{formStaffId=s.id;w.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderFSum();checkConflict()};
+  w.appendChild(b);
+ });
+ if(!has)w.innerHTML='<span class="fsum">این خدمت متخصصی ندارد — از تب خدمات تنظیم کنید</span>';
+}
+function renderFSum(){
+ const svc=svcOf(document.getElementById('fService').value);
+ const st=staffById(formStaffId);
+ document.getElementById('fSummary').innerHTML=svc?
+  (fmtPrice(svc.price)+' تومان · '+fa(svc.dur)+' دقیقه'+(st?' · '+esc(st.name):'')):'';
 }
 function updateFormDate(){
-  document.getElementById('fDateVal').textContent=dayName(formDate);
-  document.getElementById('fSub').textContent=dayName(formDate);
+ document.getElementById('fDateVal').textContent=dayName(formDate);
+ document.getElementById('fSub').textContent=(editingApptId?'ویرایش نوبت · ':'ثبت نوبت جدید · ')+dayName(formDate);
 }
-document.getElementById('fPrev').onclick=()=>{formDate=isoShift(formDate,-1);if(formDate<TODAY_ISO)formDate=TODAY_ISO;updateFormDate();checkConflict()};
-document.getElementById('fNext').onclick=()=>{formDate=isoShift(formDate,1);updateFormDate();checkConflict()};
+document.getElementById('fPrev').onclick=()=>{formDate=shiftISO(formDate,-1);if(formDate<TODAY)formDate=TODAY;updateFormDate();checkConflict()};
+document.getElementById('fNext').onclick=()=>{formDate=shiftISO(formDate,1);updateFormDate();checkConflict()};
+attachSug(document.getElementById('fName'),document.getElementById('fSug'),(c,q)=>{
+ if(c){formCustId=c.id;document.getElementById('fName').value=c.name;document.getElementById('fPhone').value=normPhone(c.phone)}
+ else{formCustId=null;document.getElementById('fName').value=q;document.getElementById('fPhone').value='';document.getElementById('fPhone').focus()}
+});
 document.getElementById('fPhone').addEventListener('input',function(){
-  this.value=this.value.replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'').slice(0,11);
+ this.value=this.value.replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'').slice(0,11);
 });
 function checkConflict(){
-  const sId=document.getElementById('fService').value;
-  const t=document.getElementById('fTime').value;
-  const s=D.services.filter(x=>x.id===sId)[0];
-  const warn=document.getElementById('fWarn');
-  if(!s||!t||!formStaffId){warn.classList.remove('on');return}
-  const dur=s.dur||60,m=toMinC(t);
-  const st=D.staff.filter(x=>x.id===formStaffId)[0];
-  const ivs=D.appointments.filter(a=>a.date===formDate&&a.status==='booked'&&String(a.staffId)===String(formStaffId))
-    .map(a=>{const s2=toMinC(a.timeS||a.timeR||'');return {s:s2,e:s2+durOf(a)}});
-  if(ivs.some(v=>m<v.e&&v.s<m+dur)){
-    warn.textContent='⚠️ این ساعت برای «'+(st?st.name:'')+'» تداخل دارد — ساعت دیگری انتخاب کنید';
-    warn.classList.add('on');
-  }else warn.classList.remove('on');
+ const warn=document.getElementById('fWarn');
+ const svc=svcOf(document.getElementById('fService').value);
+ const tR=toMinC(document.getElementById('fTimeR').value),tS=toMinC(document.getElementById('fTimeS').value);
+ if(!svc||!formStaffId||isNaN(tR)){warn.classList.remove('on');return}
+ const start=Math.min(tR,tS);
+ const iv={s:start,e:Math.max(tR,tS)+svc.dur};
+ if(overlaps(formStaffId,formDate,iv,editingApptId)){
+  warn.innerHTML='⚠️ این بازه با نوبت دیگری تداخل دارد. <b style="cursor:pointer;text-decoration:underline" id="fForce">ثبت به هر حال</b>';
+  warn.classList.add('on');
+  document.getElementById('fForce').onclick=()=>warn.classList.remove('on');
+ }else warn.classList.remove('on');
 }
 document.getElementById('fSave').onclick=async function(){
-  const err=document.getElementById('fErr');err.classList.remove('on');
-  const name=document.getElementById('fName').value.trim();
-  const phone=normPh(document.getElementById('fPhone').value.trim());
-  const time=document.getElementById('fTime').value;
-  const serviceId=document.getElementById('fService').value;
-  const note=document.getElementById('fNote').value.trim();
-  if(name.length<2){err.textContent='نام مشتری را کامل وارد کنید';err.classList.add('on');return}
-  if(!/^09\d{9}$/.test(phone)){err.textContent='شماره موبایل معتبر نیست (09xxxxxxxxx)';err.classList.add('on');return}
-  if(!formStaffId){err.textContent='متخصص را انتخاب کنید';err.classList.add('on');return}
-  const btn=this;btn.disabled=true;btn.textContent='در حال ثبت…';
-  try{
-    /* مشتری: پیدا یا بساز */
-    const {data:cust}=await sb.from('customers').select('id,name').eq('phone',phone).maybeSingle();
-    let cid;
-    if(cust){
-      cid=cust.id;
-      if(!String(cust.name||'').trim())await sb.from('customers').update({name:name}).eq('id',cid);
-    }else{
-      cid='c'+uid();
-      const {error}=await sb.from('customers').insert({id:cid,name:name,phone:phone,note:'ثبت در پنل'});
-      if(error)throw error;
-    }
-    const {error}=await sb.from('appointments').insert({
-      id:'m'+uid(),date:formDate,time_r:time,time_s:time,customer_id:cid,
-      name:name,phone:phone,service_id:serviceId,staff_id:formStaffId,
-      status:'booked',source:'panel',note:note});
-    if(error)throw error;
-    closeDr();toast('✓ نوبت ثبت شد');load(true);
-  }catch(e2){err.textContent=(e2.message||'خطا');err.classList.add('on')}
-  btn.disabled=false;btn.textContent='ثبت نوبت';
+ const err=document.getElementById('fErr');err.classList.remove('on');
+ const name=document.getElementById('fName').value.trim();
+ const phone=normPhone(document.getElementById('fPhone').value.trim());
+ const svc=svcOf(document.getElementById('fService').value);
+ const tR=document.getElementById('fTimeR').value,tS=document.getElementById('fTimeS').value;
+ if(name.length<2){err.textContent='نام مشتری را کامل وارد کنید';err.classList.add('on');return}
+ if(!validPhone(phone)){err.textContent='شماره موبایل معتبر نیست';err.classList.add('on');return}
+ if(!svc){err.textContent='خدمت را انتخاب کنید';err.classList.add('on');return}
+ if(!formStaffId){err.textContent='متخصص را انتخاب کنید';err.classList.add('on');return}
+ const btn=this;btn.disabled=true;
+ try{
+  let cid=formCustId;
+  if(!cid){
+   const ex=D.customers.filter(c=>normPhone(c.phone)===phone)[0];
+   if(ex){cid=ex.id;if(!String(ex.name||'').trim())await sb.from('customers').update({name:name}).eq('id',cid)}
+   else{cid='c'+uid();await sb.from('customers').insert({id:cid,name:name,phone:phone,note:''})}
+  }
+  const row={date:formDate,time_r:tR,time_s:tS,customer_id:cid,name:name,phone:phone,
+   service_id:svc.id,staff_id:formStaffId,status:'booked',note:''};
+  if(editingApptId){const{error}=await sb.from('appointments').update(row).eq('id',editingApptId);if(error)throw error;toast('نوبت ویرایش شد ✓')}
+  else{const{error}=await sb.from('appointments').insert(Object.assign({id:'m'+uid(),source:'panel'},row));if(error)throw error;toast('نوبت ثبت شد ✓')}
+  closeDr();load(true);
+ }catch(e2){err.textContent=e2.message||'خطا';err.classList.add('on')}
+ btn.disabled=false;
 };
 
 /* ───────── جزئیات نوبت ───────── */
 window.openDetail=function(id){
-  const a=D.appointments.filter(x=>x.id===id)[0];if(!a)return;
-  detailId=id;
-  document.getElementById('dSub').textContent=dayName(a.date)+' · ساعت '+tLbl(a.timeR||a.timeS||'');
-  const st=a.status||'booked';
-  const stTxt={booked:'رزرو شده',done:'انجام شد',canceled:'لغو شده'}[st]||st;
-  document.getElementById('dBody').innerHTML=
-    '<span class="stpill st-'+st+'">'+stTxt+(a.source==='online'?' · 🌐 آنلاین':'')+'</span>'+
-    '<div class="drow"><span class="dl">مشتری</span><span class="dv">'+esc(a.name||'—')+'</span></div>'+
-    '<div class="drow"><span class="dl">موبایل</span><span class="dv" dir="ltr">'+fa(normPh(a.phone))+'</span></div>'+
-    '<div class="drow"><span class="dl">خدمت</span><span class="dv">'+esc(a.svc||'—')+'</span></div>'+
-    '<div class="drow"><span class="dl">متخصص</span><span class="dv">'+esc(a.staff||'—')+'</span></div>'+
-    '<div class="drow"><span class="dl">ساعت رزرو</span><span class="dv">'+tLbl(a.timeR||'—')+'</span></div>'+
-    '<div class="drow"><span class="dl">ساعت شروع</span><span class="dv">'+tLbl(a.timeS||a.timeR||'—')+'</span></div>'+
-    (a.note?'<div class="drow"><span class="dl">یادداشت</span><span class="dv">'+esc(a.note)+'</span></div>':'')+
-    '<div class="dacts" id="dActs"></div>';
-  const acts=document.getElementById('dActs');
-  if(st!=='done'){
-    const b1=document.createElement('button');b1.className='btn btn-green';b1.textContent='✓ انجام شد';
-    b1.onclick=()=>setApptStatus(id,'done','انجام شد ✓');acts.appendChild(b1);
-  }
-  if(st!=='canceled'){
-    const b2=document.createElement('button');b2.className='btn btn-danger-ghost';b2.textContent='لغو نوبت';
-    b2.onclick=()=>setApptStatus(id,'canceled','نوبت لغو شد');acts.appendChild(b2);
-  }
-  const b3=document.createElement('button');b3.className='btn btn-del';b3.textContent='حذف کامل';
-  b3.onclick=function(){
-    if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
-    deleteAppt(id);
-  };
-  acts.appendChild(b3);
-  openDr('drDetail');
+ const a=D.appointments.filter(x=>x.id===id)[0];if(!a)return;
+ document.getElementById('dSub').textContent=dayName(a.date)+' · رزرو '+tLbl(a.timeR||'')+(a.timeS&&a.timeS!==a.timeR?' · شروع '+tLbl(a.timeS):'');
+ const st=a.status||'booked';
+ const stTxt={booked:'رزرو شده',done:'انجام شد',canceled:'لغو شده',inprogress:'در حال انجام'}[st]||st;
+ document.getElementById('dBody').innerHTML=
+  '<span class="stpill st-'+st+'">'+stTxt+(a.source==='online'?' · 🌐 آنلاین':'')+'</span>'+
+  '<div class="drow"><span class="dl">مشتری</span><span class="dv">'+esc(a.name||'—')+'</span></div>'+
+  '<div class="drow"><span class="dl">موبایل</span><span class="dv" dir="ltr">'+fa(normPhone(a.phone))+'</span></div>'+
+  '<div class="drow"><span class="dl">خدمت</span><span class="dv">'+esc(a.svc||'—')+' <small>'+fmtPrice((svcOf(a.serviceId)||{}).price)+' تومان</small></span></div>'+
+  '<div class="drow"><span class="dl">متخصص</span><span class="dv">'+esc(a.staff||'—')+'</span></div>'+
+  (a.note?'<div class="drow"><span class="dl">یادداشت</span><span class="dv">'+esc(a.note)+'</span></div>':'')+
+  '<div class="dacts" id="dActs"></div>';
+ const acts=document.getElementById('dActs');
+ const mkBtn=(cls,txt,fn)=>{const b=document.createElement('button');b.className='btn '+cls;b.textContent=txt;b.onclick=fn;acts.appendChild(b);return b};
+ if(st==='booked')mkBtn('btn-ghost'.replace('btn-ghost','')||'', '',()=>{})&&0;
+ if(st==='booked')mkBtn('', '',()=>{})&&0;
+ /* دکمه‌ها */
+ if(st==='booked')mkBtn('', '▶ شروع خدمت',()=>setSt(id,'inprogress','شروع شد')).style.cssText='background:var(--accent-soft);color:var(--accent-deep);border-color:#EBC7B2';
+ if(st==='booked'||st==='inprogress')mkBtn('btn-green','✓ انجام شد',()=>setSt(id,'done','انجام شد ✓'));
+ if(st!=='canceled')mkBtn('btn-danger-ghost','لغو نوبت',()=>setSt(id,'canceled','نوبت لغو شد'));
+ mkBtn('', '✎ ویرایش نوبت',()=>{closeDr();openForm(Object.assign({},a,{date:a.date}))}).style.cssText='background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2)';
+ if(st!=='canceled')mkBtn('', '🧾 صدور فاکتور',()=>{closeDr();openInvoice({fromAppt:a})}).style.cssText='background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2)';
+ const del=document.createElement('button');del.className='btn btn-del';del.textContent='حذف کامل';
+ del.onclick=function(){if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+  sb.from('appointments').delete().eq('id',id).then(({error})=>{toast(error?('خطا: '+error.message):'حذف شد');if(!error){closeDr();load(true)}})};
+ acts.appendChild(del);
+ openDr('drDetail');
 };
-async function setApptStatus(id,status,msg){
-  closeDr();toast('در حال ذخیره…');
-  const {error}=await sb.from('appointments').update({status:status}).eq('id',id);
-  if(error){toast('خطا: '+error.message);return}
-  toast(msg);load(true);
+async function setSt(id,status,msg){
+ closeDr();
+ const {error}=await sb.from('appointments').update({status:status}).eq('id',id);
+ toast(error?('خطا: '+error.message):msg);if(!error)load(true);
 }
-async function deleteAppt(id){
-  closeDr();
-  const {error}=await sb.from('appointments').delete().eq('id',id);
-  toast(error?('خطا: '+error.message):'نوبت حذف شد');
-  if(!error)load(true);
+
+/* ───────── فاکتورها ───────── */
+const METHODS=['نقدی','کارت','کارت به کارت','آنلاین'];
+function renderInvoices(){
+ const q=document.getElementById('vSearch').value.trim();
+ const list=D.invoices.filter(v=>!q||String(v.no||'').includes(q)||(v.name||'').includes(q)||normPhone(v.phone).includes(normPhone(q)))
+  .sort((a,b)=>(b.date+(b.no||0)).localeCompare(a.date+(a.no||0)));
+ document.getElementById('invCount').textContent=fa(list.length)+' فاکتور';
+ const w=document.getElementById('invList');
+ if(!list.length){w.innerHTML='<div class="empty"><span>فاکتوری ثبت نشده</span></div>';return}
+ w.innerHTML=list.map(v=>'<div class="crow" data-id="'+esc(v.id)+'"><span class="inv-no">'+fa(v.no||'—')+'</span>'+
+  '<div class="cmain"><div class="cname">'+esc(v.name||'—')+'</div><div class="cphone">'+DF.short.format(dObj(v.date))+' · '+esc(v.method)+'</div></div>'+
+  '<span class="sprice"><b>'+fmtPrice(v.total)+'</b> تومان</span><span class="chev">‹</span></div>').join('');
+ w.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openInvView(r.dataset.id));
 }
+document.getElementById('vSearch').addEventListener('input',renderInvoices);
+document.getElementById('btnNewInv').onclick=()=>openInvoice({});
+function openInvoice(pre){
+ invDraft={customerId:null,name:'',phone:'',items:[],discount:0,discountType:'amount',method:'نقدی',apptId:''};
+ if(pre.fromAppt){
+  const a=pre.fromAppt;
+  invDraft.name=a.name||'';invDraft.phone=normPhone(a.phone);invDraft.apptId=a.id;
+  const c=D.customers.filter(x=>normPhone(x.phone)===invDraft.phone)[0];if(c)invDraft.customerId=c.id;
+  const svc=svcOf(a.serviceId);
+  if(svc)invDraft.items.push({svcId:svc.id,name:svc.name,price:svc.price||0,qty:1,staff:a.staff||''});
+ }
+ document.getElementById('invDrTitle').textContent='صدور فاکتور و تسویه';
+ document.getElementById('invCust').value=invDraft.name;
+ document.getElementById('invPhone').value=invDraft.phone;
+ document.getElementById('invDisc').value=0;
+ document.getElementById('invErr').classList.remove('on');
+ const add=document.getElementById('invAddSvc');
+ add.innerHTML=D.services.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+' — '+fmtPrice(s.price)+'</option>').join('')||'<option>خدمتی ثبت نشده</option>';
+ renderInvItems();renderInvMethod();paintInv();
+ openDr('drInv');
+}
+attachSug(document.getElementById('invCust'),document.getElementById('invSug'),(c,q)=>{
+ if(c){invDraft.customerId=c.id;invDraft.name=c.name;document.getElementById('invCust').value=c.name;document.getElementById('invPhone').value=normPhone(c.phone);invDraft.phone=normPhone(c.phone)}
+ else{invDraft.customerId=null;invDraft.name=q;document.getElementById('invCust').value=q}
+});
+document.getElementById('invPhone').addEventListener('input',function(){
+ this.value=this.value.replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'').slice(0,11);invDraft.phone=this.value;
+});
+document.getElementById('invAddBtn').onclick=()=>{
+ const svc=svcOf(document.getElementById('invAddSvc').value);
+ if(!svc){toast('خدمتی انتخاب نشده');return}
+ invDraft.items.push({svcId:svc.id,name:svc.name,price:svc.price||0,qty:1,staff:''});
+ renderInvItems();paintInv();
+};
+function renderInvItems(){
+ const w=document.getElementById('invItems');
+ if(!invDraft.items.length){w.innerHTML='<div class="iempty">اقلامی اضافه نشده — از پایین خدمت اضافه کنید</div>';return}
+ w.innerHTML=invDraft.items.map((it,i)=>
+  '<div class="irow"><div class="ir-main"><b>'+esc(it.name)+'</b>'+
+  '<select class="ir-staff" data-i="'+i+'"><option value="">— متخصص —</option>'+
+  D.staff.map(s=>'<option'+(it.staff===s.name?' selected':'')+'>'+esc(s.name)+'</option>').join('')+'</select></div>'+
+  '<div class="stepper"><button data-a="-" data-i="'+i+'">−</button><b>'+fa(it.qty)+'</b><button data-a="+" data-i="'+i+'">+</button></div>'+
+  '<input class="ir-price" data-i="'+i+'" dir="ltr" value="'+(it.price||0)+'">'+
+  '<span class="ir-total">'+fmtPrice((it.price||0)*it.qty)+'</span>'+
+  '<button class="ir-x" data-x="'+i+'">'+icon('x',13)+'</button></div>').join('');
+ w.querySelectorAll('.stepper button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;invDraft.items[i].qty=Math.max(1,invDraft.items[i].qty+(b.dataset.a==='+'?1:-1));renderInvItems();paintInv()});
+ w.querySelectorAll('.ir-price').forEach(inp=>inp.onchange=()=>{invDraft.items[+inp.dataset.i].price=+inp.value||0;renderInvItems();paintInv()});
+ w.querySelectorAll('.ir-staff').forEach(s=>s.onchange=()=>{invDraft.items[+s.dataset.i].staff=s.value});
+ w.querySelectorAll('.ir-x').forEach(x=>x.onclick=()=>{invDraft.items.splice(+x.dataset.x,1);renderInvItems();paintInv()});
+}
+function renderInvMethod(){
+ const w=document.getElementById('invMethod');w.innerHTML='';
+ METHODS.forEach(m=>{
+  const b=document.createElement('button');b.className='chip'+(invDraft.method===m?' sel':'');b.textContent=m;
+  b.onclick=()=>{invDraft.method=m;renderInvMethod()};w.appendChild(b);
+ });
+}
+document.querySelectorAll('#invDiscType .chip').forEach(b=>b.onclick=()=>{
+ invDraft.discountType=b.dataset.t;
+ document.querySelectorAll('#invDiscType .chip').forEach(x=>x.classList.toggle('sel',x===b));
+ paintInv();
+});
+document.getElementById('invDisc').oninput=()=>paintInv();
+function paintInv(){
+ invDraft.discount=+document.getElementById('invDisc').value||0;
+ const sub=invDraft.items.reduce((s,it)=>s+(it.price||0)*it.qty,0);
+ const disc=invDraft.discountType==='percent'?Math.round(sub*Math.min(100,invDraft.discount)/100):Math.min(sub,invDraft.discount);
+ document.getElementById('invSubTotal').textContent=fmtPrice(sub);
+ document.getElementById('invDiscount').textContent=fmtPrice(disc);
+ document.getElementById('invTotal').textContent=fmtPrice(sub-disc);
+}
+document.getElementById('invSave').onclick=async function(){
+ const e=document.getElementById('invErr');e.classList.remove('on');
+ if(!invDraft.items.length){e.textContent='حداقل یک قلم اضافه کنید';e.classList.add('on');return}
+ const phone=normPhone(invDraft.phone||document.getElementById('invPhone').value);
+ if(!validPhone(phone)){e.textContent='شماره موبایل مشتری معتبر نیست';e.classList.add('on');return}
+ const btn=this;btn.disabled=true;
+ try{
+  let cid=invDraft.customerId;
+  const name=invDraft.name||document.getElementById('invCust').value.trim();
+  if(!cid){
+   const ex=D.customers.filter(c=>normPhone(c.phone)===phone)[0];
+   if(ex)cid=ex.id;
+   else{cid='c'+uid();await sb.from('customers').insert({id:cid,name:name||'مشتری',phone:phone,note:''})}
+  }
+  const sub=invDraft.items.reduce((s,it)=>s+(it.price||0)*it.qty,0);
+  const disc=invDraft.discountType==='percent'?Math.round(sub*Math.min(100,(+document.getElementById('invDisc').value||0))/100):Math.min(sub,+document.getElementById('invDisc').value||0);
+  const no=D.invoices.reduce((m,v)=>Math.max(m,v.no||0),0)+1;
+  const row={id:'v'+uid(),no:no,date:TODAY,customer_id:cid,name:name||'مشتری',phone:phone,
+   items:invDraft.items,subtotal:sub,discount:disc,discountType:invDraft.discountType,
+   total:sub-disc,method:invDraft.method,status:'paid',apptId:invDraft.apptId||null};
+  const db={id:row.id,no:no,date:row.date,customer_id:cid,name:row.name,phone:phone,items:row.items,
+   subtotal:sub,discount:disc,discount_type:row.discountType,total:row.total,method:row.method,status:'paid',appt_id:row.apptId};
+  const {error}=await sb.from('invoices').insert(db);
+  if(error)throw error;
+  closeDr();toast('فاکتور '+fa(no)+' صادر شد ✓');viewInvId=row.id;load(true);setTimeout(()=>openInvView(row.id),600);
+ }catch(e2){e.textContent=e2.message||'خطا';e.classList.add('on')}
+ btn.disabled=false;
+};
+function openInvView(id){
+ const v=D.invoices.filter(x=>x.id===id)[0];if(!v)return;
+ viewInvId=id;
+ document.getElementById('ivSub').textContent='شماره '+fa(v.no||'—')+' · '+DF.full.format(dObj(v.date));
+ const rows=v.items.map((it,i)=>'<tr><td>'+fa(i+1)+'</td><td>'+esc(it.name)+(it.staff?' <small style="color:var(--ink-3)">('+esc(it.staff)+')</small>':'')+'</td>'+
+  '<td class="num">'+fa(it.qty)+'</td><td class="amt">'+fmtPrice((it.price||0)*it.qty)+'</td></tr>').join('');
+ document.getElementById('ivBody').innerHTML=
+  '<div class="receipt"><div class="rc-brand">سالن زیبایی نیلا</div><div class="rc-sub">FACTURE · فاکتور فروش</div>'+
+  '<hr class="rc-sep">'+
+  '<div class="rc-meta"><span>مشتری: <b>'+esc(v.name||'—')+'</b></span><span dir="ltr"><b>'+fa(normPhone(v.phone))+'</b></span></div>'+
+  '<div class="rc-meta"><span>شماره: <b>'+fa(v.no||'—')+'</b></span><span>تاریخ: <b>'+DF.short.format(dObj(v.date))+'</b></span></div>'+
+  '<hr class="rc-sep">'+
+  '<table class="rc-table"><thead><tr><th>#</th><th>خدمت</th><th style="text-align:center">تعداد</th><th style="text-align:end">مبلغ</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+  '<hr class="rc-sep">'+
+  '<div class="rc-tot"><span>جمع خدمات</span><b>'+fmtPrice(v.subtotal)+'</b></div>'+
+  '<div class="rc-tot"><span>تخفیف</span><b>'+fmtPrice(v.discount)+'</b></div>'+
+  '<div class="rc-tot grand"><span>قابل پرداخت ('+esc(v.method)+')</span><b>'+fmtPrice(v.total)+' تومان</b></div>'+
+  '<div class="rc-thanks">با تشکر از اعتماد شما 🌸</div></div>'+
+  '<div class="dacts"><button class="btn" id="ivPrint" style="background:var(--dark);color:var(--cream)">🖨 چاپ فاکتور</button>'+
+  '<button class="btn btn-del" id="ivDel">حذف فاکتور</button></div>';
+ document.getElementById('ivPrint').onclick=()=>{
+  document.getElementById('printArea').innerHTML=document.getElementById('ivBody').querySelector('.receipt').outerHTML;
+  document.body.classList.add('printing');window.print();
+ };
+ document.getElementById('ivDel').onclick=function(){
+  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+  sb.from('invoices').delete().eq('id',id).then(({error})=>{
+   toast(error?('خطا: '+error.message):'حذف شد');if(!error){closeDr();load(true)}});
+ };
+ openDr('drInvView');
+}
+window.addEventListener('afterprint',()=>{document.body.classList.remove('printing');document.getElementById('printArea').innerHTML=''});
+
+/* ───────── گزارش روز ───────── */
+function renderReport(){
+ document.getElementById('rpMeta').innerHTML='<b>'+dayName(rpDate)+'</b>';
+ const appts=D.appointments.filter(a=>a.date===rpDate);
+ const act=appts.filter(a=>a.status!=='canceled');
+ const done=appts.filter(a=>a.status==='done');
+ const invs=D.invoices.filter(v=>v.date===rpDate);
+ const rev=invs.reduce((s,v)=>s+(v.total||0),0);
+ document.getElementById('rpCards').innerHTML=
+  '<div class="stbox"><b>'+fa(appts.length)+'</b><span>نوبت ('+fa(done.length)+' انجام)</span></div>'+
+  '<div class="stbox"><b>'+fa(invs.length)+'</b><span>فاکتور</span></div>'+
+  '<div class="stbox"><b>'+fmtPrice(rev)+'</b><span>درآمد روز (تومان)</span></div>'+
+  '<div class="stbox"><b>'+fmtPrice(invs.length?Math.round(rev/invs.length):0)+'</b><span>میانگین فاکتور</span></div>';
+ const byPay={};invs.forEach(v=>byPay[v.method]=(byPay[v.method]||0)+(v.total||0));
+ document.getElementById('rpPay').innerHTML=Object.keys(byPay).length?
+  Object.keys(byPay).map(m=>'<div class="drow"><span class="dl">'+esc(m)+'</span><span class="dv">'+fmtPrice(byPay[m])+'</span></div>').join('')
+  :'<div class="empty" style="padding:14px">فاکتوری صادر نشده</div>';
+ const byStaff={};invs.forEach(v=>(v.items||[]).forEach(it=>{
+  const k=it.staff||'—';byStaff[k]=(byStaff[k]||0)+(it.price||0)*(it.qty||1)}));
+ document.getElementById('rpStaff').innerHTML=Object.keys(byStaff).length?
+  Object.keys(byStaff).sort((a,b)=>byStaff[b]-byStaff[a]).map(k=>'<div class="hrow"><div class="hmain"><b>'+esc(k)+'</b></div><span class="hmeta">'+fmtPrice(byStaff[k])+' تومان</span></div>').join('')
+  :'<div class="empty" style="padding:14px">—</div>';
+ document.getElementById('rpInvCount').textContent=fa(invs.length);
+ document.getElementById('rpInvoices').innerHTML=invs.length?invs.map(v=>
+  '<div class="hrow click" onclick="openInvView(\''+v.id+'\')"><div class="hmain"><b>فاکتور '+fa(v.no||'—')+' · '+esc(v.name||'')+'</b><span>'+esc(v.method)+'</span></div><span class="hmeta">'+fmtPrice(v.total)+'</span></div>').join('')
+  :'<div class="empty" style="padding:14px">—</div>';
+ document.getElementById('rpAptCount').textContent=fa(appts.length);
+ document.getElementById('rpAppts').innerHTML=appts.length?appts.sort((a,b)=>(a.timeR||'').localeCompare(b.timeR||'')).map(a=>
+  '<div class="hrow click" onclick="openDetail(\''+a.id+'\')"><div class="hmain"><b>'+tLbl(a.timeR||'')+' · '+esc(a.name||'')+'</b><span>'+esc(a.svc||'')+' · '+esc(a.staff||'—')+'</span></div>'+
+  '<span class="pill st-'+(a.status||'booked')+'">'+({booked:'رزرو',done:'انجام',canceled:'لغو',inprogress:'جاری'}[a.status]||'')+'</span></div>').join('')
+  :'<div class="empty" style="padding:14px">—</div>';
+}
+document.getElementById('rpPrev').onclick=()=>{rpDate=shiftISO(rpDate,-1);renderReport()};
+document.getElementById('rpNext').onclick=()=>{rpDate=shiftISO(rpDate,1);renderReport()};
+document.getElementById('rpToday').onclick=()=>{rpDate=TODAY;renderReport()};
+makePicker(document.getElementById('rpPick'),()=>rpDate,iso=>{rpDate=iso;renderReport()},iso=>D.appointments.some(a=>a.date===iso));
+document.getElementById('rpPrint').onclick=()=>{
+ const appts=D.appointments.filter(a=>a.date===rpDate);
+ const invs=D.invoices.filter(v=>v.date===rpDate);
+ const rev=invs.reduce((s,v)=>s+(v.total||0),0);
+ document.getElementById('printArea').innerHTML=
+  '<div class="receipt"><div class="rc-brand">سالن زیبایی نیلا</div><div class="rc-sub">گزارش روز · '+DF.year.format(dObj(rpDate))+'</div><hr class="rc-sep">'+
+  '<div class="rc-meta"><span>نوبت‌ها: <b>'+fa(appts.length)+'</b></span><span>فاکتور: <b>'+fa(invs.length)+'</b></span><span>درآمد: <b>'+fmtPrice(rev)+'</b></span></div><hr class="rc-sep">'+
+  '<table class="rc-table"><thead><tr><th>ساعت</th><th>مشتری</th><th>خدمت</th><th>متخصص</th><th>وضعیت</th></tr></thead><tbody>'+
+  appts.sort((a,b)=>(a.timeR||'').localeCompare(b.timeR||'')).map(a=>'<tr><td>'+tLbl(a.timeR||'')+'</td><td>'+esc(a.name||'')+'</td><td>'+esc(a.svc||'')+'</td><td>'+esc(a.staff||'—')+'</td><td>'+({booked:'رزرو',done:'انجام',canceled:'لغو',inprogress:'جاری'}[a.status]||'')+'</td></tr>').join('')+
+  '</tbody></table><div class="rc-thanks">بستن صندوق · امضاء: ....................</div></div>';
+ document.body.classList.add('printing');window.print();
+};
+
+/* ───────── پشتیبان‌گیری ───────── */
+function renderBackup(){
+ document.getElementById('sbStatus').textContent='متصل ✓';
+ document.getElementById('bkStats').textContent=fa(D.appointments.length)+' نوبت · '+fa(D.customers.length)+' مشتری · '+fa(D.invoices.length)+' فاکتور';
+}
+function download(name,content,type){
+ const blob=new Blob([content],{type:type||'text/plain;charset=utf-8'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+const csv=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+document.getElementById('bkJson').onclick=()=>download('nila-backup-'+TODAY+'.json',JSON.stringify({v:1,date:TODAY,data:D},null,1),'application/json');
+document.getElementById('bkCsvA').onclick=()=>download('nila-appointments.csv','\ufeffتاریخ,ساعت رزرو,شروع,نام,موبایل,خدمت,متخصص,وضعیت,منبع\n'+
+ D.appointments.map(a=>[a.date,a.timeR,a.timeS,a.name,normPhone(a.phone),a.svc,a.staff,a.status,a.source].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
+document.getElementById('bkCsvC').onclick=()=>download('nila-customers.csv','\ufeffنام,موبایل,یادداشت\n'+
+ D.customers.map(c=>[c.name,normPhone(c.phone),c.note].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
+document.getElementById('bkCsvI').onclick=()=>download('nila-invoices.csv','\ufeffشماره,تاریخ,نام,موبایل,جمع,تخفیف,قابل پرداخت,نحوه پرداخت\n'+
+ D.invoices.map(v=>[v.no,v.date,v.name,normPhone(v.phone),v.subtotal,v.discount,v.total,v.method].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
+let restoreData=null;
+document.getElementById('bkRestoreBtn').onclick=()=>document.getElementById('bkFile').click();
+document.getElementById('bkFile').onchange=function(){
+ const f=this.files[0];if(!f)return;
+ const rd=new FileReader();
+ rd.onload=()=>{
+  try{
+   const j=JSON.parse(rd.result);
+   const d=j.data||j;
+   if(!d.staff&&!d.customers)throw new Error('bad');
+   restoreData=d;
+   document.getElementById('bkRestoreTxt').textContent=
+    'برای بازگردانی '+fa((d.appointments||[]).length)+' نوبت، '+fa((d.customers||[]).length)+' مشتری، '+fa((d.services||[]).length)+' خدمت و '+fa((d.invoices||[]).length)+' فاکتور آماده است.';
+   document.getElementById('bkRestoreInfo').classList.add('on');
+  }catch(e){toast('فایل نامعتبر است')}
+ };
+ rd.readAsText(f);this.value='';
+};
+document.getElementById('bkRestoreGo').onclick=async function(){
+ if(!restoreData)return;
+ const d=restoreData;this.disabled=true;this.textContent='در حال بازگردانی…';
+ try{
+  if(d.staff&&d.staff.length)await sb.from('staff').upsert(d.staff.map(s=>({id:s.id,name:s.name||'',role:s.role||'',phone:s.phone||''})));
+  if(d.services&&d.services.length){
+   await sb.from('services').upsert(d.services.map(s=>({id:s.id,name:s.name||'',dur:s.dur||60,price:s.price||0})));
+   const pairs=[];d.services.forEach(s=>(s.staff||[]).forEach(st=>pairs.push({service_id:s.id,staff_id:String(st)})));
+   if(pairs.length){await sb.from('service_staff').upsert(pairs)}
+  }
+  if(d.customers&&d.customers.length)await sb.from('customers').upsert(d.customers.map(c=>({id:c.id,name:c.name||'',phone:normPhone(c.phone),note:c.note||''})));
+  if(d.appointments&&d.appointments.length)await sb.from('appointments').upsert(d.appointments.map(a=>({id:a.id,date:a.date,time_r:a.timeR||a.time_r||'',time_s:a.timeS||a.time_s||'',customer_id:a.customerId||a.customer_id||null,name:a.name||'',phone:normPhone(a.phone),service_id:a.serviceId||a.service_id||null,staff_id:a.staffId||a.staff_id||null,status:a.status||'booked',source:a.source||'panel',note:a.note||''})));
+  if(d.invoices&&d.invoices.length)await sb.from('invoices').upsert(d.invoices.map(v=>({id:v.id,no:v.no,date:v.date,customer_id:v.customerId||v.customer_id||null,name:v.name||'',phone:normPhone(v.phone),items:v.items||[],subtotal:v.subtotal||0,discount:v.discount||0,discount_type:v.discountType||v.discount_type||'amount',total:v.total||0,method:v.method||'نقدی',status:v.status||'paid',appt_id:v.apptId||v.appt_id||null})));
+  toast('بازگردانی کامل شد ✓');document.getElementById('bkRestoreInfo').classList.remove('on');load(true);
+ }catch(e){toast('خطا: '+(e.message||e))}
+ this.disabled=false;this.textContent='تأیید و بازگردانی';
+};
 
 /* ───────── Drawer / Toast ───────── */
 function openDr(id){
-  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  document.getElementById('scrim').classList.add('on');
+ document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
+ document.getElementById(id).classList.add('on');
+ document.getElementById('scrim').classList.add('on');
 }
 function closeDr(){
-  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
-  document.getElementById('scrim').classList.remove('on');
+ document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
+ document.getElementById('scrim').classList.remove('on');
 }
 document.getElementById('scrim').onclick=closeDr;
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDr);
 function toast(msg){
-  const t=document.createElement('div');t.className='toast';t.textContent=msg;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),320)},3800);
+ const t=document.createElement('div');t.className='toast';
+ t.innerHTML='<i data-icon="check" data-size="15"></i><span>'+esc(msg)+'</span>';
+ t.querySelector('[data-icon]').insertAdjacentHTML('afterbegin',icon('check',15));
+ document.getElementById('toasts').appendChild(t);
+ setTimeout(()=>t.classList.add('out'),3600);setTimeout(()=>t.remove(),3900);
 }
-
-/* ───────── ناوبری و تایمرها ───────── */
-document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{view=b.dataset.view;renderAll()});
 document.getElementById('btnNew').onclick=()=>openForm({date:curDate});
-document.getElementById('btnReload').onclick=()=>load(false);
-setInterval(()=>{
-  const n=new Date();
-  document.getElementById('hdClock').textContent=fa(pad2(n.getHours())+':'+pad2(n.getMinutes()));
-},1000);
-setInterval(()=>{if(LOGGED&&!document.querySelector('.drawer.on'))load(true)},30000);
 </script>
 </body>
 </html>
