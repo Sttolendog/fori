@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نیلا · رزرو آنلاین نوبت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',Tahoma,sans-serif}
+:root{--bg:#F4EEE5;--surface:#FFFCF6;--surface-2:#FAF4E9;--ink:#26190E;--ink-2:#77685A;--ink-3:#AF9F8C;--line:#E8DECD;--line-2:#DBCDB6;--acc:#BC532B;--acc-deep:#963D1C;--acc-soft:#F7E5DA;--green:#5F7350;--green-soft:#EAEDE0;--amber:#A87E2F;--amber-soft:#F5EBD2;--red:#B03A2E;--red-soft:#F6E2DF;--dark:#241A10;--cream:#F4EADD}
+body{background:radial-gradient(900px 420px at 88% -8%,rgba(188,83,43,.08),transparent 60%),radial-gradient(700px 420px at -8% 108%,rgba(168,126,47,.07),transparent 55%),var(--bg);color:var(--ink);min-height:100vh;padding:20px 12px 46px;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+.top{max-width:560px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:42px;height:42px;border-radius:12px;background:var(--acc);display:grid;place-items:center;font-weight:900;font-size:20px;color:#FFF6EA;padding-bottom:3px;box-shadow:0 6px 16px rgba(188,83,43,.3)}
+.mark.sm{width:34px;height:34px;font-size:16px;border-radius:9px}
+.brand b{font-size:16px;display:block;line-height:1.3}
+.brand small{font-size:10.5px;color:var(--ink-3);font-weight:500}
+.live{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--green);background:var(--green-soft);border:1px solid #D8DFC9;padding:6px 12px;border-radius:99px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pl 1.6s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(95,115,80,.4)}70%{box-shadow:0 0 0 7px rgba(95,115,80,0)}100%{box-shadow:0 0 0 0 rgba(95,115,80,0)}}
+.card{max-width:560px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px 18px 16px;box-shadow:0 18px 50px rgba(90,60,30,.09)}
+.steps{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.stp{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;color:var(--ink-3);width:56px;transition:.2s}
+.stp b{width:32px;height:32px;border-radius:50%;border:2px solid var(--line-2);display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--surface);transition:.25s}
+.stp span{font-size:10.5px;font-weight:700}
+.stp.on{color:var(--ink)}.stp.on b{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 4px 12px rgba(188,83,43,.35)}
+.stp.done{color:var(--green)}.stp.done b{border-color:var(--green);color:var(--green)}
+.stp.lock{opacity:.45;cursor:not-allowed}
+.ln{flex:1;height:2px;background:var(--line);margin:15px -8px 0;border-radius:2px;transition:.3s}
+.ln.done{background:var(--green)}
+.bar{display:none;flex-wrap:wrap;gap:7px;margin:-4px 0 15px}.bar.on{display:flex}
+.bchip{display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:99px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--ink-2);transition:.15s}
+.bchip:hover{border-color:var(--acc);color:var(--acc-deep)}
+.pane{display:none}.pane.on{display:block;animation:up .3s ease}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
+.q{font-size:19px;font-weight:900}.qs{font-size:12.5px;color:var(--ink-2);margin:4px 0 15px}
+.quick{display:flex;gap:8px;margin-bottom:12px}
+.qchip{flex:1;border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:13px;padding:10px;font-size:12.5px;font-weight:800;transition:.15s}
+.qchip:hover{border-color:var(--acc)}.qchip.sel{background:var(--dark);border-color:var(--dark);color:var(--cream)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}
+.dchip{min-width:66px;flex:none;border:1.5px solid var(--line-2);background:var(--surface);border-radius:14px;padding:10px 6px;text-align:center;transition:.15s}
+.dchip .w{font-size:10.5px;color:var(--ink-3);font-weight:700}.dchip .n{font-size:16px;font-weight:900;margin-top:3px}.dchip .m{font-size:10px;color:var(--ink-2);margin-top:1px}
+.dchip:hover{border-color:var(--acc)}.dchip.sel{background:var(--acc);border-color:var(--acc)}
+.dchip.sel .w,.dchip.sel .n,.dchip.sel .m{color:#fff}
+.calbtn{width:100%;margin-top:10px;border:1.5px dashed var(--line-2);background:transparent;color:var(--amber);border-radius:13px;padding:12px;font-size:13px;font-weight:800;transition:.15s}
+.calbtn:hover{border-color:var(--amber);background:var(--amber-soft)}
+.svcs{display:flex;flex-direction:column;gap:10px}
+.svc{display:flex;align-items:center;gap:13px;border:1.5px solid var(--line-2);background:var(--surface);border-radius:16px;padding:14px 15px;text-align:right;width:100%;transition:.15s;color:var(--ink)}
+.svc:hover{border-color:var(--acc);box-shadow:0 6px 18px rgba(188,83,43,.1)}
+.svc.sel{border-color:var(--acc);background:linear-gradient(0deg,rgba(188,83,43,.06),rgba(188,83,43,.06)),var(--surface)}
+.svc .ic{width:44px;height:44px;border-radius:13px;background:var(--acc-soft);display:grid;place-items:center;font-size:21px;flex:none}
+.svc .nm{font-size:14.5px;font-weight:800;display:block}.svc .inf{font-size:11px;color:var(--ink-2);margin-top:3px}
+.svc .pr{margin-inline-start:auto;text-align:left;flex:none}
+.svc .pr b{font-size:14.5px;font-weight:900}.svc .pr span{font-size:10px;color:var(--ink-3);display:block;font-weight:600}
+.staff{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stf{border:1.5px solid var(--line-2);background:var(--surface);border-radius:16px;padding:16px 10px;text-align:center;transition:.15s;color:var(--ink)}
+.stf:hover{border-color:var(--acc)}
+.stf.sel{border-color:var(--acc);background:linear-gradient(0deg,rgba(188,83,43,.06),rgba(188,83,43,.06)),var(--surface)}
+.av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;margin:0 auto 9px}
+.av0{background:var(--acc-soft);color:var(--acc-deep)}.av1{background:var(--green-soft);color:#46562F}.av2{background:var(--amber-soft);color:#7A5B1B}.av3{background:#E9E4DC;color:#5C4F3E}
+.stf .n{font-size:13.5px;font-weight:800}.stf .r{font-size:10.5px;color:var(--ink-3);margin-top:3px;font-weight:600}
+.slotmeta{font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.slotmeta b{color:var(--ink);font-weight:800}
+.durpill{font-size:10.5px;font-weight:800;color:var(--amber);background:var(--amber-soft);border:1px solid #E6D3A2;border-radius:99px;padding:3px 10px}
+.ghead{font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 9px;display:flex;align-items:center;gap:7px}
+.ghead:first-of-type{margin-top:0}.ghead::after{content:'';flex:1;height:1px;background:var(--line)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);border-radius:12px;padding:11px 4px;font-size:13.5px;font-weight:800;transition:.15s}
+.slot:hover{border-color:var(--acc)}
+.slot.sel{background:var(--acc);border-color:var(--acc);color:#fff}
+.slot.taken{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.slotwarn{display:none;margin-top:12px;background:var(--red-soft);border:1px solid #EAC9C0;color:#8C2C22;font-size:12px;font-weight:700;border-radius:10px;padding:10px 13px}
+.slotwarn.on{display:block}
+.mini{background:var(--surface-2);border:1px dashed var(--line-2);border-radius:14px;padding:13px 15px;font-size:12.5px;line-height:2.2;color:var(--ink-2);margin-bottom:15px}
+.mini b{color:var(--ink);font-weight:800}
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:7px}
+.fld input{width:100%;border:1.5px solid var(--line-2);background:#fff;border-radius:12px;padding:12px 14px;font-size:14.5px;color:var(--ink);outline:none;transition:.15s}
+.fld input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
+.greet{display:none;background:var(--green-soft);border:1px solid #D8DFC9;color:#46562F;font-size:12.5px;font-weight:700;border-radius:10px;padding:10px 13px;margin:-3px 0 12px}
+.greet.on{display:block}
+.err{display:none;background:var(--red-soft);border:1px solid #EAC9C0;color:#8C2C22;font-size:12.5px;font-weight:700;border-radius:10px;padding:10px 13px;margin-bottom:12px}
+.err.on{display:block}
+.go{width:100%;border:none;border-radius:14px;background:var(--acc);color:#FFF6EC;font-size:15.5px;font-weight:800;padding:15px;transition:.15s;box-shadow:0 8px 22px rgba(188,83,43,.3)}
+.go:hover{background:var(--acc-deep)}.go:disabled{opacity:.5;cursor:not-allowed}
+.ghost{background:var(--surface);border:1.5px solid var(--line-2);box-shadow:none;color:var(--ink-2)}
+.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.navrow{display:flex;align-items:center;margin-top:16px;gap:10px}
+.back{background:none;border:none;color:var(--ink-2);font-size:13px;font-weight:700;padding:8px 4px}
+.back:hover{color:var(--ink)}
+.nextb{margin-inline-start:auto;display:flex;align-items:center;gap:7px;background:var(--dark);color:var(--cream);border:none;border-radius:12px;padding:11px 18px;font-size:13.5px;font-weight:800;transition:.15s}
+.nextb:hover{background:#120c06}.nextb:disabled{opacity:.4;cursor:not-allowed}
+.ovl{position:fixed;inset:0;background:rgba(38,25,14,.4);z-index:90;opacity:0;pointer-events:none;transition:.2s}
+.ovl.on{opacity:1;pointer-events:auto}
+.calpop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);width:308px;max-width:calc(100vw - 28px);background:var(--surface);border:1px solid var(--line-2);border-radius:18px;padding:16px;z-index:99;opacity:0;pointer-events:none;transition:.22s;box-shadow:0 24px 60px rgba(55,32,10,.25)}
+.calpop.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.calhead b{font-size:14.5px;font-weight:900}
+.calhead button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);font-size:16px}
+.calhead button:disabled{opacity:.3;cursor:not-allowed}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cgrid .dw{font-size:10.5px;font-weight:800;color:var(--ink-3);text-align:center;padding:5px 0}
+.cday{border:none;background:transparent;color:var(--ink);font-size:12.5px;font-weight:700;height:37px;border-radius:10px;transition:.12s}
+.cday:hover{background:var(--surface-2)}.cday.dis{color:#CFC3AF;cursor:not-allowed}
+.cday.today{box-shadow:inset 0 0 0 1.5px var(--line-2)}.cday.sel{background:var(--acc);color:#fff}
+.ticket{background:#fff;border:1.5px solid var(--line-2);border-radius:18px;position:relative;padding:18px 18px 16px;box-shadow:0 10px 30px rgba(90,60,30,.08)}
+.tk-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.tk-brand{display:flex;align-items:center;gap:10px}.tk-brand b{font-size:14.5px;display:block}.tk-brand small{font-size:9.5px;color:var(--ink-3);letter-spacing:.08em}
+.stamp{transform:rotate(-7deg);border:2.5px solid var(--green);color:var(--green);border-radius:9px;padding:3px 11px;font-size:11px;font-weight:900;background:rgba(95,115,80,.05);white-space:nowrap}
+.tk-hero{display:flex;align-items:stretch;background:var(--surface-2);border:1px dashed var(--line-2);border-radius:14px;padding:12px 8px;margin-bottom:14px}
+.tk-cell{flex:1;text-align:center}.tk-cell span{display:block;font-size:10.5px;color:var(--ink-3);font-weight:700;margin-bottom:3px}.tk-cell b{font-size:19px;font-weight:900}
+.tk-mid{width:1px;background:var(--line);margin:4px 8px}
+.tk-route{display:flex;position:relative;margin:2px 4px 14px}
+.tk-route::before{content:'';position:absolute;top:6px;inset-inline:14%;border-top:2px dashed var(--line-2)}
+.rs{flex:1;text-align:center;position:relative}
+.rs i{display:block;width:13px;height:13px;border-radius:50%;background:var(--acc);margin:0 auto 6px;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line-2)}
+.rs b{display:block;font-size:9.5px;color:var(--ink-3);font-weight:800}
+.rs span{display:block;font-size:11px;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+.perf{position:relative;border-top:2px dashed var(--line-2);margin:16px -18px 12px}
+.perf::before,.perf::after{content:'';position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line-2)}
+.perf::before{left:-12px}.perf::after{right:-12px}
+.perf .sc{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#fff;padding:0 9px;color:var(--ink-3);font-size:15px}
+.tk-stub{text-align:center}
+.bcode{display:flex;justify-content:center;align-items:stretch;height:44px;direction:ltr;margin-bottom:8px}
+.bcode i{background:var(--dark);height:100%;border-radius:1px}
+.bcode-code{font-size:15px;font-weight:900;letter-spacing:.28em;color:var(--acc-deep);direction:ltr}
+.stub-note{font-size:10.5px;color:var(--ink-3);margin-top:6px}
+.done-acts{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.gcal{display:block;text-align:center;color:var(--ink-2);font-size:12.5px;font-weight:700;text-decoration:none;border:1.5px solid var(--line-2);border-radius:12px;padding:12px;transition:.15s}
+.gcal:hover{color:var(--acc-deep);border-color:var(--acc)}
+.drow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.splash{max-width:560px;margin:0 auto;text-align:center;padding:80px 20px;color:var(--ink-2);font-size:13.5px;line-height:2.2}
+.spin{width:38px;height:38px;border:3px solid var(--line-2);border-top-color:var(--acc);border-radius:50%;margin:0 auto 16px;animation:sp .9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{padding:34px 16px;text-align:center;color:var(--ink-3);font-size:13px;line-height:2.1}
+footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:22px;line-height:2}
+@media(max-width:520px){.slots{grid-template-columns:repeat(3,1fr)}.stp{width:46px}.stp span{font-size:9.5px}}
+@media print{@page{margin:10mm}body{background:#fff;padding:0}body *{visibility:hidden}#doneCard,#doneCard *{visibility:visible}#doneCard{position:absolute;top:0;inset-inline:0;border:none;box-shadow:none;background:#fff;padding:0}.done-acts{display:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="mark">ن</span>
+    <div><b>سالن زیبایی نیلا</b><small>رزرو آنلاین · سریع و مطمئن</small></div>
+  </div>
+  <span class="live"><i></i> نوبت‌دهی فعال</span>
+</header>
+
+<div class="splash" id="boot"><div class="spin"></div>در حال آماده‌سازی خدمات سالن…</div>
+
+<div class="card" id="card" hidden>
+  <div class="steps" id="steps">
+    <button class="stp on" data-s="1"><b>۱</b><span>روز</span></button><i class="ln"></i>
+    <button class="stp lock" data-s="2"><b>۲</b><span>خدمت</span></button><i class="ln"></i>
+    <button class="stp lock" data-s="3"><b>۳</b><span>متخصص</span></button><i class="ln"></i>
+    <button class="stp lock" data-s="4"><b>۴</b><span>ساعت</span></button><i class="ln"></i>
+    <button class="stp lock" data-s="5"><b>۵</b><span>ثبت</span></button>
+  </div>
+  <div class="bar" id="bar"></div>
+
+  <section class="pane on" id="p1">
+    <h2 class="q">کی می‌خوای بیای؟ 😊</h2>
+    <p class="qs">روز دلخواهت رو انتخاب کن — یا از تقویم، هر روز دیگه‌ای</p>
+    <div class="quick" id="quick"></div>
+    <div class="days" id="days"></div>
+    <button class="calbtn" id="calBtn">🗓️ تقویم — انتخاب روزِ دیگر</button>
+  </section>
+
+  <section class="pane" id="p2">
+    <h2 class="q">چه خدمتی می‌خوای؟ 💇‍♀️</h2>
+    <p class="qs">قیمت‌ها و مدت‌زمان‌ها مستقیم از سالن به‌روزه</p>
+    <div class="svcs" id="svcs"></div>
+  </section>
+
+  <section class="pane" id="p3">
+    <h2 class="q">متخصصت کی باشه؟ ✨</h2>
+    <p class="qs" id="staffQs"></p>
+    <div class="staff" id="staff"></div>
+  </section>
+
+  <section class="pane" id="p4">
+    <h2 class="q">کدوم ساعت؟ ⏰</h2>
+    <p class="qs">زمان‌های خالی همین الان زنده از سالن چک می‌شه</p>
+    <div class="slotmeta" id="slotMeta"></div>
+    <div id="slots"></div>
+    <div class="slotwarn" id="slotWarn"></div>
+    <div style="display:flex;gap:14px;margin-top:13px;font-size:11px;color:var(--ink-3);font-weight:600;flex-wrap:wrap">
+      <span><i style="display:inline-block;width:11px;height:11px;border-radius:4px;margin-left:5px;vertical-align:-1px;border:1.5px solid var(--line-2);background:var(--surface)"></i>خالی</span>
+      <span><i style="display:inline-block;width:11px;height:11px;border-radius:4px;margin-left:5px;vertical-align:-1px;opacity:.35;background:#B9AC97"></i>رزرو شده</span>
+      <span style="margin-inline-start:auto">🔄 هر ۶۰ ثانیه خودکار به‌روز می‌شود</span>
+    </div>
+  </section>
+
+  <section class="pane" id="p5">
+    <h2 class="q">خب، بگو کی هستی 🌸</h2>
+    <p class="qs">فقط اسم و شماره — اگه قبلاً اومده باشی، پرونده‌ات خودش میاد!</p>
+    <div class="mini" id="miniSum"></div>
+    <div class="fld"><label>نام و نام خانوادگی *</label><input type="text" id="fName" placeholder="مثلاً: سارا محمدی"></div>
+    <div class="fld"><label>شماره موبایل *</label><input type="tel" id="fPhone" placeholder="09xxxxxxxxx" inputmode="numeric"></div>
+    <div class="greet" id="greet"></div>
+    <div class="err" id="fErr"></div>
+    <button class="go" id="go">ثبت نهایی نوبت ✓</button>
+  </section>
+
+  <div class="navrow">
+    <button class="back" id="back" hidden>→ مرحله قبل</button>
+    <button class="nextb" id="next" hidden><span>بعدی</span></button>
+  </div>
+</div>
+
+<div class="card" id="doneCard" hidden>
+  <div class="ticket">
+    <div class="tk-top">
+      <div class="tk-brand">
+        <span class="mark sm">ن</span>
+        <div><b>سالن زیبایی نیلا</b><small>BOARDING PASS · نوبت</small></div>
+      </div>
+      <div class="stamp">قطعی شد ✓</div>
+    </div>
+    <div class="tk-hero">
+      <div class="tk-cell"><span>ساعت</span><b id="tTime">—</b></div>
+      <div class="tk-mid"></div>
+      <div class="tk-cell"><span>تاریخ</span><b id="tDate">—</b></div>
+    </div>
+    <div class="tk-route">
+      <div class="rs"><i></i><b>روز</b><span id="rsDate">—</span></div>
+      <div class="rs"><i></i><b>خدمت</b><span id="rsSvc">—</span></div>
+      <div class="rs"><i></i><b>متخصص</b><span id="rsStaff">—</span></div>
+      <div class="rs"><i></i><b>ساعت</b><span id="rsTime">—</span></div>
+    </div>
+    <div class="drow"><span style="color:var(--ink-3)">نام</span><span style="font-weight:800" id="rName">—</span></div>
+    <div class="drow" style="border-bottom:none"><span style="color:var(--ink-3)">موبایل</span><span style="font-weight:800" id="rPhone">—</span></div>
+    <div class="perf"><span class="sc">✂</span></div>
+    <div class="tk-stub">
+      <div class="bcode" id="tBar"></div>
+      <div class="bcode-code" id="tCode2">—</div>
+      <div class="stub-note">این کد را هنگام مراجعه در سالن نشان دهید 🙏</div>
+    </div>
+  </div>
+  <div class="done-acts">
+    <a class="gcal" id="tGcal" target="_blank">📅 افزودن به تقویم گوگل</a>
+    <button class="go ghost" id="tPrint">🖨 چاپ بلیط</button>
+    <button class="go ghost" id="again">رزرو نوبت دیگر</button>
+  </div>
+</div>
+
+<div class="ovl" id="ovl"></div>
+<div class="calpop" id="calPop">
+  <div class="calhead"><button id="calPrev">›</button><b id="calTitle"></b><button id="calNext">‹</button></div>
+  <div class="cgrid" id="calGrid"></div>
+</div>
+
+<footer>سالن زیبایی نیلا · رزرو آنلاین نوبت</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ⚙️══════════ تنظیمات — این دو خط را پر کنید ══════════ */
+const SB_URL='postgresql://postgres:mSNqglSx8rJxhe1q@db.vxoumhcgipimkiwigxny.supabase.co:5432/postgres';
+const SB_KEY='sb_publishable_MamNHKpsUmCwzd64KYsVTA_Xhee4BJ6';
+/* ═══════════════════════════════════════════════════ */
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const tehranToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran'}).format(new Date());
+
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=s=>String(s).replace(/\d/g,d=>FA[d]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad2=n=>String(n).padStart(2,'0');
+const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const isoShift=(iso,n)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return isoOf(d)};
+const price=n=>Number(n||0).toLocaleString('fa-IR');
+const tMin=t=>{const p=String(t).split(':');return (+p[0])*60+(+(p[1]||0))};
+const tLbl=t=>fa(String(t).replace(/^0/,''));
+
+const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const JDW=['ش','ی','د','س','چ','پ','ج'];
+const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
+function toJal(d){const p=JFMT.formatToParts(d);const g=t=>+p.find(x=>x.type===t).value;return{jy:g('year'),jm:g('month'),jd:g('day')}}
+function jalaliFirstDay(jy,jm){
+  let d=new Date();d.setHours(12,0,0,0);
+  for(let i=0;i<14;i++){
+    const j=toJal(d);
+    if(j.jy===jy&&j.jm===jm){const x=new Date(d);x.setDate(x.getDate()-(j.jd-1));return x}
+    d=new Date(d.getTime()+Math.round(((jy*12+jm)-(j.jy*12+j.jm))*30.436875)*864e5);
+  }
+  return d;
+}
+const F_FULL=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'});
+const F_D=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric'});
+const F_M=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{month:'long'});
+const F_W=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'short'});
+function dayName(iso){
+  if(!iso)return '—';
+  let s=F_FULL.format(new Date(iso+'T12:00:00'));
+  if(iso===TODAY_ISO)s='امروز · '+s;else if(iso===isoShift(TODAY_ISO,1))s='فردا · '+s;
+  return s;
+}
+function dayShort(iso){const d=new Date(iso+'T12:00:00');return F_D.format(d)+' '+F_M.format(d)}
+
+let BOOT=null,TODAY_ISO='',MAXISO='',step=1,unlocked=1,timer=null;
+let sel={date:'',svc:null,staff:null,any:false,time:null};
+
+if(typeof supabase==='undefined'){
+  document.getElementById('boot').innerHTML='⚠️ کتابخانه بارگذاری نشد — اینترنت را چک و صفحه را دوباره باز کنید';
+}else boot();
+async function boot(){
+  try{
+    const [sv,ss,st]=await Promise.all([
+      sb.from('services').select('*').order('name'),
+      sb.from('service_staff').select('service_id,staff_id'),
+      sb.from('staff').select('*').order('created_at')
+    ]);
+    const e=sv.error||ss.error||st.error;if(e)throw e;
+    const map={};(ss.data||[]).forEach(r=>{(map[r.service_id]=map[r.service_id]||[]).push(r.staff_id)});
+    BOOT={ok:true,
+      services:(sv.data||[]).map(s=>({id:s.id,name:s.name,dur:s.dur||60,price:s.price||0,staff:(map[s.id]||[]).map(String)})),
+      staff:(st.data||[]).map(s=>({id:s.id,name:s.name||'',role:s.role||''})),
+      today:tehranToday(),daysAhead:30};
+    onBoot(BOOT);
+  }catch(e){document.getElementById('boot').innerHTML='خطا در اتصال به سرور — صفحه را دوباره باز کنید 🙏'}
+}
+function onBoot(b){
+  TODAY_ISO=b.today;MAXISO=isoShift(TODAY_ISO,b.daysAhead||30);
+  sel.date=TODAY_ISO;unlocked=2;
+  document.getElementById('boot').hidden=true;
+  document.getElementById('card').hidden=false;
+  buildQuick();buildDays();renderSvc();updateStepper();updateNav();
+}
+
+function unlock(n){unlocked=Math.max(unlocked,n);updateStepper()}
+function updateStepper(){document.querySelectorAll('#steps .stp').forEach(b=>b.classList.toggle('lock',(+b.dataset.s)>unlocked))}
+function canNext(){
+  if(step===1)return {ok:!!sel.date,lb:'بعدی: انتخاب خدمت'};
+  if(step===2)return {ok:!!sel.svc,lb:'بعدی: انتخاب متخصص'};
+  if(step===3)return {ok:!!(sel.any||sel.staff),lb:'بعدی: دیدن ساعت‌ها'};
+  if(step===4)return {ok:!!sel.time,lb:'بعدی: ثبت اطلاعات'};
+  return {ok:false,lb:''};
+}
+function updateNav(){
+  const nb=document.getElementById('next'),c=canNext();
+  nb.hidden=(step>=5);nb.disabled=!c.ok;nb.innerHTML='<span>'+c.lb+'</span>';
+}
+function go(n){
+  if(n>unlocked||n<1||n>5)return;
+  if(timer&&n!==4){clearInterval(timer);timer=null}
+  step=n;
+  for(let i=1;i<=5;i++)document.getElementById('p'+i).classList.toggle('on',i===n);
+  document.querySelectorAll('#steps .stp').forEach((b,i)=>{
+    const s=i+1;
+    b.classList.toggle('on',s===n);b.classList.toggle('done',s<n);b.classList.toggle('lock',s>unlocked);
+    const ln=b.nextElementSibling;if(ln&&ln.classList.contains('ln'))ln.classList.toggle('done',s<n);
+  });
+  document.getElementById('bar').classList.toggle('on',n>1);
+  renderBar();updateStepper();updateNav();
+  document.getElementById('back').hidden=(n===1);
+  if(n===4)loadSlots(false);
+  if(n===5)renderMini();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('#steps .stp').forEach(b=>b.onclick=()=>go(+b.dataset.s));
+document.getElementById('back').onclick=()=>{if(step>1)go(step-1)};
+document.getElementById('next').onclick=()=>{const c=canNext();if(c.ok&&step<5)go(step+1)};
+
+function renderBar(){
+  const w=document.getElementById('bar');w.innerHTML='';
+  const add=(lbl,fn)=>{const b=document.createElement('button');b.className='bchip';b.textContent=lbl;b.onclick=fn;w.appendChild(b)};
+  if(sel.date)add('📅 '+dayName(sel.date),()=>go(1));
+  if(sel.svc)add('💎 '+sel.svc.name,()=>go(2));
+  if(sel.any||sel.staff)add('👤 '+(sel.any?'هر متخصص':sel.staff.name),()=>go(3));
+  if(sel.time)add('⏰ '+tLbl(sel.time),()=>go(4));
+}
+function buildQuick(){
+  const w=document.getElementById('quick');w.innerHTML='';
+  [[0,'امروز'],[1,'فردا'],[2,'پس‌فردا']].forEach(function(p){
+    const iso=isoShift(TODAY_ISO,p[0]);
+    const b=document.createElement('button');
+    b.className='qchip'+(sel.date===iso?' sel':'');b.textContent=p[1];
+    b.onclick=()=>pickDate(iso);w.appendChild(b);
+  });
+}
+function buildDays(){
+  const w=document.getElementById('days');w.innerHTML='';
+  for(let i=0;i<14;i++){
+    const iso=isoShift(TODAY_ISO,i),d=new Date(iso+'T12:00:00');
+    const b=document.createElement('button');
+    b.className='dchip'+(sel.date===iso?' sel':'');
+    b.innerHTML='<div class="w">'+F_W.format(d)+'</div><div class="n">'+F_D.format(d)+'</div><div class="m">'+F_M.format(d)+'</div>';
+    b.onclick=()=>pickDate(iso);w.appendChild(b);
+  }
+  const s=w.querySelector('.sel');if(s)s.scrollIntoView({inline:'center',block:'nearest'});
+}
+function pickDate(iso){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)||iso<TODAY_ISO||iso>MAXISO)return;
+  const changed=(iso!==sel.date);
+  sel.date=iso;sel.time=null;
+  buildQuick();buildDays();renderCal();renderBar();
+  unlock(2);updateNav();
+  if(changed&&step===1)setTimeout(()=>go(2),180);
+}
+function renderSvc(){
+  const w=document.getElementById('svcs');
+  if(!BOOT.services.length){w.innerHTML='<div class="empty">خدمات هنوز ثبت نشده — به‌زودی 🌷</div>';return}
+  w.innerHTML='';
+  const ICO=['💇‍♀️','💅','✨','💄','🌸','🎀','🧖‍♀️','👁️'];
+  BOOT.services.forEach(function(s,i){
+    const b=document.createElement('button');
+    b.className='svc'+(sel.svc&&sel.svc.id===s.id?' sel':'');
+    b.innerHTML='<span class="ic">'+ICO[i%ICO.length]+'</span>'+
+      '<span><span class="nm">'+esc(s.name)+'</span><span class="inf">'+fa(s.dur)+' دقیقه</span></span>'+
+      '<span class="pr"><b>'+(s.price?price(s.price):'—')+'</b><span>تومان</span></span>';
+    b.onclick=()=>{
+      if(!sel.svc||sel.svc.id!==s.id){sel.svc=s;sel.staff=null;sel.any=false;sel.time=null}
+      renderSvc();renderStaff();renderBar();unlock(3);updateNav();go(3);
+    };
+    w.appendChild(b);
+  });
+}
+function renderStaff(){
+  if(!sel.svc)return;
+  document.getElementById('staffQs').textContent='برای «'+sel.svc.name+'» کدام متخصص؟';
+  const allowed=(sel.svc.staff&&sel.svc.staff.length)?sel.svc.staff:BOOT.staff.map(s=>s.id);
+  const list=BOOT.staff.filter(s=>allowed.indexOf(s.id)>-1);
+  const w=document.getElementById('staff');w.innerHTML='';
+  const anyB=document.createElement('button');
+  anyB.className='stf'+(sel.any?' sel':'');
+  anyB.innerHTML='<span class="av av0">✨</span><div class="n">فرقی نمی‌کنه</div><div class="r">اولین متخصص آزاد</div>';
+  anyB.onclick=()=>{sel.any=true;sel.staff=null;sel.time=null;renderStaff();renderBar();unlock(4);updateNav();go(4)};
+  w.appendChild(anyB);
+  list.forEach(function(s,i){
+    const b=document.createElement('button');
+    b.className='stf'+(sel.staff&&sel.staff.id===s.id?' sel':'');
+    b.innerHTML='<span class="av av'+(i%4)+'">'+esc((s.name||'؟').charAt(0))+'</span><div class="n">'+esc(s.name)+'</div><div class="r">'+esc(s.role||'متخصص')+'</div>';
+    b.onclick=()=>{sel.staff=s;sel.any=false;sel.time=null;renderStaff();renderBar();unlock(4);updateNav();go(4)};
+    w.appendChild(b);
+  });
+}
+function loadSlots(silent){
+  if(!sel.svc)return;
+  const box=document.getElementById('slots');
+  document.getElementById('slotWarn').classList.remove('on');
+  document.getElementById('slotMeta').innerHTML=
+    '<b>'+dayName(sel.date)+'</b> · '+esc(sel.svc.name)+' · <b>'+(sel.any?'هر متخصص':(sel.staff?esc(sel.staff.name):''))+'</b>'+
+    ' <span class="durpill">مدت: '+fa(sel.svc.dur)+' دقیقه</span>';
+  if(!silent)box.innerHTML='<div class="empty">در حال دریافت ساعت‌ها…</div>';
+  sb.rpc('public_slots',{p_date:sel.date,p_service_id:sel.svc.id,p_staff_id:sel.any?'':(sel.staff?sel.staff.id:'')})
+    .then(({data,error})=>{if(error){if(!silent)box.innerHTML='<div class="empty">خطا در دریافت</div>'}else renderSlots(data)});
+  if(timer)clearInterval(timer);
+  timer=setInterval(()=>{if(step===4)loadSlots(true)},60000);
+}
+function renderSlots(r){
+  const box=document.getElementById('slots');
+  if(!r||!r.ok){box.innerHTML='<div class="empty">'+esc((r&&r.message)||'خطا')+'</div>';return}
+  const groups=[{t:'🌤 صبح',a:0,b:720},{t:'☀️ ظهر',a:720,b:1020},{t:'🌆 عصر و شب',a:1020,b:9999}];
+  let h='',any=false;
+  groups.forEach(function(g){
+    const list=r.slots.filter(s=>{const m=tMin(s.time);return m>=g.a&&m<g.b});
+    if(!list.length)return;
+    h+='<div class="ghead">'+g.t+'</div><div class="slots">';
+    list.forEach(function(s){
+      if(s.available)any=true;
+      h+='<button class="slot'+(s.available?'':' taken')+(sel.time===s.time?' sel':'')+'" data-t="'+s.time+'"'+(s.available?'':' disabled')+'>'+tLbl(s.time)+'</button>';
+    });
+    h+='</div>';
+  });
+  box.innerHTML=h||'<div class="empty">ساعتی برای این روز تعریف نشده</div>';
+  box.querySelectorAll('.slot:not(.taken)').forEach(b=>{
+    b.onclick=()=>{
+      sel.time=b.getAttribute('data-t');
+      box.querySelectorAll('.slot').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');renderBar();unlock(5);updateNav();
+      setTimeout(()=>go(5),260);
+    };
+  });
+  if(!any)box.innerHTML+='<div class="empty">تمام ساعت‌های این روز پر شده 🙁<br>روز دیگری انتخاب کن</div>';
+  if(sel.time){
+    const st=r.slots.filter(s=>s.time===sel.time)[0];
+    if(!st||!st.available){
+      sel.time=null;renderBar();updateNav();
+      const w=document.getElementById('slotWarn');
+      w.textContent='⚠️ ساعت انتخابی شما دیگر آزاد نیست — لطفاً زمان دیگری انتخاب کن';
+      w.classList.add('on');
+    }
+  }
+}
+function renderMini(){
+  document.getElementById('miniSum').innerHTML=
+    '📅 <b>'+dayName(sel.date)+'</b> — ساعت <b>'+tLbl(sel.time)+'</b><br>'+
+    '💎 '+esc(sel.svc.name)+' ('+fa(sel.svc.dur)+' دقیقه) با <b>'+(sel.any?'هر متخصص آزاد':esc(sel.staff.name))+'</b>';
+}
+document.getElementById('fPhone').addEventListener('input',function(){
+  this.value=this.value.replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'').slice(0,11);
+  const g=document.getElementById('greet');g.classList.remove('on');
+  if(!/^09\d{9}$/.test(this.value))return;
+  sb.rpc('public_lookup',{p_phone:this.value}).then(({data})=>{
+    if(data&&data.found){
+      g.textContent='🌸 '+data.name+' جان، دوباره خوش اومدی! پرونده‌ات موجوده.';
+      g.classList.add('on');
+      if(!document.getElementById('fName').value.trim())document.getElementById('fName').value=data.name;
+    }
+  });
+});
+document.getElementById('go').onclick=async function(){
+  const err=document.getElementById('fErr');err.classList.remove('on');
+  const name=document.getElementById('fName').value.trim();
+  const phone=document.getElementById('fPhone').value.trim();
+  if(name.length<2){err.textContent='نام را کامل وارد کنید';err.classList.add('on');return}
+  if(!/^09\d{9}$/.test(phone)){err.textContent='شماره موبایل معتبر نیست (مثال: 09123456789)';err.classList.add('on');return}
+  const btn=this;btn.disabled=true;btn.textContent='در حال ثبت…';
+  try{
+    const {data:res,error}=await sb.rpc('book_online',{
+      p_date:sel.date,p_service_id:sel.svc.id,
+      p_staff_id:sel.any?'':sel.staff.id,
+      p_time:sel.time,p_name:name,p_phone:phone});
+    if(error)throw error;
+    if(res&&res.success)showDone(res);
+    else{err.textContent=(res&&res.message)||'خطا';err.classList.add('on');go(4)}
+  }catch(e){err.textContent='خطا در ارتباط — دوباره تلاش کنید';err.classList.add('on');go(4)}
+  btn.disabled=false;btn.textContent='ثبت نهایی نوبت ✓';
+};
+function drawBarcode(el,code){
+  el.innerHTML='';let seed=7;
+  for(let i=0;i<code.length;i++)seed=(seed*31+code.charCodeAt(i))>>>0;
+  for(let i=0;i<44;i++){
+    seed=(seed*1103515245+12345)>>>0;
+    const b=document.createElement('i');
+    b.style.width=(1+(seed%3))+'px';
+    b.style.margin='0 '+(((seed>>3)%2)?1:2)+'px';
+    el.appendChild(b);
+  }
+}
+function showDone(res){
+  if(timer){clearInterval(timer);timer=null}
+  document.getElementById('card').hidden=true;
+  document.getElementById('doneCard').hidden=false;
+  document.getElementById('tTime').textContent=tLbl(res.time);
+  document.getElementById('tDate').textContent=dayShort(res.date);
+  document.getElementById('rsDate').textContent=dayShort(res.date);
+  document.getElementById('rsSvc').textContent=res.service;
+  document.getElementById('rsStaff').textContent=res.staff||'—';
+  document.getElementById('rsTime').textContent=tLbl(res.time);
+  document.getElementById('rName').textContent=res.name;
+  document.getElementById('rPhone').textContent=fa(res.phone||'');
+  drawBarcode(document.getElementById('tBar'),res.code);
+  document.getElementById('tCode2').textContent=res.code.toUpperCase();
+  const t=res.time.split(':'),st=res.date.replace(/-/g,'')+'T'+t[0]+t[1]+'00';
+  const em=(+t[0])*60+(+t[1])+res.dur;
+  const en=res.date.replace(/-/g,'')+'T'+pad2(Math.floor(em/60)%24)+pad2(em%60)+'00';
+  document.getElementById('tGcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+
+    encodeURIComponent('نیلا | '+res.service)+'&dates='+st+'/'+en+'&ctz=Asia/Tehran';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('tPrint').onclick=()=>window.print();
+document.getElementById('again').onclick=()=>{
+  sel={date:TODAY_ISO,svc:null,staff:null,any:false,time:null};
+  document.getElementById('doneCard').hidden=true;
+  document.getElementById('card').hidden=false;
+  document.getElementById('fName').value='';document.getElementById('fPhone').value='';
+  document.getElementById('greet').classList.remove('on');
+  unlocked=2;buildQuick();buildDays();renderSvc();renderCal();
+  updateStepper();go(1);
+};
+let calJ={jy:0,jm:0};
+(function(){const j=toJal(new Date());calJ={jy:j.jy,jm:j.jm}})();
+document.getElementById('calBtn').onclick=()=>{renderCal();document.getElementById('calPop').classList.add('on');document.getElementById('ovl').classList.add('on')};
+document.getElementById('ovl').onclick=()=>{document.getElementById('calPop').classList.remove('on');document.getElementById('ovl').classList.remove('on')};
+document.getElementById('calPrev').onclick=()=>{calJ.jm--;if(calJ.jm<1){calJ.jm=12;calJ.jy--}renderCal()};
+document.getElementById('calNext').onclick=()=>{calJ.jm++;if(calJ.jm>12){calJ.jm=1;calJ.jy++}renderCal()};
+function renderCal(){
+  const tj=toJal(new Date());
+  document.getElementById('calPrev').disabled=(calJ.jy*12+calJ.jm)<=(tj.jy*12+tj.jm);
+  document.getElementById('calTitle').textContent=JM[calJ.jm-1]+' '+fa(calJ.jy);
+  const first=jalaliFirstDay(calJ.jy,calJ.jm);
+  let ny=calJ.jy,nm=calJ.jm+1;if(nm>12){nm=1;ny++}
+  const len=Math.round((jalaliFirstDay(ny,nm)-first)/864e5);
+  const lead=(first.getDay()+1)%7;
+  let h=JDW.map(d=>'<span class="dw">'+d+'</span>').join('');
+  for(let i=0;i<lead;i++)h+='<span></span>';
+  for(let d=1;d<=len;d++){
+    const iso=isoOf(new Date(first.getTime()+(d-1)*864e5));
+    const dis=iso<TODAY_ISO||iso>MAXISO;
+    h+='<button class="cday'+(dis?' dis':'')+(iso===TODAY_ISO?' today':'')+(iso===sel.date?' sel':'')+'" data-iso="'+iso+'"'+(dis?' disabled':'')+'>'+fa(d)+'</button>';
+  }
+  document.getElementById('calGrid').innerHTML=h;
+  document.querySelectorAll('#calGrid .cday').forEach(b=>b.onclick=()=>{
+    pickDate(b.getAttribute('data-iso'));
+    document.getElementById('calPop').classList.remove('on');
+    document.getElementById('ovl').classList.remove('on');
+    if(step===1)go(2);
+  });
+}
+</script>
+</body>
+</html>

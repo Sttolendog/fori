@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نیلا · پنل پذیرش</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#F4EEE5;--surface:#FFFCF6;--surface-2:#FAF4E9;--ink:#26190E;--ink-2:#77685A;--ink-3:#AF9F8C;--line:#E8DECD;--line-2:#DBCDB6;--acc:#BC532B;--acc-deep:#963D1C;--acc-soft:#F7E5DA;--green:#5F7350;--green-soft:#EAEDE0;--amber:#A87E2F;--amber-soft:#F5EBD2;--red:#B03A2E;--red-soft:#F6E2DF;--dark:#241A10;--cream:#F4EADD;--hph:64px;--head-h:58px}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}input,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+header{background:var(--dark);color:var(--cream);padding:0 22px;min-height:62px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;padding:10px 0}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--acc);display:grid;place-items:center;font-weight:900;font-size:18px;color:#FFF6EA;padding-bottom:2px}
+.brand b{font-size:15px;display:block;line-height:1.3}.brand small{font-size:10px;color:#B4A48A}
+nav{display:flex;gap:3px;flex-wrap:wrap}
+nav button{background:none;border:none;color:#C9B99F;font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:9px;transition:.15s}
+nav button:hover{color:#fff;background:rgba(255,255,255,.07)}
+nav button.active{background:rgba(255,255,255,.11);color:#FFF3E4}
+.hd-end{margin-inline-start:auto;display:flex;align-items:center;gap:12px;padding:9px 0}
+.pill{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);color:#E9DCC6;font-size:11px;font-weight:700;padding:6px 12px;border-radius:99px}
+.pill i{width:8px;height:8px;border-radius:50%;background:#8FBF6F;flex:none}
+.pill.busy i{background:#E4B04A;animation:pl 1.3s infinite}.pill.err i{background:#E06A5A}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(228,176,74,.5)}70%{box-shadow:0 0 0 7px rgba(228,176,74,0)}100%{box-shadow:0 0 0 0 rgba(228,176,74,0)}}
+.hd-clock{font-size:14px;font-weight:800;color:#F2E6D4}
+.hd-date{font-size:11.5px;color:#B4A48A;font-weight:600}
+.btn-p{background:var(--acc);color:#FFF6EC;border:none;font-size:13px;font-weight:800;padding:10px 16px;border-radius:11px;display:flex;align-items:center;gap:7px;transition:.15s}
+.btn-p:hover{background:var(--acc-deep)}
+.btn-g{background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2);font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:10px;display:flex;align-items:center;gap:7px;transition:.15s}
+.btn-g:hover{border-color:var(--ink-3);color:var(--ink)}
+.iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);background:var(--surface);display:grid;place-items:center;color:var(--ink-2);transition:.15s}
+.iconbtn:hover{background:var(--surface-2);color:var(--ink)}
+header .iconbtn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:var(--cream)}
+main{max-width:1200px;margin:0 auto;padding:22px 20px 10px}
+.day-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.day-head h1{font-size:21px;font-weight:900}
+.day-meta{font-size:12.5px;color:var(--ink-2);margin-top:5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.day-meta b{font-size:13.5px;font-weight:800;color:var(--ink)}
+.day-meta .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3)}
+.day-nav{display:flex;gap:6px;align-items:center}
+.day-nav .now{border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:7px 15px;font-size:12px;font-weight:800;color:var(--ink-2)}
+.day-nav .now:hover{background:var(--dark);border-color:var(--dark);color:var(--cream)}
+.tl-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(90,60,30,.05)}
+.tl-scroll{overflow-x:auto}
+.tl-track{display:flex;position:relative;min-width:100%}
+.tl-hours{width:56px;flex:none;border-inline-end:1px solid var(--line)}
+.tl-headpad{height:var(--head-h);border-bottom:1px solid var(--line);background:var(--surface-2)}
+.tl-hours-body{position:relative;height:calc(var(--hph)*12)}
+.tl-hr{height:var(--hph);position:relative}
+.tl-hr span{position:absolute;top:-7px;inset-inline-end:10px;font-size:10.5px;font-weight:700;color:var(--ink-3);background:var(--surface);padding:0 3px;z-index:2}
+.tl-col{flex:1;min-width:200px;border-inline-end:1px solid var(--line);display:flex;flex-direction:column}
+.tl-col:last-child{border-inline-end:none}
+.tl-col-head{height:var(--head-h);display:flex;align-items:center;gap:9px;padding:0 12px;border-bottom:1px solid var(--line);background:var(--surface-2);flex:none}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.av0{background:var(--acc-soft);color:var(--acc-deep)}.av1{background:var(--green-soft);color:#46562F}.av2{background:var(--amber-soft);color:#7A5B1B}.av3{background:#E9E4DC;color:#5C4F3E}
+.sname{font-size:13px;font-weight:800;line-height:1.2}.srole{font-size:10px;color:var(--ink-3);margin-top:1px}
+.scount{margin-inline-start:auto;font-size:10px;font-weight:800;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.tl-rail{position:relative;height:calc(var(--hph)*12);cursor:copy;flex:1}
+.tl-rail i.hline{position:absolute;left:0;right:0;border-top:1px dashed var(--line);pointer-events:none}
+.tl-rail:hover{background:rgba(188,83,43,.03)}
+.appt{position:absolute;inset-inline:7px;border-radius:10px;background:#FFFDF8;border:1px solid var(--line-2);border-inline-start:4px solid var(--amber);padding:5px 9px;cursor:pointer;overflow:hidden;transition:box-shadow .15s;z-index:3}
+.appt:hover{box-shadow:0 6px 18px rgba(70,45,20,.18);z-index:6}
+.appt.st-done{border-inline-start-color:var(--green);background:#F7F7F0;color:var(--ink-2)}
+.appt.st-canceled{border-inline-start-color:#C9BBA8;background:var(--surface-2);opacity:.55}
+.appt.st-canceled .a-name{text-decoration:line-through}
+.appt.flash{animation:fl 1s ease-out 3}
+@keyframes fl{0%{box-shadow:0 0 0 3px rgba(188,83,43,.6)}100%{box-shadow:0 0 0 16px rgba(188,83,43,0)}}
+.a-time{font-size:9.5px;font-weight:800;color:#8A6A22;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.st-done .a-time{color:#5A6B47}
+.onetag{font-size:8.5px;font-weight:800;background:var(--acc-soft);color:var(--acc-deep);padding:1px 6px;border-radius:99px}
+.a-name{font-size:12.5px;font-weight:800;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-svc{font-size:10px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nowline{position:absolute;left:0;right:0;border-top:2px solid var(--acc);z-index:8;pointer-events:none}
+.nowline .nlab{position:absolute;inset-inline-end:8px;top:-10px;background:var(--acc);color:#FFF6EC;font-size:9.5px;font-weight:800;padding:1px 8px;border-radius:99px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(90,60,30,.05)}
+.toolbar{display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.toolbar .ttl{font-size:13px;font-weight:800}
+.searchbox input{width:100%;max-width:340px;border:1px solid var(--line-2);background:#fff;border-radius:10px;padding:9px 12px;font-size:13px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
+.tcount{font-size:12px;font-weight:700;color:var(--ink-3);margin-inline-start:auto}
+.crow,.srow{display:flex;align-items:center;gap:13px;padding:12px 18px;border-bottom:1px solid var(--line);cursor:pointer;transition:.12s}
+.crow:last-child,.srow:last-child{border-bottom:none}
+.crow:hover,.srow:hover{background:var(--surface-2)}
+.cmain{flex:1;min-width:0}
+.cname{font-size:13.5px;font-weight:800}.cphone{font-size:11px;color:var(--ink-3);margin-top:2px}
+.sname2{font-size:13.5px;font-weight:800;flex:1;min-width:0}
+.s-staff{font-size:10px;color:var(--ink-3);margin-top:3px}
+.sdur{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);padding:4px 10px;border-radius:99px;flex:none}
+.sprice{font-size:12.5px;color:var(--ink-3);flex:none;text-align:left}
+.sprice b{color:var(--ink);font-size:13.5px;font-weight:800}
+.empty{padding:40px 18px;text-align:center;color:var(--ink-3);font-size:13px;line-height:2}
+.chev{color:var(--ink-3)}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:400px;max-width:100vw;background:var(--surface);z-index:90;transform:translateX(-105%);transition:transform .3s cubic-bezier(.32,.72,.24,1);display:flex;flex-direction:column;box-shadow:18px 0 50px rgba(45,25,8,.2)}
+.drawer.on{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(32,20,9,.42);opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.scrim.on{opacity:1;pointer-events:auto}
+.dr-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.dr-title{font-size:15.5px;font-weight:900}.dr-sub{font-size:11.5px;color:var(--ink-2);font-weight:600;margin-top:3px}
+.dr-body{padding:18px 20px 30px;overflow-y:auto;flex:1}
+.xbtn{border:none;background:var(--surface-2)}
+.fld{margin-bottom:15px}
+.fld>label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line-2);background:#fff;border-radius:10px;padding:10px 13px;font-size:13.5px;color:var(--ink);outline:none;transition:.15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
+.fld textarea{resize:vertical;min-height:60px}
+.req{color:var(--red);font-weight:900}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line-2);background:#fff;border-radius:99px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;color:var(--ink-2)}
+.chip:hover{border-color:var(--ink-3)}
+.chip.sel{background:var(--dark);border-color:var(--dark);color:#FFF3E4}
+.warn{display:none;background:var(--amber-soft);border:1px solid #E6D3A2;color:#7A5B1B;font-size:12px;font-weight:700;padding:10px 13px;border-radius:10px;margin-bottom:13px;line-height:1.8}
+.warn.on{display:block}
+.ferr{display:none;color:var(--red);font-size:12px;font-weight:700;margin:-4px 0 12px}
+.ferr.on{display:block}
+.btn-big{width:100%;justify-content:center;padding:13px;font-size:14px}
+.drow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.drow .dl{color:var(--ink-3);font-weight:600;flex:none}.drow .dv{font-weight:700;text-align:left}
+.stpill{display:inline-flex;font-size:11.5px;font-weight:800;padding:5px 13px;border-radius:99px;margin-bottom:13px}
+.st-booked{background:var(--amber-soft);color:#7A5B1B}
+.st-done{background:var(--green-soft);color:#46562F}
+.st-canceled{background:#EFE8DC;color:#8B7C69}
+.dacts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.btn{font-size:13px;font-weight:700;border-radius:11px;padding:11px 15px;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;transition:.15s}
+.btn-green{background:var(--green);color:#F3F6EC}.btn-green:hover{background:#4D5F40}
+.btn-danger-ghost{background:#FBF1EE;color:#9C3A2C;border-color:#EAC9C0}.btn-danger-ghost:hover{background:#F6E3DD}
+.btn-del{background:none;color:var(--ink-3);font-size:12px;padding:9px;border:1px solid var(--line-2);border-radius:10px}
+.btn-del:hover,.btn-del.armed{color:var(--red)}
+.btn-del.armed{background:var(--red-soft);font-weight:800}
+#toasts{position:fixed;bottom:20px;inset-inline-start:20px;z-index:200;display:flex;flex-direction:column;gap:9px}
+.toast{background:var(--dark);color:#F6EBDB;padding:11px 16px;border-radius:11px;font-size:12.5px;font-weight:700;box-shadow:0 10px 28px rgba(30,18,8,.32);animation:tin .3s;max-width:320px;line-height:1.9}
+@keyframes tin{from{transform:translateY(14px);opacity:0}}
+/* ورود */
+.pv{position:fixed;inset:0;background:radial-gradient(700px 400px at 80% -10%,rgba(188,83,43,.12),transparent 60%),var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.pv-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:34px 30px;width:340px;max-width:100%;text-align:center;box-shadow:0 20px 60px rgba(90,60,30,.14)}
+.pv-card .mk{width:52px;height:52px;border-radius:15px;background:var(--acc);display:grid;place-items:center;font-weight:900;font-size:25px;color:#FFF6EA;margin:0 auto 14px;padding-bottom:3px}
+.pv-card b{font-size:17px;font-weight:900;display:block}
+.pv-card p{font-size:12px;color:var(--ink-2);margin:7px 0 18px}
+.pv-card input{width:100%;border:1.5px solid var(--line-2);background:#fff;border-radius:12px;padding:12px;font-size:14px;color:var(--ink);outline:none;margin-bottom:10px;text-align:center}
+.pv-card input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
+.go{width:100%;border:none;border-radius:13px;background:var(--acc);color:#FFF6EC;font-size:14.5px;font-weight:800;padding:13px;margin-top:6px;transition:.15s}
+.go:hover{background:var(--acc-deep)}
+.lerr{display:none;color:var(--red);font-size:12px;font-weight:800;margin-top:10px}
+.lerr.on{display:block}
+@media(max-width:760px){main{padding:16px 12px 8px}.hd-date,.hd-clock{display:none}.tl-col{min-width:180px}.drawer{width:100vw}}
+</style>
+</head>
+<body>
+
+<!-- ورود -->
+<div class="pv" id="loginView">
+  <div class="pv-card">
+    <div class="mk">ن</div>
+    <b>پنل پذیرش نیلا</b>
+    <p>ورود منشی</p>
+    <input type="email" id="lgEmail" placeholder="ایمیل" dir="ltr" autocomplete="username">
+    <input type="password" id="lgPass" placeholder="رمز عبور" dir="ltr" autocomplete="current-password">
+    <div class="lerr" id="lgErr"></div>
+    <button class="go" id="lgGo">ورود</button>
+  </div>
+</div>
+
+<header id="hdr" hidden>
+  <div class="brand">
+    <span class="brand-mark">ن</span>
+    <div><b>سالن نیلا</b><small>پنل پذیرش</small></div>
+  </div>
+  <nav id="nav">
+    <button data-view="schedule" class="active">برنامه پذیرش</button>
+    <button data-view="customers">مشتریان</button>
+    <button data-view="services">خدمات</button>
+    <button data-view="staff">متخصصان</button>
+  </nav>
+  <div class="hd-end">
+    <span class="pill" id="pill"><i></i><span id="pillTxt">در حال اتصال…</span></span>
+    <span class="hd-clock" id="hdClock">--:--</span>
+    <span class="hd-date" id="hdDate"></span>
+    <button class="iconbtn" id="btnReload" title="به‌روزرسانی">⟳</button>
+    <button class="iconbtn" id="btnLogout" title="خروج">⎋</button>
+    <button class="btn-p" id="btnNew">＋ نوبت جدید</button>
+  </div>
+</header>
+
+<main id="main" hidden>
+  <section id="view-schedule">
+    <div class="day-head">
+      <div><h1 id="dayLabel">—</h1><div class="day-meta" id="dayStats"></div></div>
+      <div class="day-nav">
+        <button class="iconbtn" id="dPrev">›</button>
+        <button class="now" id="dToday">امروز</button>
+        <button class="iconbtn" id="dNext">‹</button>
+      </div>
+    </div>
+    <div class="tl-card"><div class="tl-scroll"><div class="tl-track" id="tlTrack"></div></div></div>
+    <p style="font-size:11.5px;color:var(--ink-3);margin:11px 4px 0;line-height:2">💡 روی جای خالی تقویم هر متخصص کلیک کنید تا نوبت ثبت شود. نوبت‌های آنلاین با نشان 🌐 مشخص می‌شوند.</p>
+  </section>
+
+  <section id="view-customers" hidden>
+    <div class="panel">
+      <div class="toolbar">
+        <div class="searchbox"><input id="cSearch" placeholder="جستجوی نام یا شماره…"></div>
+        <span class="tcount" id="custCount"></span>
+      </div>
+      <div id="custList"></div>
+    </div>
+  </section>
+
+  <section id="view-services" hidden>
+    <div class="panel">
+      <div class="toolbar">
+        <span class="ttl">خدمات و تعرفه</span><span class="tcount" id="svcCount"></span>
+        <button class="btn-g" id="btnAddSvc" style="margin-inline-start:auto">＋ افزودن خدمت</button>
+      </div>
+      <div id="svcList"></div>
+    </div>
+  </section>
+
+  <section id="view-staff" hidden>
+    <div class="panel">
+      <div class="toolbar">
+        <span class="ttl">متخصصان</span><span class="tcount" id="staffCount"></span>
+        <button class="btn-g" id="btnAddStaff" style="margin-inline-start:auto">＋ افزودن متخصص</button>
+      </div>
+      <div id="staffList"></div>
+    </div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drForm">
+  <div class="dr-head">
+    <div><div class="dr-title">ثبت نوبت</div><div class="dr-sub" id="fSub"></div></div>
+    <button class="iconbtn xbtn" data-close>✕</button>
+  </div>
+  <div class="dr-body">
+    <div class="fld"><label>نام مشتری <i class="req">*</i></label><input type="text" id="fName" placeholder="نام و نام خانوادگی"></div>
+    <div class="fld"><label>شماره موبایل <i class="req">*</i></label><input type="tel" id="fPhone" placeholder="09xxxxxxxxx" inputmode="numeric"></div>
+    <div class="fld"><label>خدمت <i class="req">*</i></label><select id="fService"></select><div style="font-size:11px;color:var(--ink-3);margin-top:5px" id="fSvcInfo"></div></div>
+    <div class="fld"><label>متخصص <i class="req">*</i></label><div class="chips" id="fStaff"></div></div>
+    <div class="fld"><label>روز</label>
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:10px;padding:5px 7px;background:#fff">
+        <button class="iconbtn" id="fPrev" style="width:30px;height:30px;border:none;background:var(--surface-2)">›</button>
+        <span style="flex:1;text-align:center;font-size:13px;font-weight:800" id="fDateVal"></span>
+        <button class="iconbtn" id="fNext" style="width:30px;height:30px;border:none;background:var(--surface-2)">‹</button>
+      </div>
+    </div>
+    <div class="fld"><label>ساعت <i class="req">*</i></label><select id="fTime"></select></div>
+    <div class="fld"><label>یادداشت</label><textarea id="fNote" placeholder="اختیاری…"></textarea></div>
+    <div class="warn" id="fWarn"></div>
+    <div class="ferr" id="fErr"></div>
+    <button class="btn-p btn-big" id="fSave">ثبت نوبت</button>
+  </div>
+</aside>
+
+<aside class="drawer" id="drDetail">
+  <div class="dr-head">
+    <div><div class="dr-title">جزئیات نوبت</div><div class="dr-sub" id="dSub"></div></div>
+    <button class="iconbtn xbtn" data-close>✕</button>
+  </div>
+  <div class="dr-body" id="dBody"></div>
+</aside>
+
+<aside class="drawer" id="drCust">
+  <div class="dr-head">
+    <div><div class="dr-title">پرونده مشتری</div></div>
+    <button class="iconbtn xbtn" data-close>✕</button>
+  </div>
+  <div class="dr-body" id="cBody"></div>
+</aside>
+
+<aside class="drawer" id="drSvc">
+  <div class="dr-head">
+    <div><div class="dr-title" id="seTitle">افزودن خدمت</div><div class="dr-sub">کدام متخصص‌ها این خدمت را انجام می‌دهند؟</div></div>
+    <button class="iconbtn xbtn" data-close>✕</button>
+  </div>
+  <div class="dr-body">
+    <div class="fld"><label>نام خدمت <i class="req">*</i></label><input type="text" id="seName"></div>
+    <div class="fld"><label>مدت (دقیقه) <i class="req">*</i></label><input type="number" id="seDur" min="5" step="5" value="60"></div>
+    <div class="fld"><label>قیمت (تومان)</label><input type="number" id="sePrice" min="0" step="10000" value="0"></div>
+    <div class="fld"><label>متخصص‌های مجاز</label><div class="chips" id="seStaff"></div></div>
+    <div class="ferr" id="seErr"></div>
+    <button class="btn-p btn-big" id="seSave">ذخیره خدمت</button>
+    <div class="dacts" id="seDelWrap" hidden><button class="btn btn-del" id="seDel">حذف خدمت</button></div>
+  </div>
+</aside>
+
+<aside class="drawer" id="drStaff">
+  <div class="dr-head">
+    <div><div class="dr-title" id="stfTitle">افزودن متخصص</div></div>
+    <button class="iconbtn xbtn" data-close>✕</button>
+  </div>
+  <div class="dr-body">
+    <div class="fld"><label>نام <i class="req">*</i></label><input type="text" id="stfName"></div>
+    <div class="fld"><label>تخصص</label><input type="text" id="stfRole" placeholder="مثلاً: رنگ و مو"></div>
+    <div class="fld"><label>شماره تماس</label><input type="tel" id="stfPhone" placeholder="اختیاری"></div>
+    <div class="ferr" id="stfErr"></div>
+    <button class="btn-p btn-big" id="stfSave">ذخیره</button>
+    <div class="dacts" id="stfDelWrap" hidden><button class="btn btn-del" id="stfDel">حذف متخصص</button></div>
+  </div>
+</aside>
+
+<div id="toasts"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ⚙️══════════ تنظیمات — این دو خط را پر کنید ══════════ */
+const SB_URL='postgresql://postgres:mSNqglSx8rJxhe1q@db.vxoumhcgipimkiwigxny.supabase.co:5432/postgres';
+const SB_KEY='sb_publishable_MamNHKpsUmCwzd64KYsVTA_Xhee4BJ6';
+/* ═══════════════════════════════════════════════════ */
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const tehranToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran'}).format(new Date());
+
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=s=>String(s).replace(/\d/g,d=>FA[d]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad2=n=>String(n).padStart(2,'0');
+const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const isoShift=(iso,n)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return isoOf(d)};
+const price=n=>Number(n||0).toLocaleString('fa-IR');
+const tLbl=t=>fa(String(t||'').replace(/^0/,''));
+const toMinC=t=>{const p=String(t||'').split(':');return isNaN(+p[0])?NaN:(+p[0])*60+(+(p[1]||0))};
+const minToHHMMC=m=>pad2(Math.floor(m/60))+':'+pad2(m%60);
+const normPh=s=>String(s||'').replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'');
+let _u=0;const uid=()=>Date.now().toString(36)+(_u++).toString(36);
+
+const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
+const F_FULL=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'});
+function dayName(iso){
+  if(!iso)return '—';
+  let s=F_FULL.format(new Date(iso+'T12:00:00'));
+  if(iso===TODAY_ISO)s='امروز، '+s;else if(iso===isoShift(TODAY_ISO,1))s='فردا، '+s;
+  return s;
+}
+
+let D={customers:[],appointments:[],services:[],staff:[]};
+let TODAY_ISO='',curDate='',view='schedule',booted=false,LOGGED=false;
+let known=new Set(),flashIds=[],editSvcId=null,editStaffId=null,detailId=null;
+const HPH=64,DAY_START=9*60,DAY_END=21*60;
+
+/* ───────── ورود ───────── */
+async function initAuth(){
+  if(typeof supabase==='undefined'){
+    const e=document.getElementById('lgErr');e.textContent='کتابخانه بارگذاری نشد — اینترنت را چک کنید';e.classList.add('on');return;
+  }
+  const {data}=await sb.auth.getSession();
+  if(data&&data.session)enter();
+}
+function enter(){
+  LOGGED=true;
+  document.getElementById('loginView').style.display='none';
+  document.getElementById('hdr').hidden=false;
+  document.getElementById('main').hidden=false;
+  load(false);
+}
+async function doLogin(){
+  const e=document.getElementById('lgErr');e.classList.remove('on');
+  const em=document.getElementById('lgEmail').value.trim();
+  const pw=document.getElementById('lgPass').value;
+  if(!em||!pw){e.textContent='ایمیل و رمز را وارد کنید';e.classList.add('on');return}
+  const b=document.getElementById('lgGo');b.disabled=true;b.textContent='در حال ورود…';
+  const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  b.disabled=false;b.textContent='ورود';
+  if(error){e.textContent='ایمیل یا رمز اشتباه است';e.classList.add('on')}
+  else enter();
+}
+document.getElementById('lgGo').onclick=doLogin;
+document.getElementById('lgPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('btnLogout').onclick=()=>sb.auth.signOut().then(()=>location.reload());
+initAuth();
+
+/* ───────── بارگیری ───────── */
+function pill(st,txt){
+  document.getElementById('pill').className='pill'+(st==='busy'?' busy':st==='err'?' err':'');
+  document.getElementById('pillTxt').textContent=txt;
+}
+async function load(silent){
+  if(!LOGGED)return;
+  pill('busy','در حال دریافت…');
+  try{
+    const [c,a,sv,s,ss]=await Promise.all([
+      sb.from('customers').select('*'),
+      sb.from('appointments').select('*'),
+      sb.from('services').select('*'),
+      sb.from('staff').select('*'),
+      sb.from('service_staff').select('*')
+    ]);
+    const err=c.error||a.error||sv.error||s.error||ss.error;
+    if(err)throw err;
+    const smap={};(ss.data||[]).forEach(r=>{(smap[r.service_id]=smap[r.service_id]||[]).push(r.staff_id)});
+    D={
+      customers:(c.data||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone,note:x.note||'',createdAt:x.created_at})),
+      services:(sv.data||[]).map(x=>({id:x.id,name:x.name,dur:x.dur||60,price:x.price||0,staff:(smap[x.id]||[]).map(String)})),
+      staff:(s.data||[]).map(x=>({id:x.id,name:x.name||'',role:x.role||'',phone:x.phone||''}))
+    };
+    const svcById={},stfById={};
+    D.services.forEach(x=>svcById[x.id]=x);D.staff.forEach(x=>stfById[x.id]=x);
+    D.appointments=(a.data||[]).map(x=>({
+      id:x.id,date:x.date,timeR:x.time_r,timeS:x.time_s,customerId:x.customer_id,
+      name:x.name||'',phone:x.phone,serviceId:x.service_id,staffId:x.staff_id,
+      svc:(svcById[x.service_id]||{}).name||x.svc||'',
+      staff:(stfById[x.staff_id]||{}).name||x.staff||'',
+      status:x.status||'booked',source:x.source||'panel',note:x.note||'',createdAt:x.created_at
+    }));
+    TODAY_ISO=tehranToday();
+    if(!booted){curDate=TODAY_ISO;booted=true}
+    detectNew();
+    document.getElementById('hdDate').textContent=dayName(TODAY_ISO);
+    renderAll();
+    const n=new Date();
+    pill('ok','متصل · '+fa(pad2(n.getHours())+':'+pad2(n.getMinutes())));
+  }catch(e){
+    pill('err','خطا — دوباره بزنید');
+    toast('خطا در دریافت: '+(e.message||e));
+  }
+}
+function detectNew(){
+  D.appointments.forEach(a=>{
+    if(!known.has(a.id)){
+      if(booted&&a.source==='online'&&a.status==='booked'){
+        flashIds.push(a.id);
+        toast('🌐 نوبت آنلاین جدید: '+(a.name||'')+' — '+tLbl(a.timeR||a.timeS||''));
+      }
+      known.add(a.id);
+    }
+  });
+}
+
+/* ───────── رندر ───────── */
+function renderAll(){
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+  document.querySelectorAll('main>section').forEach(s=>s.hidden=('view-'+view)!==s.id);
+  if(view==='schedule')renderSchedule();
+  if(view==='customers')renderCustomers();
+  if(view==='services')renderServices();
+  if(view==='staff')renderStaff();
+}
+function durOf(a){
+  const k=String(a.serviceId||'');
+  const s=D.services.filter(x=>String(x.id)===k||(a.svc&&String(x.name)===String(a.svc)))[0];
+  return s?Math.max(15,Number(s.dur)||60):60;
+}
+function renderSchedule(){
+  document.getElementById('dayLabel').textContent=dayName(curDate);
+  const day=D.appointments.filter(a=>a.date===curDate&&a.status!=='canceled');
+  const done=day.filter(a=>a.status==='done').length;
+  document.getElementById('dayStats').innerHTML=
+    '<b>'+fa(day.length)+'</b> نوبت<i class="sep"></i><b>'+fa(day.length-done)+'</b> باقی‌مانده<i class="sep"></i><b>'+fa(done)+'</b> انجام‌شده';
+  let h='<div class="tl-hours"><div class="tl-headpad"></div><div class="tl-hours-body">';
+  for(let m=DAY_START;m<DAY_END;m+=60)h+='<div class="tl-hr"><span>'+tLbl(minToHHMMC(m))+'</span></div>';
+  h+='</div></div>';
+  if(!D.staff.length)h+='<div class="empty" style="flex:1">اول از تب «متخصصان» متخصص اضافه کنید</div>';
+  D.staff.forEach((s,si)=>{
+    const list=day.filter(a=>String(a.staffId||'')===String(s.id));
+    h+='<div class="tl-col"><div class="tl-col-head">'+
+      '<span class="avatar av'+(si%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
+      '<div><div class="sname">'+esc(s.name)+'</div><div class="srole">'+esc(s.role||'متخصص')+'</div></div>'+
+      '<span class="scount">'+fa(list.length)+'</span></div><div class="tl-rail" data-staff="'+esc(s.id)+'">';
+    for(let m=DAY_START;m<DAY_END;m+=60)h+='<i class="hline" style="top:'+((m-DAY_START)/60*HPH)+'px"></i>';
+    list.forEach(a=>{
+      const st=toMinC(a.timeS||a.timeR||'');if(isNaN(st))return;
+      const dur=Math.max(30,durOf(a));
+      const top=(st-DAY_START)/60*HPH,hh=Math.max(34,dur/60*HPH-6);
+      const tR=String(a.timeR||''),tS=String(a.timeS||'');
+      h+='<div class="appt'+(a.status==='done'?' st-done':'')+(a.status==='canceled'?' st-canceled':'')+(flashIds.indexOf(a.id)>-1?' flash':'')+'" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+hh+'px">'+
+        '<div class="a-time">'+tLbl(tR||tS)+(tS&&tR&&tS!==tR?' → '+tLbl(tS):'')+
+        (a.source==='online'?' <span class="onetag">🌐 آنلاین</span>':'')+'</div>'+
+        '<div class="a-name">'+esc(a.name||'')+'</div>'+
+        '<div class="a-svc">'+esc(a.svc||'')+'</div></div>';
+    });
+    h+='</div></div>';
+  });
+  if(curDate===TODAY_ISO){
+    const n=new Date(),nm=n.getHours()*60+n.getMinutes();
+    if(nm>=DAY_START&&nm<=DAY_END)
+      h+='<div class="nowline" style="top:'+(58+(nm-DAY_START)/60*HPH)+'px"><span class="nlab">'+tLbl(minToHHMMC(nm))+'</span></div>';
+  }
+  const track=document.getElementById('tlTrack');
+  track.innerHTML=h;
+  track.querySelectorAll('.tl-rail').forEach(rail=>{
+    rail.addEventListener('click',function(e){
+      if(e.target.closest('.appt'))return;
+      const rect=rail.getBoundingClientRect();
+      let m=DAY_START+Math.round(((e.clientY-rect.top)/HPH*60)/5)*5;
+      m=Math.max(DAY_START,Math.min(DAY_END-15,m));
+      openForm({staffId:rail.dataset.staff,date:curDate,time:minToHHMMC(m)});
+    });
+  });
+  track.querySelectorAll('.appt').forEach(el=>{
+    el.addEventListener('click',function(e){e.stopPropagation();openDetail(el.dataset.id)});
+  });
+  flashIds=[];
+}
+document.getElementById('dPrev').onclick=()=>{curDate=isoShift(curDate,-1);renderSchedule()};
+document.getElementById('dNext').onclick=()=>{curDate=isoShift(curDate,1);renderSchedule()};
+document.getElementById('dToday').onclick=()=>{curDate=TODAY_ISO;renderSchedule()};
+
+function renderCustomers(){
+  const q=document.getElementById('cSearch').value.trim();
+  const list=D.customers.filter(c=>!q||(c.name||'').indexOf(q)>-1||normPh(c.phone).indexOf(normPh(q))>-1);
+  document.getElementById('custCount').textContent=fa(list.length)+' مشتری';
+  const w=document.getElementById('custList');
+  if(!list.length){w.innerHTML='<div class="empty">مشتری‌ای یافت نشد</div>';return}
+  w.innerHTML=list.map(c=>{
+    const n=D.appointments.filter(a=>normPh(a.phone)===normPh(c.phone)&&a.status==='booked').length;
+    return '<div class="crow" data-id="'+esc(c.id)+'"><div class="cmain"><div class="cname">'+esc(c.name||'—')+'</div>'+
+      '<div class="cphone">'+fa(normPh(c.phone))+'</div></div>'+
+      (n?'<span class="sdur">'+fa(n)+' نوبت پیش‌رو</span>':'')+'<span class="chev">‹</span></div>';
+  }).join('');
+  w.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openCust(r.dataset.id));
+}
+document.getElementById('cSearch').addEventListener('input',renderCustomers);
+function openCust(id){
+  const c=D.customers.filter(x=>x.id===id)[0];if(!c)return;
+  const hist=D.appointments.filter(a=>normPh(a.phone)===normPh(c.phone)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  document.getElementById('cBody').innerHTML=
+    '<div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:900">'+esc(c.name||'—')+'</div>'+
+    '<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px" dir="ltr">'+fa(normPh(c.phone))+'</div></div>'+
+    '<div class="drow"><span class="dl">تعداد نوبت‌ها</span><span class="dv">'+fa(hist.length)+'</span></div>'+
+    '<div class="drow"><span class="dl">عضویت از</span><span class="dv">'+(c.createdAt?fa(new Date(c.createdAt).toLocaleDateString('fa-IR')):'—')+'</span></div>'+
+    '<div style="font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 6px">تاریخچه نوبت‌ها</div>'+
+    (hist.length?hist.map(a=>'<div class="drow" style="cursor:pointer" onclick="openDetail(\''+a.id+'\')"><span class="dl">'+dayName(a.date)+' · '+tLbl(a.timeR||'')+'</span><span class="dv">'+esc(a.svc||'')+' <small>'+esc(a.staff||'')+'</small></span></div>').join(''):'<div class="empty" style="padding:18px">هنوز نوبتی ثبت نشده</div>');
+  openDr('drCust');
+}
+
+function staffNamesOf(svc){
+  const ids=Array.isArray(svc.staff)?svc.staff:[];
+  return D.staff.filter(s=>ids.indexOf(String(s.id))>-1).map(s=>s.name).join('، ')||'—';
+}
+function renderServices(){
+  document.getElementById('svcCount').textContent=fa(D.services.length)+' خدمت';
+  const w=document.getElementById('svcList');
+  if(!D.services.length){w.innerHTML='<div class="empty">خدمتی ثبت نشده — دکمه «افزودن خدمت» را بزنید</div>';return}
+  w.innerHTML=D.services.map(s=>'<div class="srow" data-id="'+esc(s.id)+'">'+
+    '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+esc(staffNamesOf(s))+'</div></span>'+
+    '<span class="sdur">'+fa(s.dur||60)+' دقیقه</span>'+
+    '<span class="sprice"><b>'+price(s.price)+'</b> تومان</span>'+
+    '<span class="chev">‹</span></div>').join('');
+  w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openSvcEdit(r.dataset.id));
+}
+document.getElementById('btnAddSvc').onclick=()=>openSvcEdit('');
+function openSvcEdit(id){
+  editSvcId=id||null;
+  const s=id?D.services.filter(x=>x.id===id)[0]:null;
+  document.getElementById('seTitle').textContent=s?'ویرایش خدمت':'افزودن خدمت';
+  document.getElementById('seName').value=s?s.name||'':'';
+  document.getElementById('seDur').value=s?s.dur||60:60;
+  document.getElementById('sePrice').value=s?s.price||0:0;
+  document.getElementById('seDelWrap').hidden=!s;
+  document.getElementById('seDel').classList.remove('armed');
+  document.getElementById('seDel').textContent='حذف خدمت';
+  const w=document.getElementById('seStaff');w.innerHTML='';
+  const sel=Array.isArray(s&&s.staff)?s.staff.map(String):[];
+  D.staff.forEach(st=>{
+    const b=document.createElement('button');b.className='chip'+(sel.indexOf(String(st.id))>-1?' sel':'');
+    b.textContent=st.name;b.onclick=()=>b.classList.toggle('sel');w.appendChild(b);
+  });
+  document.getElementById('seErr').classList.remove('on');
+  openDr('drSvc');
+}
+document.getElementById('seSave').onclick=async function(){
+  const e=document.getElementById('seErr');e.classList.remove('on');
+  const name=document.getElementById('seName').value.trim();
+  const dur=+document.getElementById('seDur').value||60;
+  const pr=+document.getElementById('sePrice').value||0;
+  const chips=Array.from(document.querySelectorAll('#seStaff .chip'));
+  const staff=chips.map((c,i)=>c.classList.contains('sel')&&D.staff[i]?String(D.staff[i].id):null).filter(Boolean);
+  if(name.length<2){e.textContent='نام خدمت را وارد کنید';e.classList.add('on');return}
+  this.disabled=true;this.textContent='در حال ذخیره…';
+  try{
+    const id=editSvcId||('sv'+uid());
+    await sb.from('services').upsert({id:id,name:name,dur:dur,price:pr});
+    await sb.from('service_staff').delete().eq('service_id',id);
+    if(staff.length)await sb.from('service_staff').insert(staff.map(x=>({service_id:id,staff_id:x})));
+    closeDr();toast('خدمت ذخیره شد');load(true);
+  }catch(err){e.textContent=err.message||'خطا';e.classList.add('on')}
+  this.disabled=false;this.textContent='ذخیره خدمت';
+};
+document.getElementById('seDel').onclick=async function(){
+  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+  if(!editSvcId)return;
+  this.disabled=true;
+  await sb.from('services').delete().eq('id',editSvcId);
+  closeDr();toast('خدمت حذف شد');load(true);
+};
+
+function renderStaff(){
+  document.getElementById('staffCount').textContent=fa(D.staff.length)+' متخصص';
+  const w=document.getElementById('staffList');
+  if(!D.staff.length){w.innerHTML='<div class="empty">متخصصی ثبت نشده — دکمه «افزودن متخصص» را بزنید</div>';return}
+  w.innerHTML=D.staff.map((s,i)=>'<div class="srow" data-id="'+esc(s.id)+'">'+
+    '<span class="avatar av'+(i%4)+'">'+esc((s.name||'؟').charAt(0))+'</span>'+
+    '<span class="sname2">'+esc(s.name)+'<div class="s-staff">'+esc(s.role||'متخصص')+(s.phone?' · '+fa(s.phone):'')+'</div></span>'+
+    '<span class="chev">‹</span></div>').join('');
+  w.querySelectorAll('.srow').forEach(r=>r.onclick=()=>openStaffEdit(r.dataset.id));
+}
+document.getElementById('btnAddStaff').onclick=()=>openStaffEdit('');
+function openStaffEdit(id){
+  editStaffId=id||null;
+  const s=id?D.staff.filter(x=>x.id===id)[0]:null;
+  document.getElementById('stfTitle').textContent=s?'ویرایش متخصص':'افزودن متخصص';
+  document.getElementById('stfName').value=s?s.name||'':'';
+  document.getElementById('stfRole').value=s?s.role||'':'';
+  document.getElementById('stfPhone').value=s?s.phone||'':'';
+  document.getElementById('stfDelWrap').hidden=!s;
+  document.getElementById('stfDel').classList.remove('armed');
+  document.getElementById('stfDel').textContent='حذف متخصص';
+  document.getElementById('stfErr').classList.remove('on');
+  openDr('drStaff');
+}
+document.getElementById('stfSave').onclick=async function(){
+  const e=document.getElementById('stfErr');e.classList.remove('on');
+  const name=document.getElementById('stfName').value.trim();
+  const role=document.getElementById('stfRole').value.trim();
+  const phone=normPh(document.getElementById('stfPhone').value);
+  if(name.length<2){e.textContent='نام را وارد کنید';e.classList.add('on');return}
+  this.disabled=true;this.textContent='در حال ذخیره…';
+  try{
+    const id=editStaffId||('st'+uid());
+    await sb.from('staff').upsert({id:id,name:name,role:role,phone:phone});
+    closeDr();toast('متخصص ذخیره شد');load(true);
+  }catch(err){e.textContent=err.message||'خطا';e.classList.add('on')}
+  this.disabled=false;this.textContent='ذخیره';
+};
+document.getElementById('stfDel').onclick=async function(){
+  if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+  if(!editStaffId)return;
+  this.disabled=true;
+  await sb.from('staff').delete().eq('id',editStaffId);
+  closeDr();toast('متخصص حذف شد');load(true);
+};
+
+/* ───────── نوبت جدید (پنل) ───────── */
+let formDate='',formStaffId='';
+function openForm(pre){
+  pre=pre||{};
+  formDate=pre.date||curDate||TODAY_ISO;
+  formStaffId=pre.staffId||'';
+  document.getElementById('fSub').textContent=dayName(formDate)+(pre.time?' · ساعت '+tLbl(pre.time):'');
+  document.getElementById('fName').value='';document.getElementById('fPhone').value='';
+  document.getElementById('fNote').value='';
+  const sel=document.getElementById('fService');
+  sel.innerHTML=D.services.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+' ('+fa(s.dur||60)+' دقیقه)</option>').join('');
+  if(pre.serviceId)sel.value=pre.serviceId;
+  sel.onchange=renderSvcInfo;renderSvcInfo();
+  const w=document.getElementById('fStaff');w.innerHTML='';
+  D.staff.forEach(s=>{
+    const b=document.createElement('button');b.className='chip'+(String(s.id)===String(formStaffId)?' sel':'');
+    b.textContent=s.name;
+    b.onclick=()=>{formStaffId=s.id;w.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');checkConflict()};
+    w.appendChild(b);
+  });
+  const ts=document.getElementById('fTime');
+  ts.innerHTML='';
+  for(let m=DAY_START;m<DAY_END;m+=30){
+    const v=minToHHMMC(m);
+    ts.innerHTML+='<option value="'+v+'"'+(pre.time===v?' selected':'')+'>'+tLbl(v)+'</option>';
+  }
+  if(pre.time)ts.value=pre.time;
+  ts.onchange=checkConflict;
+  document.getElementById('fWarn').classList.remove('on');
+  document.getElementById('fErr').classList.remove('on');
+  updateFormDate();
+  openDr('drForm');
+}
+function renderSvcInfo(){
+  const s=D.services.filter(x=>x.id===document.getElementById('fService').value)[0];
+  document.getElementById('fSvcInfo').textContent=s?('قیمت: '+price(s.price)+' تومان · متخصص‌ها: '+staffNamesOf(s)):'';
+}
+function updateFormDate(){
+  document.getElementById('fDateVal').textContent=dayName(formDate);
+  document.getElementById('fSub').textContent=dayName(formDate);
+}
+document.getElementById('fPrev').onclick=()=>{formDate=isoShift(formDate,-1);if(formDate<TODAY_ISO)formDate=TODAY_ISO;updateFormDate();checkConflict()};
+document.getElementById('fNext').onclick=()=>{formDate=isoShift(formDate,1);updateFormDate();checkConflict()};
+document.getElementById('fPhone').addEventListener('input',function(){
+  this.value=this.value.replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/\D/g,'').slice(0,11);
+});
+function checkConflict(){
+  const sId=document.getElementById('fService').value;
+  const t=document.getElementById('fTime').value;
+  const s=D.services.filter(x=>x.id===sId)[0];
+  const warn=document.getElementById('fWarn');
+  if(!s||!t||!formStaffId){warn.classList.remove('on');return}
+  const dur=s.dur||60,m=toMinC(t);
+  const st=D.staff.filter(x=>x.id===formStaffId)[0];
+  const ivs=D.appointments.filter(a=>a.date===formDate&&a.status==='booked'&&String(a.staffId)===String(formStaffId))
+    .map(a=>{const s2=toMinC(a.timeS||a.timeR||'');return {s:s2,e:s2+durOf(a)}});
+  if(ivs.some(v=>m<v.e&&v.s<m+dur)){
+    warn.textContent='⚠️ این ساعت برای «'+(st?st.name:'')+'» تداخل دارد — ساعت دیگری انتخاب کنید';
+    warn.classList.add('on');
+  }else warn.classList.remove('on');
+}
+document.getElementById('fSave').onclick=async function(){
+  const err=document.getElementById('fErr');err.classList.remove('on');
+  const name=document.getElementById('fName').value.trim();
+  const phone=normPh(document.getElementById('fPhone').value.trim());
+  const time=document.getElementById('fTime').value;
+  const serviceId=document.getElementById('fService').value;
+  const note=document.getElementById('fNote').value.trim();
+  if(name.length<2){err.textContent='نام مشتری را کامل وارد کنید';err.classList.add('on');return}
+  if(!/^09\d{9}$/.test(phone)){err.textContent='شماره موبایل معتبر نیست (09xxxxxxxxx)';err.classList.add('on');return}
+  if(!formStaffId){err.textContent='متخصص را انتخاب کنید';err.classList.add('on');return}
+  const btn=this;btn.disabled=true;btn.textContent='در حال ثبت…';
+  try{
+    /* مشتری: پیدا یا بساز */
+    const {data:cust}=await sb.from('customers').select('id,name').eq('phone',phone).maybeSingle();
+    let cid;
+    if(cust){
+      cid=cust.id;
+      if(!String(cust.name||'').trim())await sb.from('customers').update({name:name}).eq('id',cid);
+    }else{
+      cid='c'+uid();
+      const {error}=await sb.from('customers').insert({id:cid,name:name,phone:phone,note:'ثبت در پنل'});
+      if(error)throw error;
+    }
+    const {error}=await sb.from('appointments').insert({
+      id:'m'+uid(),date:formDate,time_r:time,time_s:time,customer_id:cid,
+      name:name,phone:phone,service_id:serviceId,staff_id:formStaffId,
+      status:'booked',source:'panel',note:note});
+    if(error)throw error;
+    closeDr();toast('✓ نوبت ثبت شد');load(true);
+  }catch(e2){err.textContent=(e2.message||'خطا');err.classList.add('on')}
+  btn.disabled=false;btn.textContent='ثبت نوبت';
+};
+
+/* ───────── جزئیات نوبت ───────── */
+window.openDetail=function(id){
+  const a=D.appointments.filter(x=>x.id===id)[0];if(!a)return;
+  detailId=id;
+  document.getElementById('dSub').textContent=dayName(a.date)+' · ساعت '+tLbl(a.timeR||a.timeS||'');
+  const st=a.status||'booked';
+  const stTxt={booked:'رزرو شده',done:'انجام شد',canceled:'لغو شده'}[st]||st;
+  document.getElementById('dBody').innerHTML=
+    '<span class="stpill st-'+st+'">'+stTxt+(a.source==='online'?' · 🌐 آنلاین':'')+'</span>'+
+    '<div class="drow"><span class="dl">مشتری</span><span class="dv">'+esc(a.name||'—')+'</span></div>'+
+    '<div class="drow"><span class="dl">موبایل</span><span class="dv" dir="ltr">'+fa(normPh(a.phone))+'</span></div>'+
+    '<div class="drow"><span class="dl">خدمت</span><span class="dv">'+esc(a.svc||'—')+'</span></div>'+
+    '<div class="drow"><span class="dl">متخصص</span><span class="dv">'+esc(a.staff||'—')+'</span></div>'+
+    '<div class="drow"><span class="dl">ساعت رزرو</span><span class="dv">'+tLbl(a.timeR||'—')+'</span></div>'+
+    '<div class="drow"><span class="dl">ساعت شروع</span><span class="dv">'+tLbl(a.timeS||a.timeR||'—')+'</span></div>'+
+    (a.note?'<div class="drow"><span class="dl">یادداشت</span><span class="dv">'+esc(a.note)+'</span></div>':'')+
+    '<div class="dacts" id="dActs"></div>';
+  const acts=document.getElementById('dActs');
+  if(st!=='done'){
+    const b1=document.createElement('button');b1.className='btn btn-green';b1.textContent='✓ انجام شد';
+    b1.onclick=()=>setApptStatus(id,'done','انجام شد ✓');acts.appendChild(b1);
+  }
+  if(st!=='canceled'){
+    const b2=document.createElement('button');b2.className='btn btn-danger-ghost';b2.textContent='لغو نوبت';
+    b2.onclick=()=>setApptStatus(id,'canceled','نوبت لغو شد');acts.appendChild(b2);
+  }
+  const b3=document.createElement('button');b3.className='btn btn-del';b3.textContent='حذف کامل';
+  b3.onclick=function(){
+    if(!this.classList.contains('armed')){this.classList.add('armed');this.textContent='مطمئنی؟ دوباره بزن';return}
+    deleteAppt(id);
+  };
+  acts.appendChild(b3);
+  openDr('drDetail');
+};
+async function setApptStatus(id,status,msg){
+  closeDr();toast('در حال ذخیره…');
+  const {error}=await sb.from('appointments').update({status:status}).eq('id',id);
+  if(error){toast('خطا: '+error.message);return}
+  toast(msg);load(true);
+}
+async function deleteAppt(id){
+  closeDr();
+  const {error}=await sb.from('appointments').delete().eq('id',id);
+  toast(error?('خطا: '+error.message):'نوبت حذف شد');
+  if(!error)load(true);
+}
+
+/* ───────── Drawer / Toast ───────── */
+function openDr(id){
+  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+}
+function closeDr(){
+  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on'));
+  document.getElementById('scrim').classList.remove('on');
+}
+document.getElementById('scrim').onclick=closeDr;
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeDr);
+function toast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),320)},3800);
+}
+
+/* ───────── ناوبری و تایمرها ───────── */
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{view=b.dataset.view;renderAll()});
+document.getElementById('btnNew').onclick=()=>openForm({date:curDate});
+document.getElementById('btnReload').onclick=()=>load(false);
+setInterval(()=>{
+  const n=new Date();
+  document.getElementById('hdClock').textContent=fa(pad2(n.getHours())+':'+pad2(n.getMinutes()));
+},1000);
+setInterval(()=>{if(LOGGED&&!document.querySelector('.drawer.on'))load(true)},30000);
+</script>
+</body>
+</html>
