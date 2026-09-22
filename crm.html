@@ -112,6 +112,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
 .btn-g:hover{border-color:var(--ink-3);color:var(--ink)}
 .minib{border:1px solid var(--line-2);background:#fff;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--ink-2);transition:.15s;white-space:nowrap}
 .minib:hover{border-color:var(--acc);color:var(--acc-deep)}
+.minib:disabled{opacity:.4;cursor:not-allowed}
 .minib.grn{background:var(--green-soft);border-color:#D8DFC9;color:#46562F}
 .smsbox{width:100%;border:1.5px solid var(--line-2);background:#fff;border-radius:12px;padding:12px 14px;font-size:13px;line-height:2;outline:none;resize:vertical;min-height:90px}
 .smsbox:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(188,83,43,.12)}
@@ -183,6 +184,35 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
 .nk-sms{background:var(--acc-soft);color:var(--acc-deep)}.nk-points{background:var(--amber-soft);color:#7A5B1B}
 .noterow p{font-size:12.5px;line-height:1.9;margin-top:5px}
 .noterow time{font-size:10px;color:var(--ink-3)}
+/* ───── گزارش ماهانه ───── */
+.rep{background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:22px}
+.rep-h{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--dark);padding-bottom:12px;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.rep-brand{font-size:18px;font-weight:900}
+.rep-sub{font-size:11px;color:var(--ink-3);letter-spacing:.08em;margin-top:2px}
+.rep-per{font-size:12px;font-weight:800;color:var(--ink-2)}
+.rep-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.repK{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.repK span{font-size:10px;font-weight:700;color:var(--ink-3);display:block}
+.repK b{font-size:15px;font-weight:900}
+.rep-fnl{background:var(--green-soft);border:1px solid #D8DFC9;border-radius:10px;padding:9px 13px;font-size:12px;line-height:2.1;margin-bottom:14px}
+.rep-src{font-size:11px;color:var(--ink-2);margin-top:4px}
+.rep-src i{display:inline-block;background:#fff;border:1px solid #D8DFC9;border-radius:99px;padding:1px 9px;margin-inline-start:5px;font-style:normal;font-weight:800;font-size:10px}
+.rep-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.rep-cols h4{font-size:12px;font-weight:900;color:var(--ink-2);margin-bottom:8px}
+.rep ul{padding-inline-start:18px;font-size:12.5px;line-height:2.1}
+.rep .mini{background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:11.5px;font-weight:800;color:var(--ink-2);margin-bottom:6px;display:flex;justify-content:space-between}
+.rep .mini b{color:var(--ink)}
+.rep-foot{border-top:1px solid var(--line-2);margin-top:8px;padding-top:10px;font-size:11px;color:var(--ink-3);text-align:center}
+@media(max-width:760px){.rep-kpis{grid-template-columns:repeat(2,1fr)}.rep-cols{grid-template-columns:1fr}}
+#printArea{display:none}
+@media print{
+  @page{margin:12mm}
+  body.printing *{visibility:hidden}
+  body.printing #printArea{display:block;visibility:visible;position:absolute;top:0;left:0;width:100%}
+  body.printing #printArea *{visibility:visible}
+  #printArea .rep{border:none;padding:0}
+}
+/* ورود */
 .pv{position:fixed;inset:0;background:radial-gradient(700px 400px at 80% -10%,rgba(188,83,43,.12),transparent 60%),var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
 .pv-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:34px 30px;width:340px;max-width:100%;text-align:center;box-shadow:0 20px 60px rgba(90,60,30,.14)}
 .pv-card .mk{width:52px;height:52px;border-radius:15px;background:var(--acc);display:grid;place-items:center;font-weight:900;font-size:24px;color:#FFF6EA;margin:0 auto 14px;padding-bottom:3px}
@@ -230,6 +260,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
     <button data-view="codes">کدها 🎟</button>
     <button data-view="camp">کمپین‌ها 📣</button>
     <button data-view="growth">رشد</button>
+    <button data-view="monthly">گزارش ماهانه 🖨</button>
   </nav>
   <div class="hd-end">
     <span class="hd-date" id="hdDate"></span>
@@ -345,16 +376,16 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
     </div>
     <div class="row2 mt14">
       <div class="card">
-        <div class="card-h"><span class="ttl">😐 در حال سرد شدن</span><span class="sub">فاصلهٔ فعلی > ۱.۲ برابر چرخهٔ معمولش — یادآوری ملایم</span></div>
+        <div class="card-h"><span class="ttl">😐 در حال سرد شدن</span><span class="sub">فاصله > ۱.۲ برابر چرخه — یادآوری ملایم</span></div>
         <div id="coolList" style="max-height:400px;overflow-y:auto"></div>
       </div>
       <div class="card">
-        <div class="card-h"><span class="ttl">⚠️ در خطر ریزش</span><span class="sub">یک کلیک: کد بازگشت ۲۰٪ + تسک پیگیری</span></div>
+        <div class="card-h"><span class="ttl">⚠️ در خطر ریزش</span><span class="sub">یک کلیک: کد بازگشت ۲۰٪ + تسک</span></div>
         <div id="riskList" style="max-height:400px;overflow-y:auto"></div>
       </div>
     </div>
     <div class="card mt14">
-      <div class="card-h"><span class="ttl">💤 احتمالاً از دست رفته</span><span class="sub">کمپین بازگشت سنگین یا رهاکردن آگاهانه</span></div>
+      <div class="card-h"><span class="ttl">💤 احتمالاً از دست رفته</span></div>
       <div id="lostList" style="max-height:340px;overflow-y:auto"></div>
     </div>
   </section>
@@ -386,7 +417,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
           <span style="flex:1"></span>
           <button class="btn-p" id="cdCreate">ساخت کد ✓</button>
         </div>
-        <p style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:2">💡 کد «معرفی» را به نام معرف بساز؛ هر بار دوستانش استفاده کنند <b>+۲۰ امتیاز</b> خودکار به معرف اضافه می‌شود. سقف استفاده = تعداد دوستانی که می‌تواند معرفی کند.</p>
+        <p style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:2">💡 کد «معرفی» را به نام معرف بساز؛ هر بار استفاده شود <b>+۲۰ امتیاز</b> خودکار به معرف اضافه می‌شود.</p>
       </div>
     </div>
     <div class="card mt14">
@@ -398,7 +429,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
   <!-- ═══ کمپین‌ها ═══ -->
   <section id="view-camp" hidden>
     <div class="card">
-      <div class="card-h"><span class="ttl">📣 ثبت کمپین جدید</span><span class="sub">لیست شماره‌های همان روز کوهورت ثبت می‌شود</span></div>
+      <div class="card-h"><span class="ttl">📣 ثبت کمپین جدید</span></div>
       <div class="card-b">
         <div class="mini-form">
           <input id="cpName" placeholder="نام کمپین… مثلاً: بازگشت مهر" style="min-width:170px">
@@ -412,7 +443,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
           </select>
           <button class="btn-p" id="cpCreate">ثبت کمپین ✓</button>
         </div>
-        <p style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:2">بعد از ارسال پیامک‌ها، اینجا را ثبت کن. ستون «بازخورد» خودکار حساب می‌کند: از کوهورت آن روز، چند نفر برگشتند و چقدر خریدند = **ROI کمپین بدون هیچ اینتگریشن**.</p>
+        <p style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:2">بعد از ارسال پیامک‌ها ثبت کن؛ ستون «بازخورد» خودکار حساب می‌کند: چند نفر برگشتند و چقدر خریدند = ROI کمپین.</p>
       </div>
     </div>
     <div class="card mt14">
@@ -469,6 +500,21 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
 رزرو آنلاین: [لینک سالن]</textarea></div>
     </div>
   </section>
+
+  <!-- ═══ گزارش ماهانه ═══ -->
+  <section id="view-monthly" hidden>
+    <div class="card">
+      <div class="card-h">
+        <span class="ttl">گزارش ماهانه</span>
+        <span style="flex:1"></span>
+        <button class="minib" id="mrPrev">› ماه قبل</button>
+        <b id="mrLabel" style="font-size:13px;min-width:110px;text-align:center"></b>
+        <button class="minib" id="mrNext">ماه بعد ‹</button>
+        <button class="btn-p" id="mrPrint">🖨 چاپ / PDF</button>
+      </div>
+      <div class="card-b" id="mrBody"></div>
+    </div>
+  </section>
 </main>
 
 <div class="scrim" id="scrim"></div>
@@ -482,6 +528,7 @@ main{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
 </aside>
 
 <div id="toasts"></div>
+<div id="printArea"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -506,6 +553,7 @@ const F_D=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric'});
 const F_DM=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long'});
 const F_FULL=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 const DOW_CH={6:'ش',0:'ی',1:'د',2:'س',3:'چ',4:'پ',5:'ج'};
+const DOW_FULL={6:'شنبه',0:'یکشنبه',1:'دوشنبه',2:'سه‌شنبه',3:'چهارشنبه',4:'پنجشنبه',5:'جمعه'};
 const DOW_ORDER=[6,0,1,2,3,4,5];
 const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
@@ -524,9 +572,9 @@ const PURPOSE_LBL={winback:'🎯 بازگشت',referral:'⭐ معرفی',birthda
 
 /* ───────── وضعیت ───────── */
 let D=null,TODAY='',LOGGED=false;
-const S={view:'dash',period:'7',chart:'count',seg:'all',cuStage:'',cuTag:'',cuTier:'',cuSort:'spend',codePre:null,openPhone:null};
-let AP=[],INV=[],NOTES=[],TASKS=[],CODES=[],CAMPS=[],CUST={},SVCMAP={};
-let editTags=[],editPhone=null;
+const S={view:'dash',period:'7',chart:'count',seg:'all',cuStage:'',cuTag:'',cuTier:'',cuSort:'spend',codePre:null};
+let AP=[],INV=[],NOTES=[],TASKS=[],CODES=[],CAMPS=[],VISITS=[],TIERH=[],CUST={},SVCMAP={};
+let editTags=[],editPhone=null,mrOffset=0;
 
 function toast(m){const t=document.createElement('div');t.className='toast';t.innerHTML=m;
   document.getElementById('toasts').appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),320)},3800)}
@@ -563,10 +611,11 @@ async function fetchAll(){
   const safe=async(t)=>{
     try{const r=await sb.from(t).select('*');if(r.error)throw r.error;return r.data||[]}
     catch(err){if(!fetchAll._w)fetchAll._w={};if(!fetchAll._w[t]){
-      toast('⚠️ جدول «'+t+'» در دسترس نیست — SQL راه‌اندازی CRM را اجرا کنید');fetchAll._w[t]=1}
+      toast('⚠️ جدول «'+t+'» در دسترس نیست — SQL را اجرا کنید');fetchAll._w[t]=1}
       return[]}};
-  const [notes,tasks,codes,camps]=await Promise.all([
-    safe('customer_notes'),safe('tasks'),safe('discount_codes'),safe('campaigns')]);
+  const [notes,tasks,codes,camps,visits,tierHist]=await Promise.all([
+    safe('customer_notes'),safe('tasks'),safe('discount_codes'),safe('campaigns'),
+    safe('page_visits'),safe('tier_history')]);
   let invoices=[];
   try{const r=await sb.from('invoices').select('*');if(r.error)throw r.error;invoices=r.data||[]}
   catch(err){if(!fetchAll._wi){toast('⚠️ جدول invoices در دسترس نیست');fetchAll._wi=true}}
@@ -586,7 +635,8 @@ async function fetchAll(){
     staff:(s.data||[]).map(x=>({id:x.id,name:x.name||'',role:x.role||''})),
     invoices:invoices.map(x=>({id:x.id,no:x.no,date:x.date,name:x.name||'',phone:normPh(x.phone),
       items:x.items||[],subtotal:x.subtotal||0,discount:x.discount||0,total:x.total||0,method:x.method||'نقدی'})),
-    notes:notes,tasks:tasks,codes:codes,campaigns:camps
+    notes:notes,tasks:tasks,codes:codes,campaigns:camps,
+    visits:visits,tierHist:tierHist
   };
 }
 async function enter(){
@@ -676,6 +726,7 @@ function build(){
     const st=stageOf(c);c.stage=st.k;c.stageT=st.t;
   });
   NOTES=D.notes||[];TASKS=D.tasks||[];CODES=D.codes||[];CAMPS=D.campaigns||[];
+  VISITS=D.visits||[];TIERH=D.tierHist||[];
   render();
 }
 
@@ -704,7 +755,7 @@ function delta(cur,prev){
 
 function render(){
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===S.view));
-  ['dash','cust','retain','codes','camp','growth'].forEach(v=>{document.getElementById('view-'+v).hidden=(v!==S.view)});
+  ['dash','cust','retain','codes','camp','growth','monthly'].forEach(v=>{document.getElementById('view-'+v).hidden=(v!==S.view)});
   const pr=periodRange();
   document.getElementById('prLabel').textContent=
     (pr.start===pr.end)?F_DM.format(new Date(pr.start+'T12:00:00')):
@@ -715,6 +766,7 @@ function render(){
   if(S.view==='codes')renderCodes();
   if(S.view==='camp')renderCamps();
   if(S.view==='growth')renderGrowth(pr);
+  if(S.view==='monthly')renderMonthly();
 }
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{S.view=b.dataset.view;render()});
 document.querySelectorAll('.pch').forEach(b=>b.onclick=()=>{
@@ -752,7 +804,6 @@ function renderDash(pr){
     kpi('💚','مشتری فعال (۳۰ روز)',fmtN(act30),'از '+fmtN(Object.keys(CUST).length)+' کل','')+
     kpi('⏭','نوبت‌های پیش‌رو',fmtN(upcoming),'در انتظار مراجعه');
 
-  /* موتور پیشنهاد */
   const funnel=STAGE_ORDER.map(k=>({k,n:Object.values(CUST).filter(c=>c.stage===k).length}));
   const riskN=(funnel.find(f=>f.k==='risk')||{}).n||0;
   const coolN=(funnel.find(f=>f.k==='cooling')||{}).n||0;
@@ -765,8 +816,8 @@ function renderDash(pr){
   const onShare=(()=>{const o=active.filter(a=>a.source==='online').length;return active.length?Math.round(o/active.length*100):0})();
   let ins='';
   if(riskN)ins+='<div class="it"><i>🔥</i><span><b>'+fa(riskN)+' مشتری</b> در آستانهٔ ریزش‌اند — تب «نگهداشت» برایشان کد بازگشت بساز. این امروز مهم‌ترین کار توست.</span></div>';
-  if(coolN)ins+='<div class="it"><i>😐</i><span><b>'+fa(coolN)+' مشتری</b> دارد سرد می‌شود — یادآوری ملایم (نه تخفیف) برایشان کافی است.</span></div>';
-  if(l1N>=3)ins+='<div class="it"><i>🥚</i><span><b>'+fa(l1N)+' نفر</b> فقط یک بار آمدند و ۳۰ روز گذشت — کمپین «چرا برنگشتی؟» با کد کم اجرا کن.</span></div>';
+  if(coolN)ins+='<div class="it"><i>😐</i><span><b>'+fa(coolN)+' مشتری</b> دارد سرد می‌شود — یادآوری ملایم کافی است.</span></div>';
+  if(l1N>=3)ins+='<div class="it"><i>🥚</i><span><b>'+fa(l1N)+' نفر</b> فقط یک بار آمدند — کمپین بازگشت با کد کم اجرا کن.</span></div>';
   if(bdN)ins+='<div class="it"><i>🎂</i><span><b>'+fa(bdN)+' تولد</b> در ۳۰ روز پیش‌رو — بهترین بهانهٔ تماس سال.</span></div>';
   if(tasksN)ins+='<div class="it"><i>✅</i><span><b>'+fa(tasksN)+' تسک</b> سرسیدشان رسیده یا گذشته.</span></div>';
   if(best&&best.n)ins+='<div class="it"><i>📌</i><span>شلوغ‌ترین روز اخیر: <b>'+F_DM.format(new Date(best.iso+'T12:00:00'))+'</b> — برای پست، قبل از این روزِ هفته زمان‌بندی کن.</span></div>';
@@ -931,6 +982,7 @@ window.open360=function(phone){
   const hist=AP.filter(a=>a.phone===phone).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const invs=INV.filter(v=>v.phone===phone).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const notes=NOTES.filter(n=>n.customer_id===phone).sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||'')).slice(0,25);
+  const th=TIERH.filter(h=>h.customer_phone===phone).sort((a,b)=>(b.changed_at||'').localeCompare(a.changed_at||'')).slice(0,8);
   const aov=c.visits?Math.round(c.spend/c.visits):0;
   const refOpts='<option value="">— انتخاب معرف —</option>'+Object.values(CUST).filter(x=>x.phone!==phone)
     .map(x=>'<option value="'+x.phone+'"'+(c.referred_by===x.phone?' selected':'')+'>'+esc(x.name||x.phone)+'</option>').join('');
@@ -963,6 +1015,9 @@ window.open360=function(phone){
     '<div class="sect">⭐ امتیاز دستی</div>'+
     '<div class="mini-form"><input id="ptDelta" type="number" placeholder="مثلاً ۵۰" style="width:110px">'+
     '<button class="minib grn" id="ptPlus">افزایش +</button><button class="minib" id="ptMinus" style="color:var(--red)">کاهش −</button></div>'+
+    (th.length?'<div class="sect">👑 تاریخچهٔ سطح وفاداری</div>'+
+      th.map(h=>'<div class="hrow"><div class="hmain"><b>'+esc(h.old_tier||'—')+' → '+esc(h.new_tier)+'</b></div>'+
+        '<span class="hmeta">'+fa(String(h.changed_at||'').slice(0,10).replace(/-/g,'/'))+'</span></div>').join(''):'')+
     '<div class="sect">⚡ اقدام سریع</div>'+
     '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
     '<button class="minib" id="qa_code">🎟 کد تخفیف اختصاصی</button>'+
@@ -1018,8 +1073,9 @@ window.open360=function(phone){
     const {error}=await sb.from('discount_codes').insert({id:'dc'+Date.now().toString(36),code:code,
       type:'percent',value:15,purpose:'referral',customer_phone:phone,expires:isoShift(TODAY,60),max_uses:5,note:'کد معرفی '+(c.name||'')});
     if(error){toast('خطا: '+error.message);return}
-    toast('⭐ کد معرفی <b dir="ltr">'+code+'</b> ساخته شد (۱۵٪ · ۵ بار · ۶۰ روز) — کپی شد؛ به مشتری بده');
-    copyText(code);await fetchAll();build();
+    copyText(code);
+    toast('⭐ کد معرفی <b dir="ltr">'+code+'</b> ساخته شد (۱۵٪ · ۵ بار · ۶۰ روز)');
+    await fetchAll();build();
   };
   document.getElementById('qa_task').onclick=async()=>{
     const title=prompt('عنوان تسک برای '+(c.name||'')+':');
@@ -1140,7 +1196,7 @@ window.wbCode=async function(phone){
     title:'ارسال کد بازگشت '+code+' برای '+(c.name||phone),due:TODAY,
     customer_id:phone,customer_name:c.name||'',customer_phone:phone});
   copyText(code);
-  toast('🎯 کد بازگشت <b dir="ltr">'+code+'</b> ساخته و کپی شد + تسک پیگیری ثبت شد');
+  toast('🎯 کد بازگشت <b dir="ltr">'+code+'</b> ساخته و کپی شد + تسک ثبت شد');
   await fetchAll();build();
 };
 function rnd4(){const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<4;i++)s+=A[Math.floor(Math.random()*A.length)];return s}
@@ -1217,7 +1273,7 @@ function renderCamps(){
       const ret=phones.filter(p=>AP.some(a=>a.phone===p&&a.date>=since&&a.status!=='canceled')).length;
       const rev=INV.filter(v=>phones.indexOf(v.phone)>-1&&v.date>=since).reduce((s,v)=>s+(v.total||0),0);
       const conv=phones.length?Math.round(ret/phones.length*100):0;
-      return '<tr><td><b>'+esc(cp.name||'—')+'</b>'+(cp.note?'<br><span style="font-size:10px;color:var(--ink-3)">'+esc(cp.note)+'</span>':'')+'</td>'+
+      return '<tr><td><b>'+esc(cp.name||'—')+'</b></td>'+
         '<td>'+(PURPOSE_LBL[cp.segment]||esc(cp.segment||'—'))+'</td>'+
         '<td>'+(cp.created_on?F_DM.format(new Date(cp.created_on+'T12:00:00')):'—')+'</td>'+
         '<td>'+fa(phones.length)+'</td>'+
@@ -1225,7 +1281,7 @@ function renderCamps(){
         '<td><b>'+fmtN(rev)+'</b> تومان</td>'+
         '<td><span class="badge '+(conv>=20?'bdg-loyal':conv>0?'bdg-cooling':'bdg-lost')+'">'+fa(conv)+'٪</span></td></tr>';
     }).join('')+'</tbody>'
-    :'<tr><td><div class="empty">هنوز کمپینی ثبت نشده — پیامک‌ها را بفرست و بعد اینجا ثبتش کن</div></td></tr>';
+    :'<tr><td><div class="empty">هنوز کمپینی ثبت نشده</div></td></tr>';
 }
 document.getElementById('cpCreate').onclick=async()=>{
   const name=document.getElementById('cpName').value.trim();
@@ -1300,6 +1356,121 @@ document.getElementById('btnCsv').onclick=()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='farivar-'+S.seg+'.csv';a.click();
   toast('CSV دانلود شد ✓')};
 document.getElementById('btnCopySms').onclick=()=>copyText(document.getElementById('smsTxt').value);
+
+/* ───────── گزارش ماهانه 🖨 ───────── */
+function mrRange(off){
+  const tj=toJal(new Date(TODAY+'T12:00:00'));
+  let jm=tj.jm-off,jy=tj.jy;
+  while(jm<1){jm+=12;jy--}
+  while(jm>12){jm-=12;jy++}
+  const start=isoOf(jalaliFirstDay(jy,jm));
+  let njm=jm+1,njy=jy;if(njm>12){njm=1;njy++}
+  const end=isoOf(isoShift(jalaliFirstDay(njy,njm),-1));
+  return{start:start,end:end,jy:jy,jm:jm,label:JM[jm-1]+' '+fa(jy)};
+}
+function repK(l,raw,prevRaw,fmt){
+  fmt=fmt||fmtN;
+  let dl='';
+  if(prevRaw!==null&&prevRaw!==undefined&&prevRaw>0&&raw!==prevRaw){
+    const p=Math.round((raw-prevRaw)/prevRaw*100);
+    if(p)dl=' <span class="dlt '+(p>0?'up':'dn')+'">'+(p>0?'↑':'↓')+fa(Math.abs(p))+'٪</span>';
+  }
+  return '<div class="repK"><span>'+l+'</span><b>'+fmt(raw)+dl+'</b></div>';
+}
+function renderMonthly(){
+  const pr=mrRange(mrOffset),ppr=mrRange(mrOffset+1);
+  document.getElementById('mrLabel').textContent=pr.label;
+  document.getElementById('mrNext').disabled=(mrOffset<=0);
+  const APm=AP.filter(a=>a.date>=pr.start&&a.date<=pr.end);
+  const APp=AP.filter(a=>a.date>=ppr.start&&a.date<=ppr.end);
+  const act=APm.filter(a=>a.status!=='canceled');
+  const done=APm.filter(a=>a.status==='done');
+  const canc=APm.filter(a=>a.status==='canceled');
+  const cRate=APm.length?Math.round(canc.length/APm.length*100):0;
+  const cRateP=APp.length?Math.round(APp.filter(a=>a.status==='canceled').length/APp.length*100):0;
+  const invm=INV.filter(v=>v.date>=pr.start&&v.date<=pr.end);
+  const invp=INV.filter(v=>v.date>=ppr.start&&v.date<=ppr.end);
+  const rev=invm.reduce((s,v)=>s+(v.total||0),0);
+  const revp=invp.reduce((s,v)=>s+(v.total||0),0);
+  const avg=invm.length?Math.round(rev/invm.length):0;
+  let newC=0;Object.values(CUST).forEach(c=>{if(c.first&&c.first>=pr.start&&c.first<=pr.end)newC++});
+  const actC=Object.values(CUST).filter(c=>c.last&&c.last>=pr.start&&c.last<=pr.end).length;
+  const riskN=Object.values(CUST).filter(c=>c.stage==='risk').length;
+  const lostN=Object.values(CUST).filter(c=>c.stage==='lost'||c.stage==='lost1').length;
+  const on=act.filter(a=>a.source==='online').length;
+  const onShare=act.length?Math.round(on/act.length*100):0;
+  /* قیف بازدید + منابع */
+  const vm=(VISITS||[]).filter(v=>{const d=String(v.day||'').slice(0,10);return d>=pr.start&&d<=pr.end});
+  const conv=vm.length?Math.round(act.length/vm.length*100):0;
+  const srcs={};vm.forEach(v=>{const k=v.src||'direct';srcs[k]=(srcs[k]||0)+1});
+  const srcLine=Object.keys(srcs).sort((a,b)=>srcs[b]-srcs[a])
+    .map(k=>'<i>'+esc(k==='direct'?'مستقیم':k)+': '+fa(srcs[k])+'</i>').join('');
+  /* خدمات برتر */
+  const sv={};act.forEach(a=>{const k=a.svcName||'—';sv[k]=(sv[k]||0)+1});
+  const topS=Object.keys(sv).map(k=>({name:k,n:sv[k]})).sort((a,b)=>b.n-a.n).slice(0,5);
+  const maxS=Math.max(1,...topS.map(x=>x.n));
+  /* متخصصان */
+  const stf=(D.staff||[]).map(s=>{
+    const mine=APm.filter(a=>a.staffId===String(s.id)||(!a.staffId&&a.staffName===String(s.name)));
+    const rv=invm.reduce((x,v)=>x+(v.items||[]).filter(it=>it.staff===String(s.name)).reduce((y,it)=>y+(it.price||0)*(it.qty||1),0),0);
+    return{name:s.name,done:mine.filter(a=>a.status==='done').length,rev:rv};
+  }).sort((a,b)=>b.rev-a.rev||b.done-a.done);
+  /* شلوغ‌ترین روز هفته */
+  const dw={};act.forEach(a=>{if(a.date){const d=new Date(a.date+'T12:00:00').getDay();dw[d]=(dw[d]||0)+1}});
+  const bestDw=Object.keys(dw).sort((a,b)=>dw[b]-dw[a])[0];
+  /* ارتقای سطح در این ماه */
+  const ups=TIERH.filter(h=>{const d=String(h.changed_at||'').slice(0,10);return d>=pr.start&&d<=pr.end});
+  /* یافته‌ها */
+  let fins='';
+  fins+='<li>شلوغ‌ترین روز هفته: <b>'+(bestDw!==undefined?DOW_FULL[bestDw]:'—')+'</b> — محتوای تبلیغاتی را قبل از این روز منتشر کن.</li>';
+  if(topS.length)fins+='<li>خدمت شاخص ماه: <b>'+esc(topS[0].name)+'</b> ('+fmtN(topS[0].n)+' نوبت) — از آن در استوری استفاده کن.</li>';
+  fins+='<li>سهم رزرو آنلاین: <b>'+fa(onShare)+'٪</b> — '+(onShare>=40?'مسیر آنلاین جا افتاده، حفظش کن.':onShare>=15?'رو به رشد؛ لینک را در بیو تقویت کن.':'کم؛ لینک رزرو را در استوری و بیو بیشتر بگذار.')+'</li>';
+  if(riskN)fins+='<li><b>'+fa(riskN)+' مشتری</b> الان در آستانهٔ ریزش‌اند — کمپین بازگشت این ماه را از دست نده.</li>';
+  if(lostN)fins+='<li><b>'+fa(lostN)+' مشتری</b> در وضعیت از دست رفته — تصمیم بگیر: کمپین سنگین یا رهاکردن آگاهانه.</li>';
+  if(vm.length)fins+='<li>از هر <b>۱۰۰ بازدید</b> صفحهٔ رزرو، <b>'+fa(conv)+'</b> نوبت ثبت می‌شود'+(conv<10?' — اگر بازدید زیاد و رزرو کم است، قیمت‌ها یا اولین صفحه را بازبینی کن.':'.')+'</li>';
+  if(ups.length)fins+='<li><b>'+fa(ups.length)+' ارتقای سطح وفاداری</b> این ماه رخ داده — مشتری‌های طلایی‌شده را شخصاً تبریک بگو.</li>';
+
+  document.getElementById('mrBody').innerHTML=
+    '<div class="rep">'+
+    '<div class="rep-h"><div><div class="rep-brand">سالن زیبایی فریور</div>'+
+    '<div class="rep-sub">MONTHLY REPORT · گزارش ماهانهٔ مدیریت</div></div>'+
+    '<div class="rep-per">'+pr.label+'<br><span style="font-weight:600;color:var(--ink-3)">'+F_DM.format(new Date(pr.start+'T12:00:00'))+' تا '+F_DM.format(new Date(pr.end+'T12:00:00'))+'</span></div></div>'+
+    '<div class="rep-kpis">'+
+    repK('نوبت‌ها',act.length,APp.filter(a=>a.status!=='canceled').length)+
+    repK('انجام‌شده',done.length,APp.filter(a=>a.status==='done').length)+
+    repK('نرخ لغو',cRate,cRateP,v=>fa(v)+'٪')+
+    repK('درآمد فاکتور',rev,revp)+
+    repK('میانگین سبد',avg,invp.length?Math.round(revp/invp.length):0)+
+    repK('مشتری جدید',newC,0)+
+    '</div>'+
+    (vm.length?'<div class="rep-fnl">🔗 قیف تبدیل این ماه: <b>'+fmtN(vm.length)+'</b> بازدید صفحهٔ رزرو → <b>'+fmtN(act.length)+'</b> نوبت ('+fa(conv)+'٪) → <b>'+fmtN(done.length)+'</b> مراجعه → <b>'+fmtN(invm.length)+'</b> فاکتور'+
+      (srcLine?'<div class="rep-src">منابع بازدید:'+srcLine+'</div>':'')+'</div>':
+      '<div class="rep-fnl">🔗 برای فعال‌شدن قیف تبدیل، پچ شمارندهٔ بازدید را در صفحهٔ رزرو نصب کن (راهنمای پیام).</div>')+
+    '<div class="rep-cols"><div><h4>خدمات برتر ماه</h4>'+
+    (topS.length?topS.map(s=>'<div class="mini"><span>'+esc(s.name)+'</span><b>'+fmtN(s.n)+' نوبت</b></div>'+
+      '<div style="height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin:-2px 0 8px"><i style="display:block;height:100%;background:var(--acc);width:'+Math.round(s.n/maxS*100)+'%"></i></div>').join(''):'<div class="empty">—</div>')+
+    '</div><div><h4>عملکرد متخصصان</h4>'+
+    (stf.length?'<table class="tbl"><thead><tr><th>متخصص</th><th>انجام</th><th>فروش فاکتور</th></tr></thead><tbody>'+
+      stf.map(s=>'<tr><td><b>'+esc(s.name)+'</b></td><td>'+fmtN(s.done)+'</td><td><b>'+(s.rev?fmtN(s.rev):'—')+'</b></td></tr>').join('')+'</tbody></table>':'<div class="empty">—</div>')+
+    '</div></div>'+
+    '<div class="rep-cols"><div><h4>وضعیت مشتریان</h4>'+
+    '<div class="mini"><span>فعال در این ماه</span><b>'+fmtN(actC)+'</b></div>'+
+    '<div class="mini"><span>مشتری جدید این ماه</span><b>'+fmtN(newC)+'</b></div>'+
+    '<div class="mini"><span>در آستانهٔ ریزش (الان)</span><b>'+fmtN(riskN)+'</b></div>'+
+    '<div class="mini"><span>از دست رفته (الان)</span><b>'+fmtN(lostN)+'</b></div>'+
+    '<div class="mini"><span>کل دفتر مشتریان</span><b>'+fmtN(Object.keys(CUST).length)+'</b></div>'+
+    (ups.length?'<div class="mini"><span>👑 ارتقای سطح این ماه</span><b>'+fmtN(ups.length)+'</b></div>':'')+
+    '</div><div><h4>یافته‌ها و پیشنهادها</h4><ul>'+fins+'</ul></div></div>'+
+    '<div class="rep-foot">تولیدشده توسط CRM فریور · تاریخ گزارش: '+F_FULL.format(new Date(TODAY+'T12:00:00'))+' · امضای مدیریت: ....................</div>'+
+    '</div>';
+}
+document.getElementById('mrPrev').onclick=()=>{mrOffset++;renderMonthly()};
+document.getElementById('mrNext').onclick=()=>{if(mrOffset>0){mrOffset--;renderMonthly()}};
+document.getElementById('mrPrint').onclick=()=>{
+  document.getElementById('printArea').innerHTML=document.getElementById('mrBody').innerHTML;
+  document.body.classList.add('printing');window.print();
+};
+window.addEventListener('afterprint',()=>{document.body.classList.remove('printing');document.getElementById('printArea').innerHTML=''});
 </script>
 </body>
 </html>
