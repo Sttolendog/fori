@@ -593,5 +593,19 @@ function renderCal(){
   });
 }
 </script>
+  <script>
+/* 📊 شمارندهٔ بازدید — هر ۳۰ دقیقه حداکثر یک ثبت به‌ازای هر مرورگر */
+try{
+  if(typeof sb!=='undefined'&&sb){
+    var K='frv_visit_'+new Date().toISOString().slice(0,10);
+    var last=+sessionStorage.getItem(K)||0;
+    if(Date.now()-last>1800000){
+      sessionStorage.setItem(K,Date.now());
+      var vsrc=new URLSearchParams(location.search).get('src')||'direct';
+      sb.from('page_visits').insert({id:'v'+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36),src:vsrc});
+    }
+  }
+}catch(e){}
+</script>
 </body>
 </html>
