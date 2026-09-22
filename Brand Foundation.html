@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FARIVAR · فریور — Brand Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Markazi+Text:wght@400;500;600;700&family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --terra:#BC532B; --terra-d:#963D1C; --terra-l:#F7E5DA;
+  --esp:#241A10; --esp-2:#2E2115;
+  --sand:#F4EEE5; --ivory:#FFFCF6;
+  --clay:#D8C6B4; --blush:#E8CFC3;
+  --sage:#5F7350; --ochre:#A87E2F; --brick:#B03A2E;
+  --line:rgba(36,26,16,.14); --sub:rgba(36,26,16,.6);
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='0.55'/></svg>");
+}
+html,body{background:#E9DFD0}
+body{font-family:'Vazirmatn',sans-serif;color:var(--esp);-webkit-font-smoothing:antialiased}
+::selection{background:var(--blush)}
+.en{direction:ltr;unicode-bidi:isolate;font-family:'Fraunces',serif}
+#fit{width:100%;display:flex;justify-content:center;overflow:hidden;padding:26px 0 60px}
+#stage{width:1400px;flex:none;transform-origin:top center}
+.board{width:1400px;aspect-ratio:16/9;background:var(--sand);margin:0 auto 34px;box-shadow:0 24px 70px rgba(60,40,20,.16);position:relative;display:flex;flex-direction:column;padding:0 60px;overflow:hidden}
+.board::before{content:'';position:absolute;inset:0;background-image:var(--noise);opacity:.14;mix-blend-mode:multiply;pointer-events:none;z-index:0}
+.board>*{position:relative;z-index:1}
+.bd-head{display:flex;align-items:center;gap:18px;padding:36px 0 20px;border-bottom:1px solid var(--line)}
+.bd-brand{display:flex;align-items:baseline;gap:10px}
+.bd-brand .fa{font-family:'Markazi Text',serif;font-size:26px;line-height:1;font-weight:600}
+.bd-brand .la{font-size:10px;letter-spacing:.42em;color:rgba(36,26,16,.55)}
+.bd-sec{display:flex;align-items:baseline;gap:14px;margin-inline-start:auto}
+.bd-sec .no{font-family:'Fraunces',serif;font-size:15px;font-weight:500;color:var(--terra)}
+.bd-sec .ti{font-size:11px;letter-spacing:.5em;color:var(--esp);font-weight:600;direction:ltr}
+.bd-foot{display:flex;align-items:center;justify-content:space-between;padding:16px 0 30px;border-top:1px solid var(--line);font-size:9.5px;letter-spacing:.4em;color:rgba(36,26,16,.45);direction:ltr}
+.bd-foot b{font-weight:500}
+.bd-body{flex:1;min-height:0;padding:26px 0 22px;display:flex;flex-direction:column}
+.kick{display:flex;align-items:center;gap:16px;justify-content:center}
+.kick .ln{width:46px;height:1px;background:rgba(36,26,16,.3)}
+.kick span{font-size:10px;letter-spacing:.45em;color:var(--sub);font-weight:600}
+.card{background:var(--ivory);border-radius:18px;box-shadow:0 8px 26px rgba(80,50,25,.08);position:relative;overflow:hidden}
+
+/* ═══ برد ۱ — هسته ═══ */
+.co-quote{font-family:'Markazi Text',serif;font-weight:600;font-size:47px;line-height:1.5;text-align:center;margin:26px auto 0;max-width:1060px}
+.co-quote em{font-style:normal;color:var(--terra)}
+.co-pos{flex:1;display:flex;flex-direction:column;justify-content:center;gap:11px;margin-top:8px}
+.pos-row{display:flex;align-items:stretch;gap:14px;background:var(--ivory);border-radius:13px;padding:11px 16px;box-shadow:0 5px 16px rgba(80,50,25,.06)}
+.pos-row .lb{flex:none;width:118px;display:grid;place-items:center;background:var(--esp);color:#F4EADD;border-radius:9px;font-size:12px;font-weight:800}
+.pos-row.acc .lb{background:var(--terra);color:#FFF3E8}
+.pos-row p{font-size:14.5px;line-height:2;align-self:center}
+.pos-row p b{font-weight:800}
+.co-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.co-desc{display:flex;align-items:baseline;gap:14px}
+.co-desc .fa{font-family:'Markazi Text',serif;font-size:24px;font-weight:600;line-height:1}
+.co-desc .dd{font-size:12px;font-weight:700;color:var(--sub)}
+.co-desc .en2{font-family:'Fraunces',serif;font-size:10px;letter-spacing:.4em;color:rgba(36,26,16,.5);direction:ltr}
+.co-note{font-size:11px;color:rgba(36,26,16,.5)}
+
+/* ═══ برد ۲ — مخاطب ═══ */
+.au-grid{flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.au-card{grid-column:span 5;padding:20px 24px;display:flex;flex-direction:column}
+.au-card.sm{grid-column:span 4;padding:20px 22px}
+.au-top{display:flex;align-items:center;gap:14px}
+.au-av{width:52px;height:52px;border-radius:50%;background:var(--blush);display:grid;place-items:center;font-family:'Markazi Text',serif;font-size:26px;font-weight:600;padding-bottom:4px;flex:none}
+.au-av.terra{background:var(--terra);color:#FBEFE4}
+.au-nm{font-size:19px;font-weight:800}
+.au-rl{font-size:11.5px;color:var(--sub);margin-top:2px}
+.au-qu{font-family:'Markazi Text',serif;font-size:19px;line-height:1.7;color:rgba(36,26,16,.85);margin:14px 2px 4px;padding-inline-start:12px;border-inline-start:3px solid var(--terra)}
+.au-list{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.au-li{display:flex;align-items:baseline;gap:9px;font-size:12.5px;line-height:1.9}
+.au-li i{width:8px;height:8px;border-radius:50%;flex:none;translate:0 -1px}
+.au-li b{font-weight:800;flex:none;width:52px}
+.au-price{grid-column:span 3;background:var(--esp);color:#F4EADD;border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(40,24,10,.25)}
+.au-price::after{content:'';position:absolute;inset:0;border-radius:18px;background-image:var(--noise);opacity:.3;mix-blend-mode:screen;pointer-events:none}
+.au-price h4{font-family:'Fraunces',serif;font-size:10px;letter-spacing:.35em;color:var(--terra);font-weight:500;direction:ltr}
+.au-price .big{font-family:'Markazi Text',serif;font-size:34px;font-weight:600;line-height:1.35;margin:12px 0 4px}
+.au-price .big em{font-style:normal;color:#E9A986}
+.au-price ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:9px}
+.au-price li{font-size:11.5px;line-height:1.9;color:rgba(244,234,221,.85);padding-inline-start:14px;position:relative}
+.au-price li::before{content:'';position:absolute;inset-inline-start:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--terra)}
+.au-price .fn{margin-top:auto;font-size:10px;color:rgba(244,234,221,.5);line-height:1.9;border-top:1px dashed rgba(244,234,221,.2);padding-top:10px}
+
+/* ═══ برد ۳ — شخصیت ═══ */
+.ch-grid{flex:1;display:grid;grid-template-columns:7fr 5fr;gap:22px}
+.ch-left{display:flex;flex-direction:column;gap:10px}
+.ch-row{display:grid;grid-template-columns:150px 1fr 1fr;align-items:center;gap:12px;background:var(--ivory);border-radius:13px;padding:12px 16px;box-shadow:0 5px 16px rgba(80,50,25,.06);flex:1}
+.ch-row .nm{font-family:'Markazi Text',serif;font-size:27px;font-weight:600;line-height:1}
+.ch-row .cell{display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.85;padding-inline-start:12px}
+.ch-row .cell.yes{border-inline-start:1px dashed rgba(95,115,80,.5)}
+.ch-row .cell.no{border-inline-start:1px dashed rgba(176,58,46,.45)}
+.ch-row .cell i{width:7px;height:7px;border-radius:50%;flex:none;translate:0 -1px}
+.ch-row .cell b{font-weight:800;flex:none;font-size:11px}
+.ch-right{display:flex;flex-direction:column;gap:16px}
+.pr-card{background:var(--esp);border-radius:18px;padding:24px 26px;color:#F4EADD;position:relative;overflow:hidden;box-shadow:0 12px 32px rgba(40,24,10,.3)}
+.pr-card::before{content:'';position:absolute;top:-70px;inset-inline-end:-50px;width:190px;height:280px;border-radius:999px 999px 0 0;background:linear-gradient(200deg,#C9603A,#963D1C);opacity:.9}
+.pr-card::after{content:'';position:absolute;inset:0;background-image:var(--noise);opacity:.28;mix-blend-mode:screen;pointer-events:none;border-radius:18px}
+.pr-card h4{font-family:'Fraunces',serif;font-size:10px;letter-spacing:.35em;color:#E9A986;font-weight:500;direction:ltr;position:relative;z-index:1}
+.pr-card .tx{font-family:'Markazi Text',serif;font-size:31px;font-weight:600;line-height:1.6;margin-top:10px;position:relative;z-index:1;max-width:92%}
+.pr-card .tx em{font-style:normal;color:#F0B694}
+.pr-card .sm{font-size:11px;color:rgba(244,234,221,.65);margin-top:10px;line-height:1.9;position:relative;z-index:1}
+.rtb{flex:1;display:flex;flex-direction:column;gap:8px}
+.rtb .rt{display:flex;gap:12px;align-items:center;background:var(--ivory);border-radius:12px;padding:9px 14px;box-shadow:0 4px 12px rgba(80,50,25,.05);flex:1}
+.rtb .rt .n{font-family:'Fraunces',serif;font-size:15px;color:var(--terra);flex:none;width:20px;text-align:center}
+.rtb .rt p{font-size:12.5px;line-height:1.85}
+.rtb .rt p b{font-weight:800}
+.rtb .cap{display:flex;justify-content:space-between;align-items:baseline}
+.rtb .cap b{font-size:13px;font-weight:800}
+.rtb .cap span{font-size:9.5px;letter-spacing:.35em;color:rgba(36,26,16,.45);direction:ltr}
+
+/* ═══ برد ۴ — لحن ═══ */
+.vc-grid{flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.vc-col{display:flex;flex-direction:column;gap:11px}
+.vc-cap{font-size:12px;font-weight:800;display:flex;align-items:baseline;gap:10px}
+.vc-cap span{font-size:9px;letter-spacing:.35em;color:rgba(36,26,16,.45);direction:ltr;font-weight:500}
+.vc-pr{background:var(--ivory);border-radius:12px;padding:11px 15px;box-shadow:0 4px 12px rgba(80,50,25,.05);display:flex;gap:12px;align-items:center;flex:1}
+.vc-pr .n{font-family:'Fraunces',serif;font-size:15px;color:var(--terra);flex:none;width:18px;text-align:center}
+.vc-pr p{font-size:12.5px;line-height:1.85}
+.vc-pr p b{font-weight:800}
+.ex{background:var(--ivory);border-radius:12px;padding:11px 15px;box-shadow:0 4px 12px rgba(80,50,25,.05);flex:1;display:flex;flex-direction:column;gap:7px;justify-content:center}
+.ex .bad,.ex .good{display:flex;align-items:baseline;gap:9px;font-size:12px;line-height:1.8}
+.ex .mk{flex:none;font-weight:900;font-size:12px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;translate:0 2px;color:#fff;font-family:Vazirmatn}
+.ex .bad .mk{background:var(--brick)}
+.ex .good .mk{background:var(--sage)}
+.ex .bad{color:rgba(36,26,16,.55);text-decoration:line-through;text-decoration-color:rgba(176,58,46,.4);text-decoration-thickness:1px}
+.ex .good b{font-weight:700}
+.wd-rows{display:flex;flex-direction:column;gap:9px}
+.wd-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.wd-row .wl{font-size:11px;font-weight:800;flex:none;width:44px}
+.wd-chip{border-radius:99px;padding:4px 12px;font-size:11px;font-weight:600}
+.wd-chip.ok{background:#EAEDE0;color:#46562F}
+.wd-chip.no{background:#F6E2DF;color:#8C2C22;text-decoration:line-through}
+.msg{background:var(--ivory);border-radius:12px;padding:10px 15px;box-shadow:0 4px 12px rgba(80,50,25,.05)}
+.msg .ch{font-size:10px;letter-spacing:.3em;color:rgba(36,26,16,.45);direction:ltr;font-family:'Fraunces',serif}
+.msg p{font-size:13.5px;font-weight:700;margin-top:3px}
+.msg p small{font-weight:500;color:var(--sub);font-size:11px}
+.open{margin-top:16px;background:var(--ivory);border:1px dashed rgba(188,83,43,.5);border-radius:14px;padding:13px 18px;display:flex;gap:18px;align-items:center}
+.open .tt{flex:none;font-size:12px;font-weight:800;color:var(--terra-d);width:96px;line-height:1.6}
+.open ul{list-style:none;display:flex;flex:1;gap:14px;flex-wrap:wrap}
+.open li{display:flex;align-items:center;gap:8px;font-size:11.5px;line-height:1.7}
+.open li i{width:13px;height:13px;border:1.5px solid var(--terra);border-radius:4px;flex:none}
+
+.pbtn{position:fixed;bottom:20px;inset-inline-start:20px;z-index:99;background:var(--esp);color:#F4EADD;border:none;font:inherit;font-size:12px;font-weight:700;padding:11px 18px;border-radius:99px;cursor:pointer;box-shadow:0 10px 26px rgba(30,18,8,.35)}
+.pbtn:hover{background:var(--esp-2)}
+@media print{
+  @page{size:1400px 788px;margin:0}
+  html,body{background:#fff}
+  #fit{padding:0}
+  #stage{transform:none!important}
+  .board{margin:0;box-shadow:none;page-break-after:always}
+  .pbtn{display:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div id="fit"><div id="stage">
+
+<!-- ═══════ ۰۱ هسته ═══════ -->
+<section class="board">
+  <div class="bd-head">
+    <div class="bd-brand"><span class="fa">فریور</span><span class="la en">FARIVAR</span></div>
+    <div class="bd-sec"><span class="no en">01</span><span class="ti">FOUNDATION</span></div>
+  </div>
+  <div class="bd-body">
+    <div class="kick"><span>برند در یک جمله</span><i class="ln"></i></div>
+    <div class="co-quote">بوتیک زیبایی زنان؛ آرام، دقیق و گرم — جایی که مراقبت از خود یک <em>روالِ قابل‌اعتماد</em> است، نه یک رویداد.</div>
+    <div class="co-pos">
+      <div class="pos-row"><span class="lb">برای</span><p>زنان شهرنشینِ <b>۲۸ تا ۴۵ ساله</b> که کیفیت را به جلوه ترجیح می‌دهند و وقت‌شان ارزشمند است.</p></div>
+      <div class="pos-row"><span class="lb">که</span><p>از شلوغی، تعارف و تبلیغات صریحِ سالن‌ها خسته‌اند و دنبال <b>«متخصصِ ثابتِ خودشان»</b> می‌گردند.</p></div>
+      <div class="pos-row acc"><span class="lb">فریور</span><p>یک بوتیک زیبایی کوچک و مدیریت‌شده است که با <b>متخصصان تخصص‌پرورده، تعرفه‌ی شفاف و محیطی آرام</b>، هر مراجعه را قابل‌پیش‌بینی و لذت‌بخش می‌کند.</p></div>
+      <div class="pos-row"><span class="lb">برخلاف</span><p>سالن‌های پرادعا با دکور طلایی، جشنواره‌های تخفیف و کیفیتی که هر بار متفاوت است.</p></div>
+      <div class="pos-row"><span class="lb">در نتیجه</span><p>فریور کمی <b>گران‌تر از میانگین</b> است — اما نه «لوکس‌ترین»؛ <b>قابل‌اعتمادترین انتخاب.</b></p></div>
+    </div>
+    <div class="co-foot">
+      <div class="co-desc">
+        <span class="fa">فریور</span>
+        <span class="en2">FARIVAR</span>
+        <span class="dd">بوتیک زیبایی زنان</span>
+      </div>
+      <span class="co-note">توصیفگر زیر لوگوتایپ کافی است — شعارِ جدا لازم نیست؛ عجله نکنید.</span>
+    </div>
+  </div>
+  <div class="bd-foot"><b>FARIVAR — BRAND FOUNDATION</b><span>CORE · POSITIONING</span><b>01 / 04</b></div>
+</section>
+
+<!-- ═══════ ۰۲ مخاطب ═══════ -->
+<section class="board">
+  <div class="bd-head">
+    <div class="bd-brand"><span class="fa">فریور</span><span class="la en">FARIVAR</span></div>
+    <div class="bd-sec"><span class="no en">02</span><span class="ti">AUDIENCE</span></div>
+  </div>
+  <div class="bd-body">
+    <div class="au-grid">
+      <div class="card au-card">
+        <div class="au-top">
+          <span class="au-av terra">ن</span>
+          <div><div class="au-nm">نگار، ۳۴ ساله</div><div class="au-rl">مدیر دفتر فنی · مشتری اصلی</div></div>
+        </div>
+        <p class="au-qu">«نمی‌خواهم هر بار قرعه‌کشی کنم که امروز چه دستی روی سرم می‌رود.»</p>
+        <div class="au-list">
+          <div class="au-li"><i style="background:var(--sage)"></i><b>انگیزه</b><span>نتیجه‌ی تکرارپذیر · احترام به وقتش · محیطی آرام برای نفس کشیدن</span></div>
+          <div class="au-li"><i style="background:var(--brick)"></i><b>ترس</b><span>قیمت غافلگیرکننده در صندوق · متخصص متفاوت هر بار · انتظار پشت میز پذیرش</span></div>
+          <div class="au-li"><i style="background:var(--ochre)"></i><b>کانال</b><span>توصیه‌ی یک دوست · اینستاگرامِ غیرتبلیغاتی · گوگل‌مپ</span></div>
+        </div>
+      </div>
+      <div class="card au-card sm">
+        <div class="au-top">
+          <span class="au-av">م</span>
+          <div><div class="au-nm">مینا، ۲۷ ساله</div><div class="au-rl">کارشناس فروش · مناسبت‌ها</div></div>
+        </div>
+        <p class="au-qu">«فقط همان چیزی بشوم که توی عکسِ رفرنس دادم.»</p>
+        <div class="au-list">
+          <div class="au-li"><i style="background:var(--sage)"></i><b>انگیزه</b><span>نتیجه‌ی قابل‌پیش‌بینی در تاریخِ مشخص</span></div>
+          <div class="au-li"><i style="background:var(--brick)"></i><b>ترس</b><span>هر ریسکی در روزِ مراسم</span></div>
+          <div class="au-li"><i style="background:var(--ochre)"></i><b>کانال</b><span>دایرکت · رزرو تلفنی</span></div>
+        </div>
+      </div>
+      <div class="au-price">
+        <h4>PRICING STANCE</h4>
+        <div class="big">۱۵ تا ۲۵٪ بالاتر از میانگینِ منطقه</div>
+        <ul>
+          <li>بدون تخفیف عمومی؛ تخفیف فقط در باشگاه مشتری و نوبت‌های خلأی صبح.</li>
+          <li>تعرفه همیشه قبل از خدمت اعلام می‌شود.</li>
+          <li>قیمت بالا با «ثبات نتیجه» توجیه می‌شود، نه با دکور.</li>
+        </ul>
+        <div class="fn">پنل پذیرش همین حالا این سیاست را اجرا می‌کند: فاکتور رسمی، گزارش روز، باشگاه مشتری.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bd-foot"><b>FARIVAR — BRAND FOUNDATION</b><span>AUDIENCE · PRICING</span><b>02 / 04</b></div>
+</section>
+
+<!-- ═══════ ۰۳ شخصیت ═══════ -->
+<section class="board">
+  <div class="bd-head">
+    <div class="bd-brand"><span class="fa">فریور</span><span class="la en">FARIVAR</span></div>
+    <div class="bd-sec"><span class="no en">03</span><span class="ti">CHARACTER</span></div>
+  </div>
+  <div class="bd-body">
+    <div class="ch-grid">
+      <div class="ch-left">
+        <div class="ch-row"><span class="nm">گرم</span><div class="cell yes"><i style="background:var(--sage)"></i><span><b>هست:</b> پذیرایی آرام و انسانی</span></div><div class="cell no"><i style="background:var(--brick)"></i><span><b>نیست:</b> ذوق‌زده و اغراق‌آمیز</span></div></div>
+        <div class="ch-row"><span class="nm">مطمئن</span><div class="cell yes"><i style="background:var(--sage)"></i><span><b>هست:</b> جمله‌ی کوتاه و قاطع</span></div><div class="cell no"><i style="background:var(--brick)"></i><span><b>نیست:</b> فخرفروشی و «لاکچری» جیغ</span></div></div>
+        <div class="ch-row"><span class="nm">طبیعی</span><div class="cell yes"><i style="background:var(--sage)"></i><span><b>هست:</b> متریال واقعی، نور واقعی، پوست واقعی</span></div><div class="cell no"><i style="background:var(--brick)"></i><span><b>نیست:</b> ادعای ارگانیک و دست‌سازِ نمایشی</span></div></div>
+        <div class="ch-row"><span class="nm">معاصر</span><div class="cell yes"><i style="background:var(--sage)"></i><span><b>هست:</b> ویرایش‌شده و امروزی</span></div><div class="cell no"><i style="background:var(--brick)"></i><span><b>نیست:</b> دنباله‌روی ترندِ روز</span></div></div>
+        <div class="ch-row"><span class="nm">زنانه و ظریف</span><div class="cell yes"><i style="background:var(--sage)"></i><span><b>هست:</b> لطافتِ محو، لمسِ نرم</span></div><div class="cell no"><i style="background:var(--brick)"></i><span><b>نیست:</b> صورتی، رزگلد، تاج و مژه</span></div></div>
+      </div>
+      <div class="ch-right">
+        <div class="pr-card">
+          <h4>BRAND PROMISE</h4>
+          <div class="tx">«همان متخصص، همان نتیجه، همان <em>قیمتِ اعلام‌شده</em> — هر بار.»</div>
+          <div class="sm">سه وعده‌ی قابل‌اندازه‌گیری؛ همه در پنل ثبت و قابل ممیزی هستند. قولی که با عملیات پشتیبانی نمی‌شود، قول نیست.</div>
+        </div>
+        <div class="rtb">
+          <div class="cap"><b>چرا باورکردنی است</b><span>REASONS TO BELIEVE</span></div>
+          <div class="rt"><span class="n">1</span><p><b>متخصص ثابت هر خدمت</b> — نوبت به متخصص می‌چسبد، نه به اتفاق.</p></div>
+          <div class="rt"><span class="n">2</span><p><b>تعرفه شفاف قبل از شروع</b> — فاکتور رسمی برای هر تسویه.</p></div>
+          <div class="rt"><span class="n">3</span><p><b>ثبت زمان رزرو و زمان واقعی شروع</b> — احترام به وقت، قابل ممیزی.</p></div>
+          <div class="rt"><span class="n">4</span><p><b>پرونده‌ی مشتری</b> — تاریخچه و سابقه‌ی هر نفر محفوظ می‌ماند.</p></div>
+          <div class="rt"><span class="n">5</span><p><b>هویت بصری خاکیِ گرم</b> — در بازاری صورتی و طلایی، دیده‌شدن آسان است.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bd-foot"><b>FARIVAR — BRAND FOUNDATION</b><span>PERSONALITY · PROMISE · PROOF</span><b>03 / 04</b></div>
+</section>
+
+<!-- ═══════ ۰۴ لحن ═══════ -->
+<section class="board">
+  <div class="bd-head">
+    <div class="bd-brand"><span class="fa">فریور</span><span class="la en">FARIVAR</span></div>
+    <div class="bd-sec"><span class="no en">04</span><span class="ti">VOICE</span></div>
+  </div>
+  <div class="bd-body">
+    <div class="vc-grid">
+      <div class="vc-col" style="grid-column:span 4">
+        <div class="vc-cap">چهار اصل لحن<span>PRINCIPLES</span></div>
+        <div class="vc-pr"><span class="n">1</span><p><b>کوتاه بنویس.</b> جمله‌ی دوکلمه‌ای هم کافی است.</p></div>
+        <div class="vc-pr"><span class="n">2</span><p><b>ادعا نکن، نشان بده.</b> «متخصص‌پرورده» به‌جای «بهترین».</p></div>
+        <div class="vc-pr"><span class="n">3</span><p><b>مخاطب بزرگسال است.</b> نه تعارف، نه صدای فروشنده.</p></div>
+        <div class="vc-pr"><span class="n">4</span><p><b>اعداد صریح.</b> قیمت، مدت، ساعت — همیشه.</p></div>
+        <div class="vc-cap" style="margin-top:6px">واژگان<span>LEXICON</span></div>
+        <div class="wd-rows">
+          <div class="wd-row"><span class="wl">استفاده</span><span class="wd-chip ok">رزرو</span><span class="wd-chip ok">متخصص</span><span class="wd-chip ok">بوتیک</span><span class="wd-chip ok">مهمانِ فریور</span></div>
+          <div class="wd-row"><span class="wl">پرهیز</span><span class="wd-chip no">جشنواره</span><span class="wd-chip no">بی‌نظیر</span><span class="wd-chip no">لاکچری</span><span class="wd-chip no">رؤیایی</span><span class="wd-chip no">کمال</span></div>
+        </div>
+      </div>
+      <div class="vc-col" style="grid-column:span 5">
+        <div class="vc-cap">نه ← بله<span>BEFORE / AFTER</span></div>
+        <div class="ex">
+          <div class="bad"><span class="mk">✕</span><span>جشنواره‌ی شگفت‌انگیز تخفیف ویژه!</span></div>
+          <div class="good"><span class="mk">✓</span><b>نوبت‌های صبح، ۲۰٪ کمتر.</b></div>
+        </div>
+        <div class="ex">
+          <div class="bad"><span class="mk">✕</span><span>تجربه‌ای رویایی در لاکچری‌ترین سالن شهر</span></div>
+          <div class="good"><span class="mk">✓</span><b>رنگ مو · ۱۲۰ دقیقه · متخصص: نگار</b></div>
+        </div>
+        <div class="ex">
+          <div class="bad"><span class="mk">✕</span><span>کمالِ زیبایی شما، هنرِ ماست!</span></div>
+          <div class="good"><span class="mk">✓</span><b>مثل همیشه، متخصصِ خودتان منتظرتان است.</b></div>
+        </div>
+      </div>
+      <div class="vc-col" style="grid-column:span 3">
+        <div class="vc-cap">پیام‌های کلیدی<span>KEY MESSAGES</span></div>
+        <div class="msg"><div class="ch">INSTAGRAM BIO</div><p>بوتیک زیبایی زنان<small> · رزرو: دایرکت یا تماس</small></p></div>
+        <div class="msg"><div class="ch">PHONE</div><p>«فریور؛ روزتان بخیر»</p></div>
+        <div class="msg"><div class="ch">UI / RECEIPT</div><p>فریور · ثبت شد</p></div>
+      </div>
+    </div>
+    <div class="open">
+      <span class="tt">تصمیم‌های باز —<br>پیش از فاز لوگو</span>
+      <ul>
+        <li><i></i>آزاد بودن «فریور»: ثبت علامت، هندل اینستاگرام، دامنه</li>
+        <li><i></i>ری‌برند از نیلا یا برند تازه؟ مسیر مهاجرت مشتریان فعلی</li>
+        <li><i></i>شاخص قیمت: میانگین منطقه و درصد هدف</li>
+        <li><i></i>محله/شهر + کلمات جستجوی محلی برای گوگل‌مپ</li>
+        <li><i></i>تست تلفظ «فریور» با ۵ نفر غریبه</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bd-foot"><b>FARIVAR — BRAND FOUNDATION</b><span>VOICE · MESSAGES · DECISIONS</span><b>04 / 04</b></div>
+</section>
+
+</div></div>
+
+<button class="pbtn" onclick="window.print()">چاپ / PDF</button>
+
+<script>
+const stage=document.getElementById('stage'),fit=document.getElementById('fit');
+function fitScale(){
+  const s=Math.min(1,(window.innerWidth-20)/1400);
+  stage.style.transform='scale('+s+')';
+  fit.style.height=(stage.offsetHeight*s+86)+'px';
+}
+window.addEventListener('resize',fitScale);
+window.addEventListener('load',fitScale);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitScale);
+fitScale();
+</script>
+</body>
+</html>
