@@ -385,6 +385,7 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-3);padding:18px 20px 2
       <div class="list-toolbar">
         <div class="searchbox"><input id="cSearch" placeholder="جستجوی نام یا شماره تماس…"></div>
         <span class="tcount" id="custCount"></span>
+        <button class="btn-ghost addbtn" id="btnAddCustomer" data-icon="plus" data-size="14"><span>ثبت مشتری</span></button>
       </div>
       <div id="custList"></div>
     </div>
@@ -818,7 +819,7 @@ async function load(silent){
   D.staff=(sts.data||[]).map(x=>({id:x.id,name:x.name||'',role:x.role||'',phone:x.phone||''}));
   const smap={};(ss.data||[]).forEach(r=>{(smap[r.service_id]=smap[r.service_id]||[]).push(r.staff_id)});
   D.services=(svs.data||[]).map(x=>({id:x.id,name:x.name,dur:x.dur||60,price:x.price||0,staff:(smap[x.id]||[]).map(String)}));
-  D.customers=(cs.data||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone,note:x.note||'',createdAt:x.created_at}));
+  D.customers=(cs.data||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone,note:x.note||'',birthday:x.birthday||'',source:x.source||'',referredBy:x.referred_by||'',firstContactChannel:x.first_contact_channel||'',leadStatus:x.lead_status||'new',nextFollowUp:x.next_follow_up||'',sensitivity:x.sensitivity||'',preferredServiceId:x.preferred_service_id||'',preferredStaffId:x.preferred_staff_id||'',preferredTime:x.preferred_time||'',marketingConsent:x.marketing_consent===true,contactConsent:x.contact_consent!==false,createdAt:x.created_at}));
   const svcById={},stfById={};D.services.forEach(x=>svcById[x.id]=x);D.staff.forEach(x=>stfById[x.id]=x);
   D.appointments=(aps.data||[]).map(x=>({id:x.id,date:x.date,timeR:x.time_r,timeS:x.time_s,
    customerId:x.customer_id,name:x.name||'',phone:x.phone,serviceId:x.service_id,staffId:x.staff_id,
@@ -953,43 +954,55 @@ function renderCustomers(){
  if(!list.length){w.innerHTML='<div class="empty"><span>'+(q?'موردی یافت نشد':'هنوز مشتری ثبت نشده')+'</span></div>';return}
  w.innerHTML=list.map(c=>{
   const n=D.appointments.filter(a=>normPhone(a.phone)===normPhone(c.phone)&&a.status==='booked').length;
-  return '<div class="crow" data-id="'+esc(c.id)+'"><div class="cmain"><div class="cname">'+esc(c.name||'—')+'</div>'+
-   '<div class="cphone">'+fa(normPhone(c.phone))+'</div></div>'+
+  const leadTxt={new:'لید جدید',contacted:'تماس گرفته شد',booked:'نوبت ثبت شد',visited:'مراجعه کرده',lost:'از دست‌رفته'}[c.leadStatus]||'';
+  return '<div class="crow" data-id="'+esc(c.id)+'"><div class="cmain"><div class="cname">'+esc(c.name||'—')+'</div>'+ 
+   '<div class="cphone">'+fa(normPhone(c.phone))+(c.source?' · '+esc(c.source):'')+(leadTxt?' · '+esc(leadTxt):'')+'</div></div>'+ 
    (n?'<span class="cstat"><b>'+fa(n)+'</b> نوبت پیش‌رو</span>':'')+'<span class="chev">‹</span></div>';
  }).join('');
  w.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openCust(r.dataset.id));
 }
 document.getElementById('cSearch').addEventListener('input',renderCustomers);
 function openCust(id){
- const c=D.customers.filter(x=>x.id===id)[0];if(!c)return;
- const hist=D.appointments.filter(a=>normPhone(a.phone)===normPhone(c.phone)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
- const spent=D.invoices.filter(v=>normPhone(v.phone)===normPhone(c.phone)).reduce((s,v)=>s+(v.total||0),0);
+ const isNew=!id,c=isNew?{name:'',phone:'',note:'',source:'',referredBy:'',firstContactChannel:'',leadStatus:'new',nextFollowUp:'',birthday:'',sensitivity:'',preferredServiceId:'',preferredStaffId:'',preferredTime:'',marketingConsent:false,contactConsent:true}:D.customers.filter(x=>x.id===id)[0];
+ if(!c)return;
+ const hist=isNew?[]:D.appointments.filter(a=>normPhone(a.phone)===normPhone(c.phone)).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ const spent=isNew?0:D.invoices.filter(v=>normPhone(v.phone)===normPhone(c.phone)).reduce((s,v)=>s+(v.total||0),0);
+ const sourceOpts=['','اینستاگرام','واتساپ','تماس تلفنی','معرفی مشتری','گوگل / جست‌وجو','رزرو آنلاین','تابلو / عبوری','کمپین تبلیغاتی','سایر'].map(x=>'<option value="'+esc(x)+'"'+(c.source===x?' selected':'')+'>'+(x||'انتخاب منبع')+'</option>').join('');
+ const channelOpts=['','تماس تلفنی','واتساپ','اینستاگرام','مراجعه حضوری','رزرو آنلاین','سایر'].map(x=>'<option value="'+esc(x)+'"'+(c.firstContactChannel===x?' selected':'')+'>'+(x||'انتخاب کانال')+'</option>').join('');
+ const statusOpts=[['new','لید جدید'],['contacted','تماس گرفته شد'],['booked','نوبت ثبت شد'],['visited','مراجعه کرده'],['lost','از دست‌رفته']].map(x=>'<option value="'+x[0]+'"'+(c.leadStatus===x[0]?' selected':'')+'>'+x[1]+'</option>').join('');
+ const svcOpts='<option value="">بدون انتخاب</option>'+D.services.map(s=>'<option value="'+esc(s.id)+'"'+(String(c.preferredServiceId)===String(s.id)?' selected':'')+'>'+esc(s.name)+'</option>').join('');
+ const staffOpts='<option value="">بدون انتخاب</option>'+D.staff.map(s=>'<option value="'+esc(s.id)+'"'+(String(c.preferredStaffId)===String(s.id)?' selected':'')+'>'+esc(s.name)+'</option>').join('');
  document.getElementById('cBody').innerHTML=
-  '<div class="ch-head"><span class="avatar lg av0">'+esc((c.name||'؟').charAt(0))+'</span>'+
-  '<div><div class="cname">'+esc(c.name||'—')+'</div><div class="cphone" dir="ltr">'+fa(normPhone(c.phone))+'</div></div></div>'+
-  '<div class="fld"><label>نام</label><input type="text" id="ceName" value="'+esc(c.name||'')+'"></div>'+
-  '<div class="fld"><label>موبایل</label><input type="text" id="cePhone" dir="ltr" value="'+esc(normPhone(c.phone))+'"></div>'+
-  '<div class="fld"><label>یادداشت</label><input type="text" id="ceNote" value="'+esc(c.note||'')+'"></div>'+
-  '<div style="display:flex;gap:9px"><button class="btn-ghost" id="ceSave" data-icon="check" data-size="14"><span>ذخیره پرونده</span></button>'+
-  '<button class="btn-ghost" id="ceNew" data-icon="plus" data-size="14"><span>نوبت جدید</span></button></div>'+
-  '<div class="dacts"><div class="drow"><span class="dl">مجموع خرید</span><span class="dv">'+fmtPrice(spent)+' تومان</span></div>'+
-  '<div class="drow"><span class="dl">تعداد نوبت</span><span class="dv">'+fa(hist.length)+'</span></div></div>'+
-  '<div style="font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 6px">تاریخچه</div>'+
-  (hist.length?hist.map(a=>'<div class="hrow click" onclick="openDetail(\''+a.id+'\')"><div class="hmain"><b>'+esc(a.svc||'')+' · '+tLbl(a.timeR||'')+'</b><span>'+dayName(a.date)+' · '+esc(a.staff||'—')+'</span></div>'+
-   '<span class="pill st-'+(a.status||'booked')+'">'+({booked:'رزرو',done:'انجام',canceled:'لغو',inprogress:'جاری'}[a.status]||a.status)+'</span></div>').join('')
-   :'<div class="empty" style="padding:18px">هنوز نوبتی ثبت نشده</div>');
+  '<div class="ch-head"><span class="avatar lg av0">'+esc((c.name||'؟').charAt(0))+'</span><div><div class="cname">'+esc(c.name||'ثبت مشتری جدید')+'</div><div class="cphone" dir="ltr">'+(c.phone?fa(normPhone(c.phone)):'اطلاعات اولیه لید')+'</div></div></div>'+ 
+  '<div class="dacts"><div class="drow"><span class="dl">اطلاعات لید</span><span class="dv">از منشی ثبت می‌شود</span></div></div>'+ 
+  '<div class="fld"><label>نام و نام خانوادگی <i class="req">*</i></label><input type="text" id="ceName" value="'+esc(c.name||'')+'" placeholder="مثلاً سارا احمدی"></div>'+ 
+  '<div class="fld"><label>موبایل <i class="req">*</i></label><input type="text" id="cePhone" dir="ltr" value="'+esc(normPhone(c.phone))+'" placeholder="۰۹۱۲۳۴۵۶۷۸۹" inputmode="tel"></div>'+ 
+  '<div class="fld"><label>از کجا با سالن آشنا شد؟</label><div class="sel-wrap"><select id="ceSource">'+sourceOpts+'</select></div></div>'+ 
+  '<div class="fld"><label>اولین راه ارتباطی</label><div class="sel-wrap"><select id="ceChannel">'+channelOpts+'</select></div></div>'+ 
+  '<div class="fld"><label>معرف، پیج یا نام کمپین</label><input type="text" id="ceRef" value="'+esc(c.referredBy||'')+'" placeholder="مثلاً معرفی مریم / کمپین نوروز"></div>'+ 
+  '<div class="fld"><label>وضعیت لید</label><div class="sel-wrap"><select id="ceStatus">'+statusOpts+'</select></div></div>'+ 
+  '<div class="fld"><label>پیگیری بعدی</label><input type="date" id="ceFollow" value="'+esc(c.nextFollowUp||'')+'"><div class="fsum">برای تماس مجدد یا یادآوری نوبت</div></div>'+ 
+  '<div class="fld"><label>تولد</label><input type="text" id="ceBirthday" value="'+esc(c.birthday||'')+'" placeholder="مثلاً ۱۳۷۵/۰۵/۱۴"></div>'+ 
+  '<div class="fld"><label>خدمت مورد علاقه</label><div class="sel-wrap"><select id="ceService">'+svcOpts+'</select></div></div>'+ 
+  '<div class="fld"><label>متخصص مورد علاقه</label><div class="sel-wrap"><select id="ceStaff">'+staffOpts+'</select></div></div>'+ 
+  '<div class="fld"><label>ترجیح ساعت مراجعه</label><input type="text" id="ceTime" value="'+esc(c.preferredTime||'')+'" placeholder="مثلاً عصرها یا ۱۷ تا ۲۰"></div>'+ 
+  '<div class="fld"><label>حساسیت یا نکته مهم خدمات</label><input type="text" id="ceSensitivity" value="'+esc(c.sensitivity||'')+'" placeholder="مثلاً حساسیت به آمونیاک"></div>'+ 
+  '<div class="fld"><label>یادداشت منشی</label><input type="text" id="ceNote" value="'+esc(c.note||'')+'" placeholder="نیاز یا درخواست مشتری"></div>'+ 
+  '<div class="fld"><label><input type="checkbox" id="ceContact" '+(c.contactConsent?'checked':'')+'> اجازه تماس پیگیری</label><label><input type="checkbox" id="ceMarketing" '+(c.marketingConsent?'checked':'')+'> اجازه پیامک و پیشنهاد تبلیغاتی</label></div>'+ 
+  '<div style="display:flex;gap:9px;flex-wrap:wrap"><button class="btn-ghost" id="ceSave" data-icon="check" data-size="14"><span>'+(isNew?'ثبت مشتری':'ذخیره پرونده')+'</span></button>'+ 
+  (!isNew?'<button class="btn-ghost" id="ceNew" data-icon="plus" data-size="14"><span>نوبت جدید</span></button>':'')+'</div>'+ 
+  (!isNew?'<div class="dacts"><div class="drow"><span class="dl">مجموع خرید</span><span class="dv">'+fmtPrice(spent)+' تومان</span></div><div class="drow"><span class="dl">تعداد نوبت</span><span class="dv">'+fa(hist.length)+'</span></div></div><div style="font-size:12px;font-weight:800;color:var(--ink-2);margin:16px 0 6px">تاریخچه</div>'+(hist.length?hist.map(a=>'<div class="hrow click" onclick="openDetail(\''+a.id+'\')"><div class="hmain"><b>'+esc(a.svc||'')+' · '+tLbl(a.timeR||'')+'</b><span>'+dayName(a.date)+' · '+esc(a.staff||'—')+'</span></div><span class="pill st-'+(a.status||'booked')+'">'+({booked:'رزرو',done:'انجام',canceled:'لغو',inprogress:'جاری'}[a.status]||a.status)+'</span></div>').join(''):'<div class="empty" style="padding:18px">هنوز نوبتی ثبت نشده</div>'):'');
  document.getElementById('ceSave').onclick=async()=>{
-  const name=document.getElementById('ceName').value.trim();
-  const phone=normPhone(document.getElementById('cePhone').value);
-  if(name.length<2){toast('نام را کامل وارد کنید');return}
-  if(!validPhone(phone)){toast('شماره موبایل معتبر نیست');return}
-  const {error}=await sb.from('customers').update({name:name,phone:phone,note:document.getElementById('ceNote').value.trim()}).eq('id',id);
-  toast(error?('خطا: '+error.message):'پرونده ذخیره شد ✓');if(!error){closeDr();load(true)}
+  const name=document.getElementById('ceName').value.trim(),phone=normPhone(document.getElementById('cePhone').value);
+  if(name.length<2){toast('نام را کامل وارد کنید');return} if(!validPhone(phone)){toast('شماره موبایل معتبر نیست');return}
+  const payload={name:name,phone:phone,note:document.getElementById('ceNote').value.trim(),source:document.getElementById('ceSource').value,referred_by:document.getElementById('ceRef').value.trim(),first_contact_channel:document.getElementById('ceChannel').value,lead_status:document.getElementById('ceStatus').value,next_follow_up:document.getElementById('ceFollow').value||null,birthday:document.getElementById('ceBirthday').value.trim(),preferred_service_id:document.getElementById('ceService').value||null,preferred_staff_id:document.getElementById('ceStaff').value||null,preferred_time:document.getElementById('ceTime').value.trim(),sensitivity:document.getElementById('ceSensitivity').value.trim(),contact_consent:document.getElementById('ceContact').checked,marketing_consent:document.getElementById('ceMarketing').checked};
+  const result=isNew?await sb.from('customers').insert(Object.assign({id:'c'+uid()},payload)):await sb.from('customers').update(payload).eq('id',id);
+  toast(result.error?('خطا: '+result.error.message):(isNew?'مشتری ثبت شد ✓':'پرونده ذخیره شد ✓'));if(!result.error){closeDr();load(true)}
  };
- document.getElementById('ceNew').onclick=()=>openForm({date:curDate,preName:c.name,prePhone:normPhone(c.phone),preCustId:c.id});
- document.querySelectorAll('#cBody [data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||14))));
- openDr('drCust');
+ if(!isNew)document.getElementById('ceNew').onclick=()=>openForm({date:curDate,preName:c.name,prePhone:normPhone(c.phone),preCustId:c.id});
+ document.querySelectorAll('#cBody [data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||14))));openDr('drCust');
 }
+document.getElementById('btnAddCustomer').onclick=()=>openCust(null);
 
 /* ───────── متخصصان ───────── */
 function renderStaff(){
@@ -1463,8 +1476,8 @@ const csv=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
 document.getElementById('bkJson').onclick=()=>download('nila-backup-'+TODAY+'.json',JSON.stringify({v:1,date:TODAY,data:D},null,1),'application/json');
 document.getElementById('bkCsvA').onclick=()=>download('nila-appointments.csv','\ufeffتاریخ,ساعت رزرو,شروع,نام,موبایل,خدمت,متخصص,وضعیت,منبع\n'+
  D.appointments.map(a=>[a.date,a.timeR,a.timeS,a.name,normPhone(a.phone),a.svc,a.staff,a.status,a.source].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
-document.getElementById('bkCsvC').onclick=()=>download('nila-customers.csv','\ufeffنام,موبایل,یادداشت\n'+
- D.customers.map(c=>[c.name,normPhone(c.phone),c.note].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
+document.getElementById('bkCsvC').onclick=()=>download('farivar-customers.csv','\ufeffنام,موبایل,منبع لید,کانال ارتباط,معرف یا کمپین,وضعیت لید,پیگیری بعدی,تولد,خدمت مورد علاقه,متخصص مورد علاقه,حساسیت,یادداشت,اجازه تماس,اجازه تبلیغات\n'+
+ D.customers.map(c=>[c.name,normPhone(c.phone),c.source,c.firstContactChannel,c.referredBy,c.leadStatus,c.nextFollowUp,c.birthday,(svcOf(c.preferredServiceId)||{}).name,(staffById(c.preferredStaffId)||{}).name,c.sensitivity,c.note,c.contactConsent?'بله':'خیر',c.marketingConsent?'بله':'خیر'].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
 document.getElementById('bkCsvI').onclick=()=>download('nila-invoices.csv','\ufeffشماره,تاریخ,نام,موبایل,جمع,تخفیف,قابل پرداخت,نحوه پرداخت\n'+
  D.invoices.map(v=>[v.no,v.date,v.name,normPhone(v.phone),v.subtotal,v.discount,v.total,v.method].map(csv).join(',')).join('\n'),'text/csv;charset=utf-8');
 let restoreData=null;
@@ -1495,7 +1508,7 @@ document.getElementById('bkRestoreGo').onclick=async function(){
    const pairs=[];d.services.forEach(s=>(s.staff||[]).forEach(st=>pairs.push({service_id:s.id,staff_id:String(st)})));
    if(pairs.length)await sb.from('service_staff').upsert(pairs);
   }
-  if(d.customers&&d.customers.length)await sb.from('customers').upsert(d.customers.map(c=>({id:c.id,name:c.name||'',phone:normPhone(c.phone),note:c.note||''})));
+  if(d.customers&&d.customers.length)await sb.from('customers').upsert(d.customers.map(c=>({id:c.id,name:c.name||'',phone:normPhone(c.phone),note:c.note||'',source:c.source||'',referred_by:c.referredBy||c.referred_by||'',first_contact_channel:c.firstContactChannel||c.first_contact_channel||'',lead_status:c.leadStatus||c.lead_status||'new',next_follow_up:c.nextFollowUp||c.next_follow_up||null,birthday:c.birthday||'',preferred_service_id:c.preferredServiceId||c.preferred_service_id||null,preferred_staff_id:c.preferredStaffId||c.preferred_staff_id||null,preferred_time:c.preferredTime||c.preferred_time||'',sensitivity:c.sensitivity||'',contact_consent:c.contactConsent!==false,marketing_consent:c.marketingConsent===true})));
   if(d.appointments&&d.appointments.length)await sb.from('appointments').upsert(d.appointments.map(a=>({id:a.id,date:a.date,time_r:a.timeR||a.time_r||'',time_s:a.timeS||a.time_s||'',customer_id:a.customerId||a.customer_id||null,name:a.name||'',phone:normPhone(a.phone),service_id:a.serviceId||a.service_id||null,staff_id:a.staffId||a.staff_id||null,status:a.status||'booked',source:a.source||'panel',note:a.note||''})));
   if(d.invoices&&d.invoices.length)await sb.from('invoices').upsert(d.invoices.map(v=>({id:v.id,no:v.no,date:v.date,customer_id:v.customerId||v.customer_id||null,name:v.name||'',phone:normPhone(v.phone),items:v.items||[],subtotal:v.subtotal||0,discount:v.discount||0,discount_type:v.discountType||v.discount_type||'amount',total:v.total||0,method:v.method||'نقدی',status:v.status||'paid',appt_id:v.apptId||v.appt_id||null})));
   toast('بازگردانی کامل شد ✓');document.getElementById('bkRestoreInfo').classList.remove('on');load(true);
