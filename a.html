@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نیلا · پنل پذیرش</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F6F3EC;--surface:#FFFFFF;--surface-2:#FBF8F1;
+  --ink:#221A12;--ink-2:#6E604F;--ink-3:#A79A85;
+  --line:#ECE5D8;--line-2:#DDD2BF;
+  --accent:#C05B33;--accent-deep:#98421F;--accent-soft:#FAECE3;
+  --green:#4E7A50;--green-soft:#E9F0E5;
+  --amber:#A87A28;--amber-soft:#F7EDD6;
+  --red:#B23A31;--red-soft:#F8E6E3;
+  --dark:#1E160F;--cream:#F5ECDD;
+  --sh-sm:0 1px 2px rgba(46,28,10,.05);
+  --sh-md:0 12px 32px rgba(46,28,10,.10);
+  --sh-lg:0 30px 80px rgba(30,18,6,.25);
+  --hph:84px;--head-h:64px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent-soft)}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px;border:2px solid var(--bg)}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[data-icon]{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.req{font-style:normal;color:var(--red)}
+.mt8{margin-top:8px}
+
+/* ═══ دکمه‌ها ═══ */
+.btn-primary{background:var(--accent);color:#FFF6ED;border:none;font-size:13.5px;font-weight:800;padding:10px 18px;border-radius:12px;display:inline-flex;align-items:center;gap:8px;transition:.15s;box-shadow:0 4px 14px rgba(192,91,51,.28)}
+.btn-primary:hover{background:var(--accent-deep);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;transform:none}
+.btn-primary.big{width:100%;justify-content:center;padding:13px}
+.btn-ghost{background:var(--surface);border:1px solid var(--line-2);color:var(--ink-2);font-size:12.5px;font-weight:700;padding:9px 15px;border-radius:11px;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.btn-ghost:hover{border-color:var(--ink-3);color:var(--ink)}
+.iconbtn{width:36px;height:36px;border-radius:11px;border:1px solid var(--line-2);background:var(--surface);display:grid;place-items:center;color:var(--ink-2);transition:.15s}
+.iconbtn:hover{background:var(--surface-2);color:var(--ink)}
+.pillbtn{border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:7px 18px;font-size:12px;font-weight:700;color:var(--ink-2);transition:.15s}
+.pillbtn:hover,.pillbtn.on{background:var(--dark);border-color:var(--dark);color:#FFF3E4}
+
+/* ═══ صفحهٔ ورود ═══ */
+.auth{min-height:100vh;display:grid;grid-template-columns:1.05fr 1fr}
+.auth-brand{background:var(--dark);color:var(--cream);display:flex;flex-direction:column;justify-content:center;padding:60px;position:relative;overflow:hidden}
+.auth-brand::before{content:'';position:absolute;top:-140px;left:-100px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(192,91,51,.35),transparent 70%)}
+.auth-brand::after{content:'';position:absolute;bottom:-160px;right:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(192,91,51,.18),transparent 70%)}
+.ab-in{position:relative;z-index:2}
+.ab-mark{width:62px;height:62px;border-radius:18px;background:linear-gradient(135deg,#D06A3F,#A64A22);display:grid;place-items:center;font-size:30px;font-weight:900;color:#FFF3E6;padding-bottom:4px;margin-bottom:22px;box-shadow:0 14px 34px rgba(192,91,51,.4)}
+.ab-in h1{font-size:30px;font-weight:900}
+.ab-in .ab-tag{font-size:13.5px;color:#B9A88C;margin-top:6px;margin-bottom:30px}
+.ab-feat{display:flex;align-items:center;gap:12px;padding:11px 0;font-size:13.5px;font-weight:600;color:#E7DAC2}
+.ab-feat i{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:#E8A176;flex:none}
+.auth-form{display:grid;place-items:center;padding:24px}
+.auth-card{width:380px;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:36px 32px;box-shadow:var(--sh-md)}
+.auth-card h2{font-size:19px;font-weight:900}
+.auth-card .ac-sub{font-size:12.5px;color:var(--ink-3);margin:5px 0 22px}
+.auth-card input{width:100%;border:1.5px solid var(--line-2);background:#fff;border-radius:12px;padding:12px 14px;font:inherit;font-size:13.5px;color:var(--ink);outline:none;margin-bottom:11px;transition:.15s}
+.auth-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,91,51,.12)}
+.demo-tip{font-size:11px;color:var(--ink-3);background:var(--surface-2);border:1px dashed var(--line-2);border-radius:10px;padding:9px 12px;margin-top:14px;line-height:1.8}
+.lerr{display:none;color:var(--red);font-size:12px;font-weight:800;margin-top:6px}
+.lerr.on{display:block}
+
+/* ═══ اسکلت برنامه ═══ */
+.app{display:flex;min-height:100vh}
+.side{width:240px;flex:none;background:var(--dark);color:var(--cream);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:60}
+.brand{display:flex;gap:11px;align-items:center;padding:22px 20px 18px}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#D06A3F,#A64A22);display:grid;place-items:center;font-size:21px;font-weight:900;color:#FFF3E6;padding-bottom:3px;flex:none}
+.brand-txt b{display:block;font-size:15.5px;font-weight:900;color:#FBF1E1}
+.brand-txt span{font-size:10.5px;color:#9D8C70;font-weight:500}
+.side nav{padding:4px 12px;display:flex;flex-direction:column;gap:3px;flex:1;overflow-y:auto}
+.side nav button{display:flex;align-items:center;gap:11px;background:none;border:none;color:#BBA98D;font:inherit;font-size:13.5px;font-weight:600;padding:11px 13px;border-radius:12px;transition:.15s;text-align:start}
+.side nav button:hover{color:#fff;background:rgba(255,255,255,.06)}
+.side nav button.active{background:var(--accent);color:#FFF6ED;box-shadow:0 6px 16px rgba(192,91,51,.35)}
+.side-foot{padding:16px 20px 20px;border-top:1px solid rgba(255,255,255,.08)}
+.side-clock{font-size:25px;font-weight:800;color:#F5ECDD;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.side-date{font-size:11.5px;color:#9D8C70;margin-top:2px}
+.side-user{display:flex;align-items:center;gap:10px;margin-top:16px}
+.s-av{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-weight:800;font-size:14px;color:#E8A176;flex:none}
+.side-user b{display:block;font-size:12.5px}
+.side-user small{font-size:10.5px;color:#9D8C70}
+.s-out{margin-inline-start:auto;width:30px;height:30px;border:none;border-radius:9px;background:rgba(255,255,255,.07);color:#BBA98D;display:grid;place-items:center}
+.s-out:hover{background:rgba(226,106,90,.25);color:#F2B4A8}
+
+.frame{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:66px;display:flex;align-items:center;gap:12px;padding:0 26px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;background:rgba(246,243,236,.9);backdrop-filter:blur(8px)}
+.top-title{font-size:14.5px;font-weight:800}
+.top-spacer{flex:1}
+.hamb{display:none}
+.syncpill{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--ink-3);background:var(--surface-2);border:1px solid var(--line);padding:5px 12px;border-radius:99px}
+.syncpill i{width:7px;height:7px;border-radius:50%;background:var(--amber)}
+main{padding:0 26px 48px}
+
+/* ═══ سربرگ روز ═══ */
+.day-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:24px 0 16px}
+.day-head h1{font-size:24px;font-weight:900}
+.day-meta{font-size:12.5px;color:var(--ink-2);margin-top:6px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.day-meta b{font-size:14px;font-weight:800;color:var(--ink)}
+.day-meta i.sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3)}
+.day-nav{display:flex;gap:8px;align-items:center}
+
+/* ═══ تقویم ═══ */
+.tl{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh-sm);overflow:hidden}
+.tl-scroll{overflow:auto;max-height:calc(100vh - 235px);min-height:420px}
+.tl-track{display:flex;min-width:100%}
+.tl-hours{width:62px;flex:none;position:sticky;inset-inline-start:0;background:var(--surface);z-index:5;border-inline-end:1px solid var(--line)}
+.tl-headpad{height:var(--head-h);border-bottom:1px solid var(--line);background:var(--surface-2);position:sticky;top:0;z-index:6}
+.tl-hours-body{position:relative;height:calc(var(--hph)*12)}
+.tl-hr{height:var(--hph);position:relative;border-top:1px solid var(--line)}
+.tl-hr span{position:absolute;top:-8px;inset-inline-end:8px;font-size:10.5px;font-weight:700;color:var(--ink-3);background:var(--surface);padding:1px 5px;border-radius:6px;z-index:2}
+.tl-col{flex:1;min-width:215px;border-inline-end:1px solid var(--line);display:flex;flex-direction:column}
+.tl-col:last-child{border-inline-end:none}
+.tl-col-head{height:var(--head-h);flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--surface-2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+.avatar.lg{width:40px;height:40px;font-size:16px}
+.av0{background:var(--accent-soft);color:var(--accent-deep)}
+.av1{background:var(--green-soft);color:#44603F}
+.av2{background:var(--amber-soft);color:#7A5B1B}
+.av3{background:#ECE7DE;color:#5C4F3E}
+.sname{font-size:13.5px;font-weight:800;line-height:1.2}
+.srole{font-size:10.5px;color:var(--ink-3);margin-top:1px}
+.scount{margin-inline-start:auto;font-size:10.5px;font-weight:700;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:99px}
+.tl-rail{position:relative;height:calc(var(--hph)*12);cursor:copy;background-image:repeating-linear-gradient(to bottom,var(--line) 0 1px,transparent 1px var(--hph));border-bottom:1px solid var(--line)}
+.tl-rail:hover{background-color:rgba(192,91,51,.03)}
+.appt{position:absolute;inset-inline:10px;border-radius:12px;background:#fff;border:1px solid var(--line-2);border-inline-start:4px solid var(--amber);padding:7px 11px;cursor:pointer;overflow:hidden;box-shadow:var(--sh-sm);transition:box-shadow .15s,transform .15s;z-index:2}
+.appt:hover{box-shadow:var(--sh-md);transform:translateY(-1px);z-index:7}
+.appt.st-inprogress{border-inline-start-color:var(--accent);background:var(--accent-soft);border-color:#EFCDBB}
+.appt.st-done{border-inline-start-color:var(--green);background:#F8FBF5}
+.appt.st-done .a-time{color:var(--green)}
+.appt.st-canceled{opacity:.5;border-inline-start-color:var(--ink-3);background:var(--surface-2)}
+.appt.st-canceled .a-name{text-decoration:line-through}
+.a-time{font-size:10px;font-weight:800;color:var(--amber);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.a-real{background:#fff;border:1px solid var(--line-2);border-radius:99px;padding:0 7px;font-size:9px;color:var(--ink-2)}
+.a-name{font-size:12.5px;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-svc{font-size:10.5px;color:var(--ink-2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt.compact{display:flex;align-items:center;gap:8px;padding:4px 10px}
+.appt.compact .a-name{margin:0;font-size:11.5px;flex:1}
+.appt.compact .a-time{font-size:9.5px}
+.appt.compact .a-svc{display:none}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;animation:pl 1.6s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(192,91,51,.45)}70%{box-shadow:0 0 0 7px rgba(192,91,51,0)}100%{box-shadow:0 0 0 0 rgba(192,91,51,0)}}
+@keyframes flashk{0%{box-shadow:0 0 0 3px rgba(192,91,51,.55)}100%{box-shadow:0 0 0 18px rgba(192,91,51,0)}}
+.appt.flash{animation:flashk 1s ease-out 3}
+.nowline{position:absolute;inset-inline:0;border-top:2px solid var(--accent);z-index:3;pointer-events:none}
+.nowline .nlab{position:absolute;inset-inline-start:6px;top:-9px;background:var(--accent);color:#FFF6ED;font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:99px}
+.tl-empty{padding:70px 20px;text-align:center;color:var(--ink-3);font-size:13px}
+.hint{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--ink-3);margin:13px 4px 0;line-height:1.9}
+
+/* ═══ لیست‌ها ═══ */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--sh-sm)}
+.list-toolbar{display:flex;align-items:center;gap:12px;padding:15px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.list-toolbar .ttl{font-size:13.5px;font-weight:800}
+.searchbox{position:relative;flex:1;max-width:360px;min-width:180px}
+.searchbox input{width:100%;border:1px solid var(--line-2);background:#fff;border-radius:11px;padding:9px 14px;font:inherit;font-size:13px;outline:none;transition:.15s}
+.searchbox input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,91,51,.12)}
+.tcount{font-size:12px;font-weight:700;color:var(--ink-3)}
+.addbtn{margin-inline-start:auto}
+.crow,.srow{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:.12s}
+.crow:last-child,.srow:last-child{border-bottom:none}
+.crow:hover,.srow:hover{background:var(--surface-2)}
+.cmain{flex:1;min-width:0}
+.cname{font-size:14px;font-weight:800}
+.cphone{font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.cstat{font-size:12px;color:var(--ink-2)}
+.cstat b{font-weight:800;color:var(--ink)}
+.chev{color:var(--ink-3);display:grid;place-items:center}
+.empty{padding:44px 20px;text-align:center;color:var(--ink-3);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.s-staff{font-size:10.5px;color:var(--ink-3);margin-top:3px;display:flex;align-items:center;gap:5px}
+.sdur{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);padding:4px 11px;border-radius:99px;flex:none}
+.sprice{font-size:12px;color:var(--ink-3);flex:none;min-width:110px;text-align:left}
+.sprice b{font-weight:800;color:var(--ink);font-size:13.5px}
+.svc-form{display:grid;grid-template-columns:1.4fr .9fr 1fr auto auto;gap:9px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--surface-2);align-items:center}
+.svc-form input{border:1px solid var(--line-2);background:#fff;border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;outline:none;width:100%}
+.svc-form input:focus{border-color:var(--accent)}
+.inv-no{width:46px;height:34px;border-radius:10px;background:var(--dark);color:#F6EBDB;display:grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+
+/* ═══ کشو ═══ */
+.scrim{position:fixed;inset:0;background:rgba(24,14,6,.45);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:420px;max-width:100vw;background:var(--surface);z-index:90;transform:translateX(-105%);transition:transform .34s cubic-bezier(.32,.72,.24,1);display:flex;flex-direction:column;box-shadow:var(--sh-lg)}
+.drawer.on{transform:none}
+.dr-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.dr-title{font-size:16.5px;font-weight:900}
+.dr-sub{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:3px}
+.xbtn{border:none;background:var(--surface-2)}
+.dr-body{padding:20px 22px 30px;overflow-y:auto;flex:1}
+.fld{margin-bottom:17px}
+.fld>label{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:7px}
+.fld input[type=text],.fld input[type=number],.fld input[type=tel],.fld select,.fld textarea{width:100%;border:1px solid var(--line-2);background:#fff;border-radius:11px;padding:10px 13px;font:inherit;font-size:13.5px;color:var(--ink);outline:none;transition:.15s}
+.fld input:focus,.fld select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,91,51,.12)}
+.sel-wrap{position:relative}
+.sel-wrap select{appearance:none;cursor:pointer}
+.sel-wrap::after{content:'';position:absolute;inset-inline-end:14px;top:50%;width:8px;height:8px;border-inline-start:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:translateY(-70%) rotate(-45deg);pointer-events:none}
+.sugwrap{position:relative}
+.sug{position:absolute;top:calc(100% + 6px);inset-inline:0;background:#fff;border:1px solid var(--line-2);border-radius:12px;box-shadow:var(--sh-md);overflow:hidden;z-index:5;display:none}
+.sug.on{display:block}
+.sug-item{padding:9px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:600}
+.sug-item:hover{background:var(--surface-2)}
+.sug-item .ph{color:var(--ink-3);font-size:11.5px;font-weight:500}
+.sug-new{color:var(--accent-deep);gap:8px}
+.fsum{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ink-2);margin-top:7px;min-height:16px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line-2);background:#fff;border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:600;transition:.15s;color:var(--ink-2)}
+.chip:hover{border-color:var(--ink-3)}
+.chip.sel{background:var(--dark);border-color:var(--dark);color:#FFF3E4}
+.chip:disabled{opacity:.35;cursor:not-allowed}
+.daterow{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:11px;padding:5px 7px;background:#fff}
+.daterow .dval{flex:1;text-align:center;font-size:13px;font-weight:700}
+.daterow .iconbtn{width:30px;height:30px;border:none;background:var(--surface-2)}
+.warn{display:none;background:var(--amber-soft);border:1px solid #E6D3A2;color:#7A5B1B;font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:11px;margin-bottom:15px;line-height:1.8}
+.warn.on{display:block}
+.ferr{display:none;color:var(--red);font-size:12px;font-weight:700;margin:-6px 0 14px}
+.ferr.on{display:block}
+
+/* ═══ جزئیات و فاکتور ═══ */
+.stpill{display:inline-flex;align-items:center;font-size:12.5px;font-weight:800;padding:6px 15px;border-radius:99px;margin-bottom:14px}
+.pill{font-size:10px;font-weight:800;padding:3px 10px;border-radius:99px;flex:none}
+.st-booked{background:var(--amber-soft);color:#7A5B1B}
+.st-inprogress{background:var(--accent-soft);color:var(--accent-deep)}
+.st-done{background:var(--green-soft);color:#44603F}
+.st-canceled{background:#EFEAE0;color:#8B7C69}
+.drow{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.drow .dl{color:var(--ink-3);font-weight:600;flex:none}
+.drow .dv{font-weight:700;text-align:left}
+.drow .dv small{display:block;font-weight:500;color:var(--ink-3);font-size:11px;margin-top:2px}
+.latetag{font-style:normal;font-size:9.5px;font-weight:800;background:var(--amber-soft);color:#7A5B1B;padding:1px 7px;border-radius:99px}
+.dacts{display:flex;flex-direction:column;gap:9px;margin-top:20px}
+.btn{font-size:13px;font-weight:700;border-radius:12px;padding:11px 16px;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s;width:100%}
+.btn-green{background:var(--green);color:#F3F6EC}
+.btn-green:hover{background:#40613F}
+.btn-danger-ghost{background:var(--red-soft);color:#9C3A2C;border-color:#EAC9C0}
+.btn-danger-ghost:hover{background:#F4DBD6}
+.btn-del{background:none;color:var(--ink-3);font-size:12px;padding:9px;border:1px solid var(--line-2);border-radius:11px}
+.btn-del:hover{color:var(--red)}
+.btn-del.armed{background:var(--red)!important;color:#fff!important;border-color:var(--red)}
+.hrow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px dashed var(--line)}
+.hrow:last-child{border-bottom:none}
+.hrow.click{cursor:pointer}
+.hrow.click:hover{background:var(--surface-2)}
+.hmain{flex:1;min-width:0}
+.hmain b{display:block;font-size:13px;font-weight:800}
+.hmain span{font-size:11px;color:var(--ink-3)}
+.hmeta{font-size:11.5px;color:var(--ink-2);font-weight:700;text-align:left;flex:none}
+.ch-head{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.cname.big{font-size:16px;font-weight:900}
+.irow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.irow .ir-main{flex:1;min-width:0}
+.irow .ir-main b{display:block;font-size:13px;font-weight:700}
+.ir-price{display:block;width:110px;border:none;border-bottom:1px dashed var(--line-2);background:transparent;font:inherit;font-size:12px;color:var(--ink-2);text-align:left;padding:2px 0;outline:none;margin-top:3px}
+.ir-price:focus{border-color:var(--accent);color:var(--ink)}
+.stepper{display:flex;align-items:center;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;flex:none;background:#fff}
+.stepper button{width:27px;height:27px;border:none;background:transparent;font-size:15px;font-weight:800;color:var(--ink-2)}
+.stepper b{width:26px;text-align:center;font-size:13px}
+.ir-x{border:none;background:none;color:var(--ink-3);width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center}
+.ir-x:hover{color:var(--red);background:var(--red-soft)}
+.ir-x.armed{background:var(--red);color:#fff}
+.iempty{font-size:12px;color:var(--ink-3);padding:12px 2px;border-bottom:1px dashed var(--line)}
+.discrow{display:flex;gap:9px;align-items:center}
+.discrow input{flex:1;min-width:0;border:1px solid var(--line-2);background:#fff;border-radius:11px;padding:10px 13px;font:inherit;font-size:13.5px;outline:none}
+.discrow input:focus{border-color:var(--accent)}
+.discrow .chips{flex:none}
+.invsum{background:var(--surface-2);border:1px dashed var(--line-2);border-radius:13px;padding:12px 16px;margin:4px 0 18px}
+.is-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);padding:4px 0}
+.is-row b{font-weight:800;color:var(--ink)}
+.is-row.total{border-top:1px dashed var(--line-2);margin-top:6px;padding-top:10px;font-size:14px;color:var(--ink)}
+.is-row.total b{color:var(--accent-deep);font-size:17px;font-weight:900}
+.addrow{display:flex;gap:9px;margin-top:10px}
+.addrow .sel-wrap{flex:1}
+
+/* ═══ رسید ═══ */
+.receipt{border:1px solid var(--line-2);border-radius:14px;padding:20px;background:#fff}
+.rc-brand{text-align:center;font-size:17px;font-weight:900}
+.rc-sub{text-align:center;font-size:11px;color:var(--ink-3);margin-top:3px;letter-spacing:.14em}
+.rc-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);padding:3px 0;gap:10px}
+.rc-meta b{color:var(--ink);font-weight:700;text-align:left}
+.rc-sep{border:none;border-top:1px dashed var(--line-2);margin:12px 0}
+.rc-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rc-table th{text-align:start;font-size:11px;color:var(--ink-3);font-weight:700;padding:5px 0;border-bottom:1px solid var(--line)}
+.rc-table td{padding:7px 0;border-bottom:1px dashed var(--line)}
+.rc-table .num{text-align:center;width:44px}
+.rc-table .amt{text-align:end;font-weight:700;white-space:nowrap}
+.rc-tot{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--ink-2)}
+.rc-tot b{color:var(--ink)}
+.rc-tot.grand{border-top:1px solid var(--line-2);margin-top:6px;padding-top:10px;font-size:14px}
+.rc-tot.grand b{color:var(--accent-deep);font-size:18px;font-weight:900}
+.rc-thanks{text-align:center;font-size:11.5px;color:var(--ink-3);margin-top:16px}
+#printArea{display:none}
+@media print{
+  @page{margin:12mm}
+  body.printing *{visibility:hidden}
+  body.printing #printArea{display:block;visibility:visible;position:absolute;inset:0}
+  body.printing #printArea *{visibility:visible}
+  #printArea .receipt{border:none;box-shadow:none;padding:0}
+}
+
+/* ═══ گزارش ═══ */
+.rpt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.rpt-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;align-items:start}
+.stbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 10px;text-align:center;box-shadow:var(--sh-sm)}
+.stbox b{display:block;font-size:20px;font-weight:900;margin-bottom:3px}
+.stbox span{font-size:11px;color:var(--ink-3);font-weight:700}
+.stbox small{display:block;font-size:10px;color:var(--ink-3);margin-top:4px}
+.prow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px;font-weight:600}
+.prow:last-child{border-bottom:none}
+.prow b{margin-inline-start:auto;font-weight:800}
+.prow b small{font-weight:500;color:var(--ink-3)}
+.pdot{width:10px;height:10px;border-radius:50%;flex:none}
+.m-cash{background:var(--green)}
+.m-card{background:var(--accent)}
+.m-online{background:var(--amber)}
+
+/* ═══ تقویم شمسی popup ═══ */
+.dp-wrap{position:relative}
+.dp-pop{position:absolute;top:calc(100% + 8px);inset-inline-end:0;width:290px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--sh-md);padding:14px;z-index:70}
+.dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dp-title{font-size:14px;font-weight:800}
+.dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dp-dow{font-size:10.5px;font-weight:700;color:var(--ink-3);text-align:center;padding:4px 0}
+.dp-day{position:relative;border:none;background:transparent;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink);height:34px;border-radius:10px;transition:.12s}
+.dp-day:hover{background:var(--surface-2)}
+.dp-day.today{box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.dp-day.sel{background:var(--dark);color:#FFF3E4}
+.dp-day .dot{position:absolute;bottom:4px;right:50%;transform:translateX(50%);width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.dp-day.sel .dot{background:#F0A982}
+.dp-foot{margin-top:10px}
+.dp-foot .btn-ghost{width:100%;justify-content:center}
+
+/* ═══ توست ═══ */
+#toasts{position:fixed;bottom:22px;inset-inline-start:22px;z-index:200;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--dark);color:#F6EBDB;padding:12px 17px;border-radius:13px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-lg);animation:tin .3s}
+.toast svg{color:#A8C686;flex:none}
+.toast.out{animation:tout .25s forwards}
+@keyframes tin{from{transform:translateY(16px);opacity:0}}
+@keyframes tout{to{transform:translateY(8px);opacity:0}}
+
+/* ═══ ریسپانسیو ═══ */
+@media(max-width:960px){
+  .side{position:fixed;inset-inline-start:0;transform:translateX(105%);transition:transform .3s;box-shadow:var(--sh-lg)}
+  .side.open{transform:none}
+  .hamb{display:grid}
+  .auth{grid-template-columns:1fr}
+  .auth-brand{display:none}
+  .rpt-cols{grid-template-columns:1fr}
+  .rpt-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  main,.topbar{padding-inline:14px}
+  .drawer{width:100vw}
+  .svc-form{grid-template-columns:1fr 1fr}
+  .day-head h1{font-size:19px}
+  .syncpill{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ ورود ═══════════ -->
+<div class="auth" id="authView">
+  <div class="auth-brand">
+    <div class="ab-in">
+      <div class="ab-mark">ن</div>
+      <h1>نیلا</h1>
+      <div class="ab-tag">پنل پذیرش سالن زیبایی</div>
+      <div class="ab-feat"><i data-icon="cal" data-size="16"></i>تقویم زندهٔ نوبت‌های هر متخصص</div>
+      <div class="ab-feat"><i data-icon="file" data-size="16"></i>فاکتور و تسویهٔ سریع با چاپ رسید</div>
+      <div class="ab-feat"><i data-icon="chart" data-size="16"></i>گزارش روزانه و بستن صندوق</div>
+    </div>
+  </div>
+  <div class="auth-form">
+    <div class="auth-card">
+      <h2>ورود منشی</h2>
+      <div class="ac-sub">برای مدیریت نوبت‌ها وارد شوید</div>
+      <input type="email" id="lgEmail" placeholder="ایمیل" dir="ltr" autocomplete="username">
+      <input type="password" id="lgPass" placeholder="رمز عبور" dir="ltr" autocomplete="current-password">
+      <div class="lerr" id="lgErr"></div>
+      <button class="btn-primary big" id="lgGo" style="margin-top:4px">ورود</button>
+      <div class="demo-tip">نسخهٔ بازطراحی با دادهٔ نمونه — فعلاً هر ایمیل و رمزی بزنید. محل اتصال Supabase در کد علامت‌گذاری شده است.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ اسکلت اصلی ═══════════ -->
+<div class="app" id="appView" hidden>
+  <aside class="side" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">ن</span>
+      <div class="brand-txt"><b>نیلا</b><span>پنل پذیرش سالن</span></div>
+    </div>
+    <nav id="nav">
+      <button data-view="schedule" class="active" data-icon="cal" data-size="16">برنامه پذیرش</button>
+      <button data-view="customers" data-icon="users" data-size="16">مشتریان</button>
+      <button data-view="staff" data-icon="user" data-size="16">متخصصان</button>
+      <button data-view="services" data-icon="scissors" data-size="16">خدمات و تعرفه</button>
+      <button data-view="invoices" data-icon="file" data-size="16">فاکتورها</button>
+      <button data-view="report" data-icon="chart" data-size="16">گزارش روز</button>
+      <button data-view="backup" data-icon="down" data-size="16">پشتیبان‌گیری</button>
+    </nav>
+    <div class="side-foot">
+      <div class="side-clock" id="sideClock">--:--:--</div>
+      <div class="side-date" id="sideDate"></div>
+      <div class="side-user">
+        <span class="s-av">م</span>
+        <div><b>منشی پذیرش</b><small>salon@nila</small></div>
+        <button class="s-out" id="btnLogout" data-icon="x" data-size="14" title="خروج"></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="frame">
+    <header class="topbar">
+      <button class="iconbtn hamb" id="hamb" data-icon="menu" data-size="18" title="منو"></button>
+      <div class="top-title" id="topTitle">برنامه پذیرش</div>
+      <span class="top-spacer"></span>
+      <span class="syncpill"><i></i>دادهٔ نمونه</span>
+      <button class="btn-primary" id="btnNew" data-icon="plus" data-size="15"><span>نوبت جدید</span></button>
+    </header>
+    <main>
+      <!-- برنامه پذیرش -->
+      <section id="view-schedule">
+        <div class="day-head">
+          <div><h1 id="dayLabel"></h1><div class="day-meta" id="dayStats"></div></div>
+          <div class="day-nav">
+            <button class="iconbtn" id="dPrev" data-icon="chevR" title="روز قبل"></button>
+            <button class="pillbtn" id="dToday">امروز</button>
+            <button class="iconbtn" id="dNext" data-icon="chevL" title="روز بعد"></button>
+            <button class="iconbtn" id="dpBtn" data-icon="calpick" title="انتخاب از تقویم"></button>
+          </div>
+        </div>
+        <div class="tl"><div class="tl-scroll"><div class="tl-track" id="tlTrack"></div></div></div>
+        <p class="hint"><i data-icon="ptr" data-size="14"></i>روی جای خالی تقویم هر متخصص کلیک کنید تا نوبت ثبت شود. نوبت‌های آنلاین با 🌐 مشخص‌اند و نقطهٔ چشمک‌زن یعنی در حال انجام.</p>
+      </section>
+      <!-- مشتریان -->
+      <section id="view-customers" hidden>
+        <div class="panel">
+          <div class="list-toolbar">
+            <div class="searchbox"><input id="cSearch" placeholder="جستجوی نام یا شماره تماس…"></div>
+            <span class="tcount" id="custCount"></span>
+          </div>
+          <div id="custList"></div>
+        </div>
+      </section>
+      <!-- متخصصان -->
+      <section id="view-staff" hidden>
+        <div class="panel">
+          <div class="list-toolbar">
+            <span class="tcount" id="staffCount"></span>
+            <button class="btn-ghost addbtn" id="btnAddStaff" data-icon="plus" data-size="14"><span>افزودن متخصص</span></button>
+          </div>
+          <div class="svc-form" id="staffForm" hidden>
+            <input id="stName" placeholder="نام متخصص، مثلاً: نگار محمدی">
+            <input id="stRole" placeholder="تخصص، مثلاً: رنگ و مو">
+            <input id="stPhone" placeholder="شماره تماس (اختیاری)" inputmode="tel">
+            <button class="btn-primary" id="stSave" style="padding:10px 16px">افزودن</button>
+            <button class="btn-ghost" id="stCancel">انصراف</button>
+          </div>
+          <div id="staffList"></div>
+        </div>
+      </section>
+      <!-- خدمات -->
+      <section id="view-services" hidden>
+        <div class="panel">
+          <div class="list-toolbar">
+            <span class="tcount" id="svcCount"></span>
+            <button class="btn-ghost addbtn" id="btnAddSvc" data-icon="plus" data-size="14"><span>افزودن خدمت</span></button>
+          </div>
+          <div id="svcList"></div>
+        </div>
+      </section>
+      <!-- فاکتورها -->
+      <section id="view-invoices" hidden>
+        <div class="panel">
+          <div class="list-toolbar">
+            <div class="searchbox"><input id="vSearch" placeholder="جستجوی شماره فاکتور، نام یا شماره مشتری…"></div>
+            <span class="tcount" id="invCount"></span>
+          </div>
+          <div id="invList"></div>
+        </div>
+      </section>
+      <!-- گزارش روز -->
+      <section id="view-report" hidden>
+        <div class="day-head">
+          <div><h1>گزارش روز</h1><div class="day-meta" id="rpMeta"></div></div>
+          <div class="day-nav">
+            <button class="iconbtn" id="rpPrev" data-icon="chevR" title="روز قبل"></button>
+            <button class="pillbtn" id="rpToday">امروز</button>
+            <button class="iconbtn" id="rpNext" data-icon="chevL" title="روز بعد"></button>
+            <button class="iconbtn" id="rpPick" data-icon="calpick" title="انتخاب از تقویم"></button>
+          </div>
+        </div>
+        <div class="rpt-grid" id="rpCards"></div>
+        <div class="rpt-cols">
+          <div class="panel"><div class="list-toolbar"><span class="ttl">بستن صندوق — نحوهٔ پرداخت</span></div><div style="padding:8px 20px 14px" id="rpPay"></div></div>
+          <div class="panel"><div class="list-toolbar"><span class="ttl">فروش به تفکیک متخصص</span></div><div style="padding:8px 20px 14px" id="rpStaff"></div></div>
+        </div>
+        <div class="rpt-cols">
+          <div class="panel"><div class="list-toolbar"><span class="ttl">فاکتورهای این روز</span><span class="tcount" id="rpInvCount" style="margin-inline-start:auto"></span></div><div style="padding:8px 20px 14px" id="rpInvoices"></div></div>
+          <div class="panel"><div class="list-toolbar"><span class="ttl">نوبت‌های این روز</span><span class="tcount" id="rpAptCount" style="margin-inline-start:auto"></span></div><div style="padding:8px 20px 14px" id="rpAppts"></div></div>
+        </div>
+      </section>
+      <!-- پشتیبان -->
+      <section id="view-backup" hidden>
+        <div class="panel">
+          <div class="list-toolbar"><span class="ttl">پشتیبان‌گیری داده‌ها</span></div>
+          <div style="padding:20px 22px">
+            <p style="font-size:13px;color:var(--ink-2);line-height:2;margin-bottom:14px">در نسخهٔ نهایی، داده‌ها روی Supabase ذخیره می‌شوند و نوبت‌های آنلاین با Realtime همان لحظه روی تقویم می‌آیند. این بخش خروجی محلی می‌گیرد.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:9px">
+              <button class="btn-ghost" id="bkJson" data-icon="down" data-size="14"><span>پشتیبان کامل (JSON)</span></button>
+              <button class="btn-ghost" id="bkCsv" data-icon="down" data-size="14"><span>خروجی CSV نوبت‌ها</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ کشوها ═══════════ -->
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drForm">
+  <div class="dr-head">
+    <div><div class="dr-title">ثبت نوبت جدید</div><div class="dr-sub" id="fSub"></div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body">
+    <div class="fld">
+      <label>مشتری <i class="req">*</i></label>
+      <div class="sugwrap"><input type="text" id="fName" placeholder="نام مشتری را جستجو یا تایپ کنید" autocomplete="off"><div class="sug" id="fSug"></div></div>
+      <input type="text" id="fPhone" class="mt8" placeholder="شماره تماس (اجباری) — ۰۹۱۲۳۴۵۶۷۸۹" inputmode="tel">
+    </div>
+    <div class="fld">
+      <label>خدمت <i class="req">*</i></label>
+      <div class="sel-wrap"><select id="fService"></select></div>
+      <div class="fsum" id="fSummary"></div>
+    </div>
+    <div class="fld"><label>متخصص <i class="req">*</i></label><div class="chips" id="fChips"></div></div>
+    <div class="fld">
+      <label>روز</label>
+      <div class="daterow">
+        <button class="iconbtn" id="fPrev" data-icon="chevR"></button>
+        <span class="dval" id="fDateVal"></span>
+        <button class="iconbtn" id="fNext" data-icon="chevL"></button>
+      </div>
+    </div>
+    <div class="fld"><label>ساعت رزرو (زمانی که مشتری گفته) <i class="req">*</i></label><div class="sel-wrap"><select id="fTimeR"></select></div></div>
+    <div class="fld">
+      <label>ساعت شروع خدمت</label>
+      <div class="sel-wrap"><select id="fTimeS"></select></div>
+      <div class="fsum">پیش‌فرض با ساعت رزرو یکسان است — مثلاً مشتری گفته ۷ آمده ولی خدمت ۷:۳۰ شروع شده.</div>
+    </div>
+    <div class="warn" id="fWarn"></div>
+    <div class="ferr" id="fErr"></div>
+    <button class="btn-primary big" id="fSave" data-icon="check" data-size="16"><span>ثبت نوبت</span></button>
+  </div>
+</aside>
+
+<aside class="drawer" id="drDetail">
+  <div class="dr-head">
+    <div><div class="dr-title">جزئیات نوبت</div><div class="dr-sub" id="dSub"></div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body" id="dBody"></div>
+</aside>
+
+<aside class="drawer" id="drCust">
+  <div class="dr-head">
+    <div><div class="dr-title">پرونده مشتری</div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body" id="cBody"></div>
+</aside>
+
+<aside class="drawer" id="drSvc">
+  <div class="dr-head">
+    <div><div class="dr-title" id="svDrTitle">افزودن خدمت</div><div class="dr-sub">کدام متخصص‌ها این خدمت را انجام می‌دهند؟</div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body">
+    <div class="fld"><label>نام خدمت <i class="req">*</i></label><input type="text" id="seName"></div>
+    <div class="fld"><label>مدت (دقیقه) <i class="req">*</i></label><input type="number" id="seDur" min="5" step="5" value="60"></div>
+    <div class="fld"><label>قیمت (تومان) <i class="req">*</i></label><input type="number" id="sePrice" min="0" step="10000" value="0"></div>
+    <div class="fld"><label>متخصص‌های مجاز <i class="req">*</i></label><div class="chips" id="seStaff"></div></div>
+    <div class="ferr" id="seErr"></div>
+    <button class="btn-primary big" id="seSave" data-icon="check" data-size="16"><span>ذخیره خدمت</span></button>
+    <div class="dacts" id="seDelWrap" hidden><button class="btn btn-del" id="seDel">حذف خدمت</button></div>
+  </div>
+</aside>
+
+<aside class="drawer" id="drInv">
+  <div class="dr-head">
+    <div><div class="dr-title">صدور فاکتور و تسویه</div><div class="dr-sub" id="invSub"></div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body">
+    <div class="fld">
+      <label>مشتری <i class="req">*</i></label>
+      <div class="sugwrap"><input type="text" id="invCust" placeholder="نام مشتری را جستجو یا تایپ کنید" autocomplete="off"><div class="sug" id="invSug"></div></div>
+      <input type="text" id="invPhone" class="mt8" placeholder="شماره تماس (اجباری)" inputmode="tel">
+    </div>
+    <div class="fld">
+      <label>اقلام فاکتور</label>
+      <div id="invItems"></div>
+      <div class="addrow">
+        <div class="sel-wrap"><select id="invAddSvc"></select></div>
+        <button class="btn-ghost" id="invAddBtn" data-icon="plus" data-size="14"><span>افزودن</span></button>
+      </div>
+    </div>
+    <div class="fld">
+      <label>تخفیف</label>
+      <div class="discrow">
+        <input type="number" id="invDisc" min="0" value="0" placeholder="مثلاً ۵۰۰۰۰">
+        <div class="chips" id="invDiscType">
+          <button type="button" class="chip sel" data-t="amount">تومان</button>
+          <button type="button" class="chip" data-t="percent">درصد</button>
+        </div>
+      </div>
+    </div>
+    <div class="invsum">
+      <div class="is-row"><span>جمع خدمات</span><b id="invSubTotal">۰</b></div>
+      <div class="is-row"><span>تخفیف</span><b id="invDiscount">۰</b></div>
+      <div class="is-row total"><span>قابل پرداخت</span><b id="invTotal">۰</b></div>
+    </div>
+    <div class="fld"><label>نحوه پرداخت</label><div class="chips" id="invMethod">
+      <button type="button" class="chip sel" data-m="cash">نقدی</button>
+      <button type="button" class="chip" data-m="card">کارتخوان</button>
+      <button type="button" class="chip" data-m="online">آنلاین</button>
+    </div></div>
+    <div class="ferr" id="invErr"></div>
+    <button class="btn-primary big" id="invSave" data-icon="check" data-size="16"><span>صدور فاکتور و تسویه</span></button>
+  </div>
+</aside>
+
+<aside class="drawer" id="drInvView">
+  <div class="dr-head">
+    <div><div class="dr-title">فاکتور فروش</div><div class="dr-sub" id="ivSub"></div></div>
+    <button class="iconbtn xbtn" data-close data-icon="x"></button>
+  </div>
+  <div class="dr-body" id="ivBody"></div>
+</aside>
+
+<div id="toasts"></div>
+<div id="printArea"></div>
+
+<script>
+/* ═══════════ ابزارها ═══════════ */
+const $=id=>document.getElementById(id);
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const fa=s=>String(s).replace(/\d/g,d=>FA[d]);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad2=n=>String(n).padStart(2,'0');
+const fmt=n=>Number(n||0).toLocaleString('fa-IR');
+const norm=s=>String(s).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\s+/g,' ').trim().toLowerCase();
+const normPhone=s=>String(s||'').replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/[\s\-()]/g,'');
+const validPhone=t=>/^09\d{9}$/.test(t);
+const toMin=t=>{const p=String(t||'').split(':');return (+p[0])*60+(+(p[1]||0))};
+const hm=m=>pad2(Math.floor(m/60))+':'+pad2(m%60);
+const tLbl=t=>fa(String(t||'').replace(/^0/,''));
+let _u=0;const uid=()=>Date.now().toString(36)+(_u++).toString(36);
+
+const ICONS={
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ chevR:'<path d="M9 18l6-6-6-6"/>',chevL:'<path d="M15 18l-6-6 6-6"/>',
+ check:'<path d="M5 13l4 4L19 7"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',
+ trash:'<path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+ scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12"/>',
+ cal:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/>',
+ calpick:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/>',
+ ptr:'<path d="M3 3l7.1 17 2.5-7.4L20 10.1 3 3z"/>',
+ print:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+ chart:'<path d="M3 3v18h18"/><path d="M8 16v-5M13 16V8M18 16v-3"/>',
+ down:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+};
+const icon=(n,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||''}</svg>`;
+document.querySelectorAll('[data-icon]').forEach(el=>el.insertAdjacentHTML('afterbegin',icon(el.dataset.icon,+(el.dataset.size||16))));
+
+/* ═══════════ تاریخ و زمان (تهران) ═══════════ */
+const isoOf=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const shiftISO=(iso,n)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return isoOf(d)};
+const TODAY=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran'}).format(new Date());
+const DF={
+ full:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'}),
+ year:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long',year:'numeric'}),
+ short:new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long'}),
+};
+const dObj=iso=>new Date(iso+'T12:00:00');
+function dayName(iso){let s=DF.full.format(dObj(iso));
+ if(iso===TODAY)s='امروز، '+s;else if(iso===shiftISO(TODAY,1))s='فردا، '+s;else if(iso===shiftISO(TODAY,-1))s='دیروز، '+s;return s}
+const faDateShort=d=>DF.short.format(dObj(d));
+const tehranHMS=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date()).split(':').map(Number);
+const nowMin=()=>{const[h,m]=tehranHMS();return h*60+m};
+
+/* ═══════════ تقویم شمسی popup ═══════════ */
+const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const JFMT=new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'});
+function toJal(d){const p=JFMT.formatToParts(d);const g=t=>+p.find(x=>x.type===t).value;return{jy:g('year'),jm:g('month'),jd:g('day')}}
+function jFirst(jy,jm){let d=new Date();d.setHours(12,0,0,0);
+ for(let i=0;i<16;i++){const j=toJal(d);
+  if(j.jy===jy&&j.jm===jm)return new Date(d.getFullYear(),d.getMonth(),d.getDate()-(j.jd-1),12);
+  d=new Date(d.getTime()+Math.round(((jy*12+jm)-(j.jy*12+j.jm))*30.436875)*86400000)}
+ return d}
+function makePicker(btn,getISO,setISO,hasDots){
+ const wrap=document.createElement('div');wrap.className='dp-wrap';
+ btn.parentNode.insertBefore(wrap,btn);wrap.appendChild(btn);
+ const pop=document.createElement('div');pop.className='dp-pop';pop.hidden=true;wrap.appendChild(pop);
+ pop.innerHTML='<div class="dp-head"><button class="iconbtn" data-p="p">›</button><div class="dp-title"></div><button class="iconbtn" data-p="n">‹</button></div><div class="dp-grid"></div><div class="dp-foot"><button class="btn-ghost">امروز</button></div>';
+ let jy=0,jm=0;
+ function render(){
+  pop.querySelector('.dp-title').textContent=JM[jm-1]+' '+fa(jy);
+  const first=jFirst(jy,jm);
+  let ny=jy,nm=jm+1;if(nm>12){nm=1;ny++}
+  const len=Math.round((jFirst(ny,nm)-first)/86400000);
+  const lead=(first.getDay()+1)%7;
+  let h='';['ش','ی','د','س','چ','پ','ج'].forEach(d=>h+='<span class="dp-dow">'+d+'</span>');
+  for(let i=0;i<lead;i++)h+='<span></span>';
+  for(let d=1;d<=len;d++){
+   const dd=new Date(first.getFullYear(),first.getMonth(),first.getDate()+d-1,12),iso=isoOf(dd);
+   h+='<button class="dp-day'+(iso===getISO()?' sel':'')+(iso===TODAY?' today':'')+'" data-iso="'+iso+'">'+fa(d)+(hasDots&&hasDots(iso)?'<i class="dot"></i>':'')+'</button>';
+  }
+  pop.querySelector('.dp-grid').innerHTML=h;
+  pop.querySelectorAll('.dp-day').forEach(b=>b.onclick=()=>{setISO(b.dataset.iso);hide()});
+ }
+ const show=()=>{const j=toJal(dObj(getISO()||TODAY));jy=j.jy;jm=j.jm;render();pop.hidden=false};
+ const hide=()=>pop.hidden=true;
+ pop.querySelector('[data-p=p]').onclick=()=>{jm--;if(jm<1){jm=12;jy--}render()};
+ pop.querySelector('[data-p=n]').onclick=()=>{jm++;if(jm>12){jm=1;jy++}render()};
+ pop.querySelector('.dp-foot button').onclick=()=>{setISO(TODAY);hide()};
+ btn.onclick=e=>{e.stopPropagation();pop.hidden?show():hide()};
+ document.addEventListener('click',e=>{if(!pop.hidden&&!pop.contains(e.target)&&!wrap.contains(e.target))hide()});
+}
+
+/* ═══════════ دادهٔ نمونه (به‌جای Supabase) ═══════════ */
+const D={
+ staff:[
+  {id:'s1',name:'نگار محمدی',role:'رنگ و مو',phone:'09121110001'},
+  {id:'s2',name:'سارا کریمی',role:'ناخن',phone:'09121110002'},
+  {id:'s3',name:'مریم اکبری',role:'پوست و آرایش',phone:'09121110003'},
+  {id:'s4',name:'الهام رضایی',role:'مژه و ابرو',phone:'09121110004'},
+ ],
+ services:[
+  {id:'v1',name:'کوتاهی مو زنانه',dur:45,price:350000,st:['s1']},
+  {id:'v2',name:'رنگ ریشه',dur:120,price:1200000,st:['s1']},
+  {id:'v3',name:'کوتره و براشینگ',dur:60,price:550000,st:['s1']},
+  {id:'v4',name:'مانیکور',dur:60,price:450000,st:['s2']},
+  {id:'v5',name:'کاشت ناخن',dur:150,price:1600000,st:['s2']},
+  {id:'v6',name:'پاکسازی پوست',dur:75,price:850000,st:['s3']},
+  {id:'v7',name:'لیفت مژه',dur:60,price:600000,st:['s4']},
+  {id:'v8',name:'اکستنشن مژه',dur:120,price:1400000,st:['s4']},
+ ],
+ customers:[
+  {id:'c1',name:'آیدا محمدی',phone:'09121234567'},
+  {id:'c2',name:'رها احمدی',phone:'09122345678'},
+  {id:'c3',name:'نیوشا صادقی',phone:'09123456789'},
+  {id:'c4',name:'پریسا کریمی',phone:'09124567890'},
+  {id:'c5',name:'مهسا رضایی',phone:'09125678901'},
+  {id:'c6',name:'سمانه موسوی',phone:'09126789012'},
+  {id:'c7',name:'غزاله تهرانی',phone:'09127890123'},
+  {id:'c8',name:'الهه نوری',phone:'09128901234'},
+ ],
+ appointments:[],invoices:[]
+};
+const gS=id=>D.staff.find(x=>x.id===id),gV=id=>D.services.find(x=>x.id===id),gC=id=>D.customers.find(x=>x.id===id);
+
+/* نوبت‌های امروز — چندتا نسبت به «الان» تا وضعیت‌ها واقعی دیده شوند */
+const DS=9*60,DE=21*60;
+const base=Math.min(Math.max(nowMin(),DS+100),DE-140);
+const seedToday=[
+ ['s1','c1','v1',base-100,base-100,0],
+ ['s1','c2','v3',base-35,base-30,0],
+ ['s1','c3','v2',base+120,base+120,1],
+ ['s2','c5','v4','10:00','10:00',0],
+ ['s2','c6','v5','13:00','13:30',0],
+ ['s2','c7','v4','16:00','16:00',0],
+ ['s3','c8','v6','11:30','11:30',1],
+ ['s3','c2','v6','15:00','15:00',0],
+ ['s4','c1','v7','12:00','12:00',0],
+ ['s4','c3','v8','18:00','18:00',0],
+];
+D.appointments=seedToday.map(([sf,c,v,r,st,on])=>({id:uid(),staffId:sf,custId:c,svcId:v,date:TODAY,
+ resT:typeof r==='number'?hm(r):r,startT:typeof st==='number'?hm(st):st,dur:gV(v).dur,
+ status:(sf==='s2'&&c==='c7')?'canceled':'booked',online:!!on}));
+D.appointments.push(
+ {id:uid(),staffId:'s1',custId:'c4',svcId:'v2',date:shiftISO(TODAY,1),resT:'10:00',startT:'10:00',dur:120,status:'booked',online:false},
+ {id:uid(),staffId:'s2',custId:'c8',svcId:'v4',date:shiftISO(TODAY,1),resT:'14:00',startT:'14:00',dur:60,status:'booked',online:true});
+let nextNo=1044;
+D.invoices=[
+ {id:uid(),no:1043,custName:'رها احمدی',phone:'09122345678',date:TODAY,time:'11:40',staff:'نگار محمدی',items:[{name:'کوتره و براشینگ',qty:1,price:550000}],disc:10,discT:'percent',sub:495000,method:'card',total:495000},
+ {id:uid(),no:1042,custName:'مهسا رضایی',phone:'09125678901',date:TODAY,time:'11:05',staff:'سارا کریمی',items:[{name:'مانیکور',qty:1,price:450000}],disc:0,discT:'amount',sub:450000,method:'cash',total:450000},
+ {id:uid(),no:1041,custName:'آیدا محمدی',phone:'09121234567',date:TODAY,time:'10:20',staff:'نگار محمدی',items:[{name:'کوتاهی مو زنانه',qty:1,price:350000}],disc:0,discT:'amount',sub:350000,method:'card',total:350000},
+];
+
+/* ═══════════ وضعیت ═══════════ */
+let curDate=TODAY,view='schedule',form=null,inv=null,editingSvcId=null,rpDate=TODAY;
+const TITLES={schedule:'برنامه پذیرش',customers:'مشتریان',staff:'متخصصان',services:'خدمات و تعرفه',invoices:'فاکتورها',report:'گزارش روز',backup:'پشتیبان‌گیری'};
+const STN={booked:'رزروشده',inprogress:'در حال انجام',done:'انجام شد',canceled:'لغو شد'};
+const MM={cash:'نقدی',card:'کارتخوان',online:'آنلاین'};
+const emptyBox=(t,ic='cal')=>`<div class="empty">${icon(ic,22)}<span>${t}</span></div>`;
+
+/* ═══════════ کشو / توست ═══════════ */
+function showDrawer(id){closeAllDrawers();$(id).classList.add('on');$('scrim').classList.add('on');document.body.style.overflow='hidden'}
+function closeAllDrawers(){document.querySelectorAll('.drawer.on').forEach(d=>d.classList.remove('on'));$('scrim').classList.remove('on');document.body.style.overflow=''}
+function closeMobileNav(){$('sidebar').classList.remove('open');if(!document.querySelector('.drawer.on'))$('scrim').classList.remove('on')}
+ $('scrim').onclick=()=>{closeAllDrawers();closeMobileNav()};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAllDrawers);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllDrawers();closeMobileNav()}});
+ $('hamb').onclick=()=>{$('sidebar').classList.add('open');$('scrim').classList.add('on')};
+function toast(m){const t=document.createElement('div');t.className='toast';t.innerHTML=icon('check',16)+esc(m);
+ $('toasts').appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),260)},2600)}
+
+/* ═══════════ ناوبری ═══════════ */
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+function setView(v){view=v;
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+ document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=='view-'+v);
+ $('topTitle').textContent=TITLES[v];
+ ({schedule:renderSchedule,customers:renderCustomers,staff:renderStaff,services:renderServices,invoices:renderInvoices,report:renderReport})[v]?.();
+ closeMobileNav();
+}
+
+/* ═══════════ برنامه پذیرش ═══════════ */
+const liveStatus=(a,nm)=>{const s=toMin(a.startT),e=s+a.dur;return nm>=e?'done':nm>=s?'inprogress':'booked'};
+function renderSchedule(){
+ $('dayLabel').textContent=dayName(curDate);
+ const day=D.appointments.filter(a=>a.date===curDate);
+ $('dayStats').innerHTML=`<b>${fa(day.length)}</b> نوبت <i class="sep"></i><b>${fa(day.filter(a=>a.status==='done').length)}</b> انجام‌شده <i class="sep"></i><b>${fa(day.filter(a=>a.status==='booked').length)}</b> در انتظار`;
+ const track=$('tlTrack');
+ if(!D.staff.length){track.innerHTML=`<div class="tl-empty">اول از تب «متخصصان» چند متخصص اضافه کنید</div>`;return}
+ let h=`<div class="tl-hours"><div class="tl-headpad"></div><div class="tl-hours-body">`;
+ for(let m=DS;m<DE;m+=60)h+=`<div class="tl-hr"><span>${tLbl(hm(m))}</span></div>`;
+ h+=`</div></div>`;
+ D.staff.forEach((s,i)=>{
+  h+=`<div class="tl-col"><div class="tl-col-head"><span class="avatar av${i%4}">${esc(s.name[0])}</span><div><div class="sname">${esc(s.name)}</div><div class="srole">${esc(s.role||'—')}</div></div><span class="scount">${fa(day.filter(a=>a.staffId===s.id).length)} نوبت</span></div><div class="tl-rail" data-staff="${s.id}"></div></div>`;
+ });
+ track.innerHTML=h;
+ const nm=nowMin();
+ D.staff.forEach(s=>{
+  const rail=track.querySelector(`.tl-rail[data-staff="${s.id}"]`);
+  let inner='';
+  day.filter(a=>a.staffId===s.id).forEach(a=>{
+   const st=a.status==='canceled'?'canceled':(curDate===TODAY?liveStatus(a,nm):a.status);
+   const top=(toMin(a.startT)-DS)/60*84;
+   const hpx=Math.max(a.dur/60*84-8,26);
+   const compact=hpx<48;
+   const c=gC(a.custId),v=gV(a.svcId);
+   inner+=`<div class="appt st-${st}${compact?' compact':''}" data-id="${a.id}" style="top:${top}px;height:${hpx}px">
+    <div class="a-time">${a.online?'🌐 ':''}${st==='inprogress'?'<span class="pulse"></span>':''}<span>${tLbl(a.resT)}</span>${a.startT!==a.resT?`<span class="a-real">شروع ${tLbl(a.startT)}</span>`:''}</div>
+    <div class="a-name">${esc(c?c.name:'—')}</div>
+    ${compact?'':`<div class="a-svc">${esc(v?v.name:'')}</div>`}</div>`;
+  });
+  if(curDate===TODAY&&nm>=DS&&nm<=DE)
+   inner+=`<div class="nowline" style="top:${(nm-DS)/60*84}px"></div>`;
+  rail.innerHTML=inner;
+  rail.onclick=e=>{
+   if(e.target.closest('.appt'))return;
+   const r=rail.getBoundingClientRect();
+   let m=DS+Math.round((e.clientY-r.top)/84*60/15)*15;
+   m=Math.min(Math.max(m,DS),DE-15);
+   openForm({staffId:s.id,date:curDate,time:hm(m)});
+  };
+ });
+ if(curDate===TODAY&&nm>=DS&&nm<=DE){
+  const hb=track.querySelector('.tl-hours-body');
+  hb.insertAdjacentHTML('beforeend',`<div class="nowline" style="top:${(nm-DS)/60*84}px"><span class="nlab">${tLbl(hm(nm))}</span></div>`);
+ }
+ track.querySelectorAll('.appt').forEach(el=>el.onclick=e=>{e.stopPropagation();openDetail(el.dataset.id)});
+}
+function flash(id){const el=document.querySelector(`.appt[data-id="${id}"]`);if(el)el.classList.add('flash')}
+ $('dPrev').onclick=()=>{curDate=shiftISO(curDate,-1);renderSchedule()};
+ $('dNext').onclick=()=>{curDate=shiftISO(curDate,1);renderSchedule()};
+ $('dToday').onclick=()=>{curDate=TODAY;renderSchedule()};
+
+/* ═══════════ ثبت نوبت ═══════════ */
+function timeOpts(sel,cur){let h='';for(let m=DS;m<=DE-15;m+=15){const t=hm(m);h+=`<option value="${t}"${t===cur?' selected':''}>${tLbl(t)}</option>`}sel.innerHTML=h}
+function fillServiceSelect(){$('fService').innerHTML=D.services.length?D.services.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join(''):'<option value="">اول از «خدمات» خدمت اضافه کنید</option>'}
+function renderFormChips(){
+ const svc=gV(form.svcId),allowed=svc?svc.st:[];
+ $('fChips').innerHTML=D.staff.map(s=>`<button type="button" class="chip${form.staffId===s.id?' sel':''}" data-id="${s.id}"${allowed.includes(s.id)?'':' disabled'}>${esc(s.name)}</button>`).join('')||'<span class="fsum">اول متخصص اضافه کنید</span>';
+ $('fChips').querySelectorAll('button:not([disabled])').forEach(b=>b.onclick=()=>{form.staffId=b.dataset.id;renderFormChips();checkConflict()});
+ $('fSummary').textContent=svc?`مدت ${fa(svc.dur)} دقیقه · ${fmt(svc.price)} تومان`:'';
+}
+function checkConflict(){
+ const svc=gV(form.svcId);
+ if(!form.staffId||!form.startT){$('fWarn').classList.remove('on');return}
+ const s=toMin(form.startT),e=s+(svc?svc.dur:30);
+ const conf=D.appointments.find(a=>a.staffId===form.staffId&&a.date===form.date&&a.status!=='canceled'&&s<toMin(a.startT)+a.dur&&toMin(a.startT)<e);
+ if(conf){const c=gC(conf.custId);
+  $('fWarn').innerHTML=`تداخل با نوبت ${esc(c?c.name:'')} ساعت ${tLbl(conf.resT)} برای ${esc((gV(conf.svcId)||{}).name||'—')}`;
+  $('fWarn').classList.add('on');
+ }else $('fWarn').classList.remove('on');
+}
+function openForm(o={}){
+ form={date:o.date||curDate,staffId:o.staffId||null,svcId:o.svcId||null,custId:o.custId||null,resT:o.time||null,startT:o.time||null};
+ const pre=o.custId?gC(o.custId):null;
+ $('fName').value=pre?pre.name:'';$('fPhone').value=pre?pre.phone:'';
+ fillServiceSelect();
+ if(!form.svcId&&D.services.length)form.svcId=D.services[0].id;
+ $('fService').value=form.svcId||'';
+ renderFormChips();timeOpts($('fTimeR'),form.resT);timeOpts($('fTimeS'),form.startT);
+ $('fDateVal').textContent=dayName(form.date);
+ $('fSub').textContent='روز '+dayName(form.date);
+ $('fWarn').classList.remove('on');$('fErr').classList.remove('on');
+ checkConflict();showDrawer('drForm');
+}
+ $('fService').onchange=()=>{form.svcId=$('fService').value||null;form.staffId=null;renderFormChips();checkConflict()};
+ $('fTimeR').onchange=()=>{form.resT=$('fTimeR').value;form.startT=form.resT;$('fTimeS').value=form.startT;checkConflict()};
+ $('fTimeS').onchange=()=>{form.startT=$('fTimeS').value;checkConflict()};
+ $('fPrev').onclick=()=>{form.date=shiftISO(form.date,-1);$('fDateVal').textContent=dayName(form.date);$('fSub').textContent='روز '+dayName(form.date);checkConflict()};
+ $('fNext').onclick=()=>{form.date=shiftISO(form.date,1);$('fDateVal').textContent=dayName(form.date);$('fSub').textContent='روز '+dayName(form.date);checkConflict()};
+function attachSug(input,box,onPick){
+ input.addEventListener('input',()=>{
+  const q=norm(input.value);if(!q){box.classList.remove('on');return}
+  const pq=normPhone(q);
+  const m=D.customers.filter(c=>norm(c.name).includes(q)||(pq&&c.phone.includes(pq)));
+  let h=m.slice(0,6).map(c=>`<div class="sug-item" data-id="${c.id}"><b>${esc(c.name)}</b><span class="ph" dir="ltr">${esc(c.phone)}</span></div>`).join('');
+  h+=`<div class="sug-item sug-new" data-new="1">${icon('plus',14)}<span>ثبت مشتری جدید «${esc(input.value.trim())}»</span></div>`;
+  box.innerHTML=h;box.classList.add('on');
+  box.querySelectorAll('.sug-item').forEach(el=>el.onclick=()=>{onPick(el.dataset.id?gC(el.dataset.id):null);box.classList.remove('on')});
+ });
+ input.addEventListener('blur',()=>setTimeout(()=>box.classList.remove('on'),150));
+}
+attachSug($('fName'),$('fSug'),c=>{
+ if(c){form.custId=c.id;$('fName').value=c.name;$('fPhone').value=c.phone}
+ else{form.custId=null;$('fPhone').focus()}
+});
+ $('fSave').onclick=()=>{
+ const name=$('fName').value.trim(),phone=normPhone($('fPhone').value),errs=[];
+ if(!form.custId){if(!name)errs.push('نام مشتری');if(!validPhone(phone))errs.push('شمارهٔ معتبر ۰۹…')}
+ if(!form.svcId)errs.push('خدمت');if(!form.staffId)errs.push('متخصص');if(!form.resT)errs.push('ساعت رزرو');
+ if(errs.length){$('fErr').textContent='لطفاً تکمیل کنید: '+errs.join('، ');$('fErr').classList.add('on');return}
+ $('fErr').classList.remove('on');
+ if(!form.custId){const c={id:uid(),name,phone};D.customers.push(c);form.custId=c.id}
+ const svc=gV(form.svcId);
+ const a={id:uid(),custId:form.custId,svcId:form.svcId,staffId:form.staffId,date:form.date,
+  resT:form.resT,startT:form.startT||form.resT,dur:svc.dur,status:'booked',online:false};
+ D.appointments.push(a);
+ closeAllDrawers();toast('نوبت ثبت شد');
+ curDate=form.date;setView('schedule');flash(a.id);
+};
+ $('btnNew').onclick=()=>openForm({date:curDate});
+
+/* ═══════════ جزئیات نوبت ═══════════ */
+function openDetail(id){
+ const a=D.appointments.find(x=>x.id===id);if(!a)return;
+ const c=gC(a.custId),s=gS(a.staffId),v=gV(a.svcId);
+ const st=a.status==='canceled'?'canceled':(a.date===TODAY?liveStatus(a,nowMin()):a.status);
+ $('dSub').textContent=dayName(a.date)+' · '+tLbl(a.resT);
+ let acts='';
+ if(st==='booked')acts=`<button class="btn btn-green" data-act="start">${icon('check',15)}<span>شروع خدمت</span></button><button class="btn btn-danger-ghost" data-act="cancel">لغو نوبت</button>`;
+ else if(st==='inprogress')acts=`<button class="btn btn-green" data-act="inv">${icon('file',15)}<span>پایان و صدور فاکتور</span></button><button class="btn btn-danger-ghost" data-act="cancel">لغو نوبت</button>`;
+ else if(st==='done')acts=`<button class="btn btn-primary" data-act="inv">${icon('file',15)}<span>صدور فاکتور</span></button>`;
+ else acts=`<button class="btn btn-ghost" data-act="restore">بازگردانی نوبت</button>`;
+ acts+=`<button class="btn-del" data-act="del">حذف نوبت</button>`;
+ $('dBody').innerHTML=`<span class="stpill st-${st}">${STN[st]}</span>
+  <div class="drow"><span class="dl">مشتری</span><span class="dv">${esc(c?c.name:'—')}<small dir="ltr">${esc(c?c.phone:'')}</small></span></div>
+  <div class="drow"><span class="dl">خدمت</span><span class="dv">${esc(v?v.name:'—')}<small>${v?fa(v.dur)+' دقیقه · '+fmt(v.price)+' تومان':''}</small></span></div>
+  <div class="drow"><span class="dl">متخصص</span><span class="dv">${esc(s?s.name:'—')}</span></div>
+  <div class="drow"><span class="dl">ساعت رزرو</span><span class="dv">${tLbl(a.resT)}</span></div>
+  <div class="drow"><span class="dl">شروع واقعی</span><span class="dv">${tLbl(a.startT)} ${a.startT!==a.resT?'<em class="latetag">با تأخیر</em>':''}</span></div>
+  <div class="drow"><span class="dl">منبع</span><span class="dv">${a.online?'آنلاین 🌐':'پذیرش'}</span></div>
+  <div class="dacts">${acts}</div>`;
+ $('dBody').querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{
+  const act=b.dataset.act;
+  if(act==='start'){a.status='inprogress';toast('خدمت آغاز شد');openDetail(id)}
+  if(act==='cancel'){a.status='canceled';toast('نوبت لغو شد');openDetail(id)}
+  if(act==='restore'){a.status='booked';openDetail(id)}
+  if(act==='inv'){openInvoice({apptId:id});return}
+  if(act==='del'){
+   if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='تأیید حذف';return}
+   D.appointments=D.appointments.filter(x=>x.id!==id);
+   closeAllDrawers();toast('نوبت حذف شد');
+  }
+  if(view==='schedule'&&a.date===curDate)renderSchedule();
+  if(view==='report')renderReport();
+ });
+ showDrawer('drDetail');
+}
+
+/* ═══════════ مشتریان ═══════════ */
+function renderCustomers(){
+ const q=norm($('cSearch').value);
+ const list=D.customers.filter(c=>!q||norm(c.name).includes(q)||c.phone.includes(normPhone(q)));
+ $('custCount').textContent=fa(list.length)+' مشتری';
+ $('custList').innerHTML=list.map(c=>{
+  const n=D.appointments.filter(a=>a.custId===c.id).length;
+  return `<div class="crow" data-id="${c.id}"><span class="avatar lg av0">${esc(c.name[0])}</span><div class="cmain"><div class="cname">${esc(c.name)}</div><div class="cphone" dir="ltr">${esc(c.phone)}</div></div><span class="cstat"><b>${fa(n)}</b> نوبت</span><span class="chev">${icon('chevL',16)}</span></div>`;
+ }).join('')||emptyBox('مشتری‌ای پیدا نشد','users');
+ $('custList').querySelectorAll('.crow').forEach(r=>r.onclick=()=>openCust(r.dataset.id));
+}
+ $('cSearch').oninput=renderCustomers;
+function openCust(id){
+ const c=gC(id);if(!c)return;
+ const aps=D.appointments.filter(a=>a.custId===id).sort((x,y)=>(y.date+y.resT).localeCompare(x.date+x.resT));
+ const don=aps.filter(a=>a.status==='done').length;
+ const spent=D.invoices.filter(v=>v.phone===c.phone).reduce((s,v)=>s+v.total,0);
+ $('cBody').innerHTML=`<div class="ch-head"><span class="avatar lg av0">${esc(c.name[0])}</span><div><div class="cname big">${esc(c.name)}</div><div class="cphone" dir="ltr">${esc(c.phone)}</div></div></div>
+  <div class="rpt-grid" style="grid-template-columns:repeat(3,1fr)">
+   <div class="stbox"><b>${fa(aps.length)}</b><span>نوبت</span></div>
+   <div class="stbox"><b>${fa(don)}</b><span>مراجعه</span></div>
+   <div class="stbox"><b>${fmt(spent)}</b><span>مجموع خرید</span></div>
+  </div>
+  ${aps.map(a=>{const v=gV(a.svcId);const st=a.status==='canceled'?'canceled':(a.date===TODAY?liveStatus(a,nowMin()):a.status);
+   return `<div class="hrow"><div class="hmain"><b>${esc(v?v.name:'—')}</b><span>${faDateShort(a.date)} · ${tLbl(a.resT)}</span></div><span class="pill st-${st}">${STN[st]}</span></div>`}).join('')||emptyBox('هنوز نوبتی ندارد')}
+  <div class="dacts"><button class="btn btn-primary" id="cNew">${icon('plus',15)}<span>نوبت جدید برای این مشتری</span></button></div>`;
+ $('cNew').onclick=()=>openForm({custId:id});
+ showDrawer('drCust');
+}
+
+/* ═══════════ متخصصان ═══════════ */
+function renderStaff(){
+ $('staffCount').textContent=fa(D.staff.length)+' متخصص';
+ $('staffList').innerHTML=D.staff.map((s,i)=>`<div class="srow"><span class="avatar lg av${i%4}">${esc(s.name[0])}</span><div class="cmain"><div class="cname">${esc(s.name)}</div><div class="s-staff">${esc(s.role||'')}${s.phone?' · <span dir="ltr">'+esc(s.phone)+'</span>':''}</div></div><span class="sdur">${fa(D.appointments.filter(a=>a.staffId===s.id).length)} نوبت</span><button class="ir-x sdel" data-id="${s.id}" title="حذف">${icon('trash',15)}</button></div>`).join('')||emptyBox('متخصصی ثبت نشده','user');
+ $('staffList').querySelectorAll('.sdel').forEach(b=>{
+  let armed=false;
+  b.onclick=()=>{
+   if(!armed){armed=true;b.classList.add('armed');setTimeout(()=>{armed=false;b.classList.remove('armed')},2500);return}
+   if(D.appointments.some(a=>a.staffId===b.dataset.id&&a.date>=TODAY&&a.status!=='canceled')){toast('این متخصص نوبت فعال دارد');return}
+   D.staff=D.staff.filter(s=>s.id!==b.dataset.id);renderStaff();toast('متخصص حذف شد');
+  };
+ });
+}
+ $('btnAddStaff').onclick=()=>{$('staffForm').hidden=!$('staffForm').hidden;$('stName').focus()};
+ $('stCancel').onclick=()=>$('staffForm').hidden=true;
+ $('stSave').onclick=()=>{
+ const n=$('stName').value.trim();if(!n){toast('نام متخصص را بنویسید');return}
+ D.staff.push({id:uid(),name:n,role:$('stRole').value.trim(),phone:normPhone($('stPhone').value)});
+ $('stName').value=$('stRole').value=$('stPhone').value='';$('staffForm').hidden=true;
+ renderStaff();toast('متخصص اضافه شد');
+};
+
+/* ═══════════ خدمات ═══════════ */
+let svcSel=new Set();
+function renderServices(){
+ $('svcCount').textContent=fa(D.services.length)+' خدمت';
+ $('svcList').innerHTML=D.services.map(s=>{
+  const names=s.st.map(id=>(gS(id)||{}).name).filter(Boolean).join('، ');
+  return `<div class="srow" data-id="${s.id}"><div class="cmain"><div class="cname">${esc(s.name)}</div><div class="s-staff">${icon('user',12)}${esc(names||'بدون متخصص')}</div></div><span class="sdur">${fa(s.dur)} دقیقه</span><span class="sprice"><b>${fmt(s.price)}</b> تومان</span></div>`;
+ }).join('')||emptyBox('خدمتی ثبت نشده','scissors');
+ $('svcList').querySelectorAll('.srow').forEach(r=>r.onclick=()=>openSvcEditor(r.dataset.id));
+}
+function openSvcEditor(id){
+ editingSvcId=id||null;
+ const sv=id?gV(id):null;
+ $('seName').value=sv?sv.name:'';$('seDur').value=sv?sv.dur:60;$('sePrice').value=sv?sv.price:0;
+ svcSel=new Set(sv?sv.st:[]);
+ $('seStaff').innerHTML=D.staff.map(s=>`<button type="button" class="chip${svcSel.has(s.id)?' sel':''}" data-id="${s.id}">${esc(s.name)}</button>`).join('')||'<span class="fsum">اول متخصص اضافه کنید</span>';
+ $('seStaff').querySelectorAll('button').forEach(b=>b.onclick=()=>{svcSel.has(b.dataset.id)?svcSel.delete(b.dataset.id):svcSel.add(b.dataset.id);b.classList.toggle('sel')});
+ $('seErr').classList.remove('on');$('seDel').classList.remove('armed');
+ $('seDelWrap').hidden=!id;$('svDrTitle').textContent=id?'ویرایش خدمت':'افزودن خدمت';
+ showDrawer('drSvc');
+}
+ $('btnAddSvc').onclick=()=>openSvcEditor(null);
+ $('seSave').onclick=()=>{
+ const n=$('seName').value.trim(),d=+$('seDur').value,p=+$('sePrice').value;
+ if(!n||!d||!svcSel.size){$('seErr').textContent='نام، مدت و حداقل یک متخصص لازم است';$('seErr').classList.add('on');return}
+ $('seErr').classList.remove('on');
+ if(editingSvcId){Object.assign(gV(editingSvcId),{name:n,dur:d,price:p,st:[...svcSel]})}
+ else D.services.push({id:uid(),name:n,dur:d,price:p,st:[...svcSel]});
+ closeAllDrawers();renderServices();toast('خدمت ذخیره شد');
+};
+ $('seDel').onclick=()=>{
+ const b=$('seDel');
+ if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='تأیید حذف خدمت';return}
+ D.services=D.services.filter(s=>s.id!==editingSvcId);
+ closeAllDrawers();renderServices();toast('خدمت حذف شد');
+};
+
+/* ═══════════ فاکتور ═══════════ */
+function openInvoice(pref={}){
+ const ap=pref.apptId?D.appointments.find(a=>a.id===pref.apptId):null;
+ const cust=ap?gC(ap.custId):(pref.custId?gC(pref.custId):null);
+ inv={custId:cust?cust.id:null,apptId:ap?ap.id:null,items:[],disc:0,discT:'amount',method:'card'};
+ if(ap){const svc=gV(ap.svcId);if(svc)inv.items.push({name:svc.name,price:svc.price,qty:1})}
+ $('invCust').value=cust?cust.name:'';$('invPhone').value=cust?cust.phone:'';
+ $('invDisc').value=0;
+ $('invDiscType').querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel',x.dataset.t==='amount'));
+ $('invMethod').querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel',x.dataset.m==='card'));
+ $('invAddSvc').innerHTML=D.services.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+ $('invErr').classList.remove('on');
+ $('invSub').textContent=ap?dayName(ap.date)+' · '+tLbl(ap.resT):'تسویهٔ جدید';
+ renderInvItems();showDrawer('drInv');
+}
+function invTotals(){
+ const sub=inv.items.reduce((s,it)=>s+it.price*it.qty,0);
+ const disc=inv.discT==='percent'?Math.round(sub*Math.min(+inv.disc||0,100)/100):Math.min(+inv.disc||0,sub);
+ $('invSubTotal').textContent=fmt(sub);$('invDiscount').textContent=fmt(disc);$('invTotal').textContent=fmt(sub-disc);
+ inv._sub=sub;inv._disc=disc;inv._total=sub-disc;
+}
+function renderInvItems(){
+ $('invItems').innerHTML=inv.items.map((it,i)=>`<div class="irow"><div class="ir-main"><b>${esc(it.name)}</b><input class="ir-price" type="number" min="0" value="${it.price}" data-i="${i}"></div><div class="stepper"><button data-d="-1" data-i="${i}">−</button><b>${fa(it.qty)}</b><button data-d="1" data-i="${i}">+</button></div><button class="ir-x" data-x="${i}">${icon('x',14)}</button></div>`).join('')||'<div class="iempty">قلمی اضافه نشده — از پایین خدمت انتخاب کنید</div>';
+ $('invItems').querySelectorAll('.ir-price').forEach(inp=>inp.oninput=()=>{inv.items[+inp.dataset.i].price=+inp.value||0;invTotals()});
+ $('invItems').querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{const it=inv.items[+b.dataset.i];it.qty=Math.max(1,it.qty+ +b.dataset.d);renderInvItems()});
+ $('invItems').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{inv.items.splice(+b.dataset.x,1);renderInvItems()});
+ invTotals();
+}
+attachSug($('invCust'),$('invSug'),c=>{
+ if(c){inv.custId=c.id;$('invCust').value=c.name;$('invPhone').value=c.phone}
+ else{inv.custId=null}
+});
+ $('invAddBtn').onclick=()=>{const s=gV($('invAddSvc').value);if(!s)return;
+ const ex=inv.items.find(it=>it.name===s.name);ex?ex.qty++:inv.items.push({name:s.name,price:s.price,qty:1});renderInvItems()};
+ $('invDisc').oninput=()=>{inv.disc=+$('invDisc').value||0;invTotals()};
+ $('invDiscType').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{inv.discT=b.dataset.t;
+ $('invDiscType').querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel',x===b));invTotals()});
+ $('invMethod').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{inv.method=b.dataset.m;
+ $('invMethod').querySelectorAll('.chip').forEach(x=>x.classList.toggle('sel',x===b))});
+ $('invSave').onclick=()=>{
+ let cust=inv.custId?gC(inv.custId):null;
+ if(!cust){const n=$('invCust').value.trim(),p=normPhone($('invPhone').value);
+  if(!n||!validPhone(p)){$('invErr').textContent='نام و شمارهٔ تماس معتبر مشتری لازم است';$('invErr').classList.add('on');return}
+  cust={id:uid(),name:n,phone:p};D.customers.push(cust)}
+ if(!inv.items.length){$('invErr').textContent='حداقل یک قلم اضافه کنید';$('invErr').classList.add('on');return}
+ $('invErr').classList.remove('on');
+ const ap=inv.apptId?D.appointments.find(x=>x.id===inv.apptId):null;
+ const v={id:uid(),no:nextNo++,custName:cust.name,phone:cust.phone,date:ap?ap.date:TODAY,time:hm(nowMin()),
+  staff:ap?(gS(ap.staffId)||{}).name||'—':'—',items:inv.items.map(x=>({...x})),
+  disc:inv._disc,discT:inv.discT,sub:inv._sub,method:inv.method,total:inv._total};
+ D.invoices.unshift(v);
+ if(ap)ap.status='done';
+ closeAllDrawers();toast('فاکتور '+fa(v.no)+' صادر شد');
+ if(view==='invoices')renderInvoices();if(view==='schedule')renderSchedule();if(view==='report')renderReport();
+};
+function renderInvoices(){
+ const q=norm($('vSearch').value);
+ const list=D.invoices.filter(v=>!q||String(v.no).includes(q)||norm(v.custName).includes(q)||v.phone.includes(normPhone(q)));
+ $('invCount').textContent=fa(list.length)+' فاکتور';
+ $('invList').innerHTML=list.map(v=>`<div class="crow" data-id="${v.id}"><span class="inv-no">${fa(v.no)}</span><div class="cmain"><div class="cname">${esc(v.custName)}</div><div class="cphone">${esc(v.items.map(i=>i.name).join('، '))}</div></div><span class="cstat"><b>${fmt(v.total)}</b> تومان</span><span class="chev">${icon('chevL',16)}</span></div>`).join('')||emptyBox('فاکتوری صادر نشده','file');
+ $('invList').querySelectorAll('.crow').forEach(r=>r.onclick=()=>openInvView(r.dataset.id));
+}
+ $('vSearch').oninput=renderInvoices;
+function receiptHTML(v){
+ return `<div class="receipt"><div class="rc-brand">نیلا</div><div class="rc-sub">BEAUTY SALON</div>
+  <div class="rc-meta"><span>شماره</span><b>${fa(v.no)}</b></div>
+  <div class="rc-meta"><span>تاریخ</span><b>${DF.year.format(dObj(v.date))}</b></div>
+  <div class="rc-meta"><span>ساعت</span><b>${tLbl(v.time)}</b></div>
+  <div class="rc-meta"><span>مشتری</span><b>${esc(v.custName)}</b></div>
+  ${v.staff&&v.staff!=='—'?`<div class="rc-meta"><span>متخصص</span><b>${esc(v.staff)}</b></div>`:''}
+  <hr class="rc-sep">
+  <table class="rc-table"><thead><tr><th class="num">#</th><th>خدمت</th><th>تعداد</th><th class="amt">مبلغ</th></tr></thead><tbody>
+  ${v.items.map((it,i)=>`<tr><td class="num">${fa(i+1)}</td><td>${esc(it.name)}</td><td class="num">${fa(it.qty)}</td><td class="amt">${fmt(it.price*it.qty)}</td></tr>`).join('')}
+  </tbody></table>
+  <div class="rc-tot"><span>جمع</span><b>${fmt(v.sub)}</b></div>
+  ${v.disc?`<div class="rc-tot"><span>تخفیف</span><b>−${fmt(v.disc)}</b></div>`:''}
+  <div class="rc-tot grand"><span>قابل پرداخت</span><b>${fmt(v.total)} تومان</b></div>
+  <hr class="rc-sep"><div class="rc-meta"><span>نحوه پرداخت</span><b>${MM[v.method]||'—'}</b></div>
+  <div class="rc-thanks">نیلا · سپاس از حضور شما</div></div>`;
+}
+function openInvView(id){
+ const v=D.invoices.find(x=>x.id===id);if(!v)return;
+ $('ivSub').textContent='شماره '+fa(v.no);
+ $('ivBody').innerHTML=receiptHTML(v)+`<div class="dacts"><button class="btn btn-ghost" id="ivPrint">${icon('print',15)}<span>چاپ فاکتور</span></button></div>`;
+ $('ivPrint').onclick=()=>{
+  $('printArea').innerHTML=receiptHTML(v);
+  document.body.classList.add('printing');
+  const done=()=>{document.body.classList.remove('printing');window.onafterprint=null};
+  window.onafterprint=done;setTimeout(()=>window.print(),60);setTimeout(done,2500);
+ };
+ showDrawer('drInvView');
+}
+
+/* ═══════════ گزارش روز ═══════════ */
+function renderReport(){
+ const aps=D.appointments.filter(a=>a.date===rpDate);
+ const ivs=D.invoices.filter(v=>v.date===rpDate);
+ const sales=ivs.reduce((s,v)=>s+v.total,0),disc=ivs.reduce((s,v)=>s+(v.disc||0),0);
+ $('rpMeta').innerHTML=`<b>${fa(aps.length)}</b> نوبت · ${DF.year.format(dObj(rpDate))}`;
+ $('rpCards').innerHTML=[
+  ['نوبت‌های ثبت‌شده',fa(aps.length),fa(aps.filter(a=>a.status==='done').length)+' انجام شد'],
+  ['فاکتور صادره',fa(ivs.length),fa(new Set(ivs.map(v=>v.custName)).size)+' مشتری'],
+  ['فروش کل (تومان)',fmt(sales),''],
+  ['تخفیف‌ها (تومان)',fmt(disc),''],
+ ].map(([t,b,s])=>`<div class="stbox"><b>${b}</b><span>${t}</span>${s?`<small>${s}</small>`:''}</div>`).join('');
+ const pays={cash:0,card:0,online:0};ivs.forEach(v=>pays[v.method]=(pays[v.method]||0)+v.total);
+ $('rpPay').innerHTML=Object.entries(pays).map(([k,v])=>`<div class="prow"><span class="pdot m-${k}"></span>${MM[k]}<b>${fmt(v)} <small>تومان</small></b></div>`).join('')||emptyBox('فاکتوری صادر نشده','file');
+ const by={};ivs.forEach(v=>{if(v.staff&&v.staff!=='—')by[v.staff]=(by[v.staff]||0)+v.total});
+ $('rpStaff').innerHTML=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<div class="prow"><span class="avatar av0" style="width:26px;height:26px;font-size:12px">${esc(n[0])}</span>${esc(n)}<b>${fmt(v)}</b></div>`).join('')||emptyBox('فروشی ثبت نشده','chart');
+ $('rpInvCount').textContent=fa(ivs.length);
+ $('rpInvoices').innerHTML=ivs.map(v=>`<div class="hrow click" data-id="${v.id}"><div class="hmain"><b>${fa(v.no)} · ${esc(v.custName)}</b><span>${esc(v.items.map(i=>i.name).join('، '))}</span></div><span class="hmeta">${fmt(v.total)}</span></div>`).join('')||emptyBox('—','file');
+ $('rpInvoices').querySelectorAll('.click').forEach(r=>r.onclick=()=>openInvView(r.dataset.id));
+ $('rpAptCount').textContent=fa(aps.length);
+ $('rpAppts').innerHTML=aps.map(a=>{const v=gV(a.svcId),c=gC(a.custId);
+  const st=a.status==='canceled'?'canceled':(a.date===TODAY?liveStatus(a,nowMin()):a.status);
+  return `<div class="hrow"><div class="hmain"><b>${esc(c?c.name:'—')}</b><span>${esc(v?v.name:'—')} · ${tLbl(a.resT)}</span></div><span class="pill st-${st}">${STN[st]}</span></div>`}).join('')||emptyBox('—','cal');
+}
+ $('rpPrev').onclick=()=>{rpDate=shiftISO(rpDate,-1);renderReport()};
+ $('rpNext').onclick=()=>{rpDate=shiftISO(rpDate,1);renderReport()};
+ $('rpToday').onclick=()=>{rpDate=TODAY;renderReport()};
+
+/* ═══════════ پشتیبان ═══════════ */
+function dl(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type||'application/json'}));a.download=name;a.click()}
+ $('bkJson').onclick=()=>dl('nila-backup.json',JSON.stringify(D,null,2));
+ $('bkCsv').onclick=()=>{
+ const rows=[['date','reserve','start','staff','service','customer','phone','status']];
+ D.appointments.forEach(a=>rows.push([a.date,a.resT,a.startT,(gS(a.staffId)||{}).name||'',(gV(a.svcId)||{}).name||'',(gC(a.custId)||{}).name||'',(gC(a.custId)||{}).phone||'',a.status]));
+ dl('nila-appointments.csv','\uFEFF'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv');
+};
+
+/* ═══════════ ورود (دمو) ═══════════ */
+function lgFail(m){const e=$('lgErr');e.textContent=m;e.classList.add('on')}
+function doLogin(){
+ const em=$('lgEmail').value.trim(),pw=$('lgPass').value;
+ if(!em||!pw){lgFail('ایمیل و رمز را وارد کنید');return}
+ /* ── اتصال واقعی به Supabase (نسخهٔ نهایی):
+ const sb=supabase.createClient(SB_URL,SB_KEY);
+ const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+ if(error){lgFail('ایمیل یا رمز اشتباه است');return}
+ ─────────────────────────────────────────── */
+ enter();
+}
+ $('lgGo').onclick=doLogin;
+ $('lgPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+ $('btnLogout').onclick=()=>location.reload();
+function enter(){
+ $('authView').style.display='none';$('appView').hidden=false;
+ setView('schedule');
+}
+/* ═══════════ ساعت و بوت ═══════════ */
+function tick(){const[h,m,s]=tehranHMS();$('sideClock').textContent=fa(pad2(h)+':'+pad2(m)+':'+pad2(s))}
+tick();setInterval(tick,1000);
+ $('sideDate').textContent=DF.year.format(new Date());
+makePicker($('dpBtn'),()=>curDate,iso=>{curDate=iso;renderSchedule()},iso=>D.appointments.some(a=>a.date===iso));
+makePicker($('rpPick'),()=>rpDate,iso=>{rpDate=iso;renderReport()},iso=>D.appointments.some(a=>a.date===iso));
+setInterval(()=>{if(view==='schedule'&&curDate===TODAY&&!document.querySelector('.drawer.on'))renderSchedule()},60000);
+</script>
+</body>
+</html>
